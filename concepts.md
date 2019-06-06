@@ -113,7 +113,7 @@ The delegation token is only used when the *user* creates their first *device* o
 
 ## Secret Permanent Identity
 
-The [Secret Permanent Identity] (SPerID) is generated and stored by the *application* and provided to a user only after successful authentication against the *application server*.
+The [Secret Permanent Identity] (SPerID) is generated and stored by the *application server* and provided to a user only after successful authentication against the *application server*.
 It should never be shared with other *user*s.
 It contains some secret key material such as the [User Secret] and [delegation token](#delegation-token).
 It represents the identity of the *user* for the *Tanker SDK* and is considered a proof of authentication against the *application server*.
