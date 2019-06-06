@@ -1,5 +1,24 @@
 # Concepts
 
+[Device Encryption Key Pair]: concepts.md#device-keys "Unique identifier of a user"
+[Device ID]: concepts.md#device-id "Unique identifier of a device belonging to a user"
+[Device Signature Key Pair]: concepts.md#device-keys "Used when the user signs a block"
+[Group Encryption Key Pair]: concepts.md#user-group-keys "Used when sharing data securely within a group"
+[Group Signature Key Pair]: concepts.md#user-group-keys "Used when the user modifies a group"
+[Local Encrypted Storage]: concepts.md#device-id "A place where sensitive data is stored, encrypted at rest"
+[Resource Encryption Key]: concepts.md#resource-keys "A symmetric key that can be exchanged securely across users"
+[Shared Encrypted Key]: concepts.md#resource-keys "The result of encrypting a Resource Encryption Key"
+[Trustchain Signature Key Pair]: concepts.md#trustchain-keys "Root of the Trustchain - used to sign user additions"
+[User Encryption Key Pair]: concepts.md#user-keys "Used for sharing encrypted keys across users"
+[User ID]: concepts.md#user-id "Unique identifier of a user"
+[Unlock Key]: concepts.md#unlock-key "An opaque token that allows creating new devices"
+[User Secret]: concepts.md#user-secret "A secret generated and stored on the application server that protects the local encrypted storage"
+[Secret Permanent Identity]: concepts.md#secret-permanent-identity "An opaque string containing private data about user's identity"
+[Public Permanent Identity]: concepts.md#public-permanent-identify "Generated from a Secret Permanent Identity - essentialy equivalent to a user ID"
+[Secret Provisional Identity]: concepts.md#secret-provisional-identity "Same as Secret Permanent Identity, but for a user not registered on the Trustchain yet"
+[Public Provisional Identity]: concepts.md#public-provisional-identity "Same as Public Permanent Identity, but for a user not registered on the Trustchain yet"
+
+
 The *Tanker SDK* provides security based on the principle of separation of knowledge between the *Tanker server*, the *user* and the *application server*.
 To establish trust between these actors and to enable sharing of encrypted *data* between *user*s, the *Tanker SDK* produces and uses cryptographic keys, IDs, and tokens.
 The following section describes these elements, how they are generated, used, and, when applicable, stored.
@@ -63,23 +82,6 @@ It should be noted that they are only valid within a single *Trustchain*.
  <dd>Same as Public Permanent Identity, but for a user not registered on the Trustchain yet</dd>
 </dl>
 
-[Device Encryption Key Pair]: concepts.md#device-keys "Unique identifier of a user"
-[Device ID]: concepts.md#device-id "Unique identifier of a device belonging to a user"
-[Device Signature Key Pair]: concepts.md#device-keys "Used when the user signs a block"
-[Group Encryption Key Pair]: concepts.md#user-group-keys "Used when sharing data securely within a group"
-[Group Signature Key Pair]: concepts.md#user-group-keys "Used when the user modifies a group"
-[Local Encrypted Storage]: concepts.md#device-id "A place where sensitive data is stored, encrypted at rest"
-[Resource Encryption Key]: concepts.md#resource-keys "A symmetric key that can be exchanged securely across users"
-[Shared Encrypted Key]: concepts.md#resource-keys "The result of encrypting a Resource Encryption Key"
-[Trustchain Signature Key Pair]: concepts.md#trustchain-keys "Root of the Trustchain - used to sign user additions"
-[User Encryption Key Pair]: concepts.md#user-keys "Used for sharing encrypted keys across users"
-[User ID]: concepts.md#user-id "Unique identifier of a user"
-[Unlock Key]: concepts.md#unlock-key "An opaque token that allows creating new devices"
-[User Secret]: concepts.md#user-secret "A secret generated and stored on the application server that protects the local encrypted storage"
-[Secret Permanent Identity]: concepts.md#secret-permanent-identity "An opaque string containing private data about user's identity"
-[Public Permanent Identity]: concepts.md#public-permanent-identify "Generated from a Secret Permanent Identity - essentialy equivalent to a user ID"
-[Secret Provisional Identity]: concepts.md#secret-provisional-identity "Same as Secret Permanent Identity, but for a user not registered on the Trustchain yet"
-[Public Provisional Identity]: concepts.md#public-provisional-identity "Same as Public Permanent Identity, but for a user not registered on the Trustchain yet"
 
 ## Trustchain keys
 
