@@ -11,4 +11,3 @@ This describes the protocol and algorithms used by the various Tanker SDKs.
 * [Trustchain Design](trustchain_design.md)
 * [Protocol](protocol.md)
 * [Threat Model](threat_model.md)
-* [Glossary](glossary.md)
