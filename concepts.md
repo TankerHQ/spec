@@ -64,10 +64,24 @@ It should be noted that they are only valid within a single *Trustchain*.
  <dd>Same as Public Permanent Identity, but for a user not registered on the Trustchain yet</dd>
 </dl>
 
-<!--
-TODO: generate from above
-[UID]: concepts.md#user_id "User ID: Any ID that can identify the user on both on the application server and the Trustchain"
--->
+<!-- TODO: after each acronym, repeat the matching <dd> above -->
+[Device Encryption Key Pair]: concepts.md#device-keys "(DEK)"
+[Device ID]: concepts.md#device-id "(DID)"
+[Device Signature Key Pair]: concepts.md#device-keys "(DSK)"
+[Group Encryption Key Pair]: concepts.md#user-group-keys "(GEK)"
+[Group Signature Key Pair]: concepts.md#user-group-keys "(GSK)"
+[Local Encrypted Storage]: concepts.md#device-id "(LES)"
+[Resource Encryption Key]: concepts.md#resource-keys "(REK)"
+[Shared Encrypted Key]: concepts.md#resource-keys "(SEK)"
+[Trustchain Signature Key Pair]: concepts.md#trustchain-keys "(TSK)"
+[User Encryption Key Pair]: concepts.md#user-keys "(UEK)"
+[User ID]: concepts.md#user-id "(UID)"
+[Unlock Key]: concepts.md#unlock-key "(ULK)"
+[User Secret]: concepts.md#user-secret "(US)"
+[Secret Permanent Identity]: concepts.md#secret-permanent-identity "(SPerID)"
+[Public Permanent Identity]: concepts.md#public-permanent-identify "(PPerID)"
+[Secret Provisional Identity]: concepts.md#secret-provisional-identity "(SProID)"
+[Public Provisional Identity]: concepts.md#public-provisional-identity "(PProID)"
 
 ## Trustchain keys
 
