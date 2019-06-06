@@ -12,50 +12,49 @@ It should be noted that they are only valid within a single *Trustchain*.
 
 <dl>
   <dt>Device Encryption Key Pair (DEK)</dt>
-  <dd>Used for asymetric encryption and signature</dd>
+  <dd>Used to encrypt the user keys</dd>
 
  <dt>Device ID (DID)</dt>
- <dd>Short random string that identifies the device of a usery</dd>
+ <dd>Unique identifier of a device belonging to a user</dd>
 
  <dt>Device Signature Key Pair (DSK)</dt>
- <dd>Used when the users signs something - like the addition of a new device</dd>
+ <dd>Used when the users signs a block - like the addition of a new device</dd>
 
  <dt>Group Encryption Key Pair (GEK)</dt>
- <dd>Used when the user shares encrypted resources with a group</dd>
+ <dd>Used when sharing data securely within a group</dd>
 
  <dt>Group Signature Key Pair (GSK)</dt>
  <dd>Used when the user modifies a group - like adding a new member to it</dd>
 
  <dt>Local Encrypted Storage (LES)</dt>
- <dd>A place on the file system of the device where sensitive data is stored, encrypted at rest</dd>
+ <dd>A place where sensitive data is stored, encrypted at rest</dd>
 
  <dt>Resource Encryption Key (REK)</dt>
- <dd>A small symmetric key that can be exchanged securely across users</dd>
+ <dd>A symmetric key that can be exchanged securely across users</dd>
 
  <dt>Shared Encrypted Key (SEK)</dt>
  <dd>The result of encrypting a Resource Encryption Key</dd>
 
  <dt>Trustchain Signature Key Pair (TSK)</dt>
- <dd>Used to sign the first block of a trusthain. The private Trustchain Signature Key Pair is generated
-  on the device of the creator of the trustchain, the public counterpart is stored in the root block</dd>
+ <dd>Root of the Trustchain - used to sign user additions</dd>
 
  <dt>User Encryption Key Pair (UEK)</dt>
- <dd>Used for sharing shared encryted keys across users. It is rotated when a device is revoked</dd>
+ <dd>Used for sharing encrypted keys across users. It is rotated when a device is revoked</dd>
 
  <dt>User ID (UID)</dt>
- <dd>Any ID that can identify the user on both on the application server and the Trustchain</dd>
+ <dd>Unique identifier of a user</dd>
 
  <dt>Unlock Key (ULK)</dt>
- <dd>A secret that allows device addition</dd>
+ <dd>An opaque token that allows creating new devices</dd>
 
  <dt>User Secret (US)</dt>
- <dd>A secret generated and stored on the application server that protects the local encryted storage</dd>
+ <dd>A secret generated and stored on the application server that protects the local encrypted storage</dd>
 
  <dt>Secret Permanent Identity (SPerID)</dt>
  <dd>An opaque string containing private data about user's identity</dd>
 
  <dt>Public Permanent Identity (PPerID)</dt>
- <dd>An opaque string that can been seen as a verified public key</dd>
+ <dd>Generated from a Secret Permanent Identity - essentialy equivalent to a user ID</dd>
 
  <dt>Secret Provisional Identity (SProID)</dt>
  <dd>Same as Secret Permanent Identity, but for a user not registered on the Trustchain yet</dd>
@@ -64,7 +63,6 @@ It should be noted that they are only valid within a single *Trustchain*.
  <dd>Same as Public Permanent Identity, but for a user not registered on the Trustchain yet</dd>
 </dl>
 
-<!-- TODO: after each acronym, repeat the matching <dd> above -->
 [Device Encryption Key Pair]: concepts.md#device-keys "(DEK)"
 [Device ID]: concepts.md#device-id "(DID)"
 [Device Signature Key Pair]: concepts.md#device-keys "(DSK)"
