@@ -11,11 +11,17 @@ It should be noted that they are only valid within a single *Trustchain*.
 
 
 <dl>
-  <dt>Device Encryption Key Pair (DEK)</dt>
-  <dd>Used to encrypt the user keys</dd>
+ <dt>User ID (UID)</dt>
+  <dd>Unique identifier of a user</dd>
 
  <dt>Device ID (DID)</dt>
  <dd>Unique identifier of a device belonging to a user</dd>
+
+ <dt>User Secret (US)</dt>
+ <dd>A secret generated and stored on the application server that protects the local encrypted storage</dd>
+
+ <dt>Device Encryption Key Pair (DEK)</dt>
+ <dd>Used to encrypt the user keys</dd>
 
  <dt>Device Signature Key Pair (DSK)</dt>
  <dd>Used when the users signs a block - like the addition of a new device</dd>
@@ -41,14 +47,8 @@ It should be noted that they are only valid within a single *Trustchain*.
  <dt>User Encryption Key Pair (UEK)</dt>
  <dd>Used for sharing encrypted keys across users. It is rotated when a device is revoked</dd>
 
- <dt>User ID (UID)</dt>
- <dd>Unique identifier of a user</dd>
-
  <dt>Unlock Key (ULK)</dt>
  <dd>An opaque token that allows creating new devices</dd>
-
- <dt>User Secret (US)</dt>
- <dd>A secret generated and stored on the application server that protects the local encrypted storage</dd>
 
  <dt>Secret Permanent Identity (SPerID)</dt>
  <dd>An opaque string containing private data about user's identity</dd>
