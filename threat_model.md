@@ -67,7 +67,7 @@ The *Tanker split-view protection* column corresponds to the use of a future ver
 
 **Trustchain private key leak + repeatable data leak**:
 
-*Attack*: An attacker gains access to all user data stored by the *application*. They also gain access to the private [TSK](#trustchain-keys). This attack is repeatable. 
+*Attack*: An attacker gains access to all user data stored by the *application*. They also gain access to the private [Trustchain Signature Key Pair]. This attack is repeatable. 
 
 *Impact:* Without *Tanker*, the attacker immediately gains access to all user data existing at this point in time. By repeating the same attack, they also have access to all future user data. With *Tanker*, they have no access to Tanker-encrypted data. 
 
@@ -139,7 +139,7 @@ Combinations not listed here have the same impact as the combination of their pa
 
 **Identities leak + data leak + Tanker control**
 
-*Attack*: The attacker gets the [US](#user-secret) from the *identities*. They get the encrypted [ULK](#unlock-key) from *Tanker*'s unlock service. Using both of those, they are able to decrypt the [ULK](#unlock-key). Using the [Device Encryption Key Pair] contained in the [ULK](#unlock-key) and the encrypted [UEK](#user-keys) in the *unlock device*'s creation block, they get the [UEK](#user-keys). Using the [UEK](#user-keys) and the key publish blocks, they can get the [REK](#resource-keys) needed to decrypt the encrypted user data.
+*Attack*: The attacker gets the [User Secret] from the *identities*. They get the encrypted [Unlock Key] from *Tanker*'s unlock service. Using both of those, they are able to decrypt the [Unlock Key]. Using the [Device Encryption Key Pair] contained in the [Unlock Key] and the encrypted [User Encryption Key Pair] in the *unlock device*'s creation block, they get the [User Encryption Key Pair]. Using the [User Encryption Key Pair] and the key publish blocks, they can get the [Resource Encryption Key] needed to decrypt the encrypted user data.
 
 *Impact*: The attacker gains access to all past encrypted data.
 
@@ -151,7 +151,7 @@ Combinations not listed here have the same impact as the combination of their pa
 
 **Trustchain private key leak + repeatable data leak + Tanker control**
 
-*Attack*: The attacker uses the [TSK](#trustchain-keys) to create new valid *devices* for every *user* in the *Trustchain*, creating an alternate version where they control every single *device*. They then perform a split view attack, showing each *user* a different view of the *Trustchain*: each *user* still sees their own *devices* correctly but every other *users*' *devices* are replaced by the attacker's *devices*. New shared data will now be shared with the attacker's controlled *device*.
+*Attack*: The attacker uses the [Trustchain Signature Key Pair] to create new valid *devices* for every *user* in the *Trustchain*, creating an alternate version where they control every single *device*. They then perform a split view attack, showing each *user* a different view of the *Trustchain*: each *user* still sees their own *devices* correctly but every other *users*' *devices* are replaced by the attacker's *devices*. New shared data will now be shared with the attacker's controlled *device*.
 
 *Impact*: The attacker gains access to all future shared data undetected as long as they are able to maintain the split view.
 *Note*: The split view attack prevents the attacked *users* to realize they are being attacked. The attack causes some discrepancies in the way the application works, but those are hard to notice and link to an actual attack. The split view attack also requires a very dedicated attacker, having full control and knowledge of the *Tanker* server
@@ -159,7 +159,7 @@ Combinations not listed here have the same impact as the combination of their pa
 
 **Identities leak + locked revoked device**
 
-*Attack*: The attacker gets the [US](#user-secret) from the *identities*. They get the encrypted [LES](#device-id) from the *device*. Using the [US](#user-secret), they decrypt the [LES](#device-id) and gain access to all past [REK](#resource-keys)s the *user* had access to. They then use the [REK](#resource-keys)s on the encrypted data stored on the *device* to access clear data.
+*Attack*: The attacker gets the [User Secret] from the *identities*. They get the encrypted [Local Encrypted Storage] from the *device*. Using the [User Secret], they decrypt the [Local Encrypted Storage] and gain access to all past [Resource Encryption Key]s the *user* had access to. They then use the [Resource Encryption Key]s on the encrypted data stored on the *device* to access clear data.
 
 *Impact*: Access to targeted past data. This attack can be mitigated if the *device* is wiped when revoked.
 

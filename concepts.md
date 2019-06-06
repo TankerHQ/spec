@@ -109,21 +109,21 @@ It is used to encrypt and decrypt the LES and the ULK stored by the *unlock serv
 ## Delegation token
 
 A delegation token is proof of the *user*'s authentication with the *application server*. It is generated when the *user* opens their first session in the *Tanker SDK*.
-The delegation token is composed of an ephemeral signature key pair, a delegation signature, and the [UID](#user-id).
-The delegation signature is created by combining the ephemeral public key and the [UID](#user-id), then signing the result with the private [TSK](#trustchain-keys).
+The delegation token is composed of an ephemeral signature key pair, a delegation signature, and the [User ID].
+The delegation signature is created by combining the ephemeral public key and the [User ID], then signing the result with the private [Trustchain Signature Key Pair].
 The delegation token is only used when the *user* creates their first *device* on the *Trustchain*, to sign the first `device_creation` *block* of that *user*.
 
 ## Secret Permanent Identity
 
 The secret permanent identity (SPerID) is generated and stored by the *application* and provided to a user only after successful authentication against the *application server*.
 It should never be shared with other *user*s.
-It contains some secret key material such as the [US](#user-secret) and [delegation token](#delegation-token).
+It contains some secret key material such as the [User Secret] and [delegation token](#delegation-token).
 It represents the identity of the *user* for the *Tanker SDK* and is considered a proof of authentication against the *application server*.
 
 ## Public Permanent Identity
 
-A public permanent identity (PPerID) can be generated from a [SPerID](#secret-permanent-identity), and is used to uniquely identify a *user*.
-It contains a [UID](#user-id), but no secret key material and it is safe to share publicly.
+A public permanent identity (PPerID) can be generated from a [Secret Permanent Identity], and is used to uniquely identify a *user*.
+It contains a [User ID], but no secret key material and it is safe to share publicly.
 
 ## Device ID
 
@@ -132,22 +132,22 @@ Each *user* must have at least one *device*. *Device*s are identified in the *Ta
 ## Device keys
 
 Each *device* registered on the *Trustchain* has one encryption key pair (DEK) and one signature key pair (DSK).
-Device keys are stored in the *device*'s [LES](#device-id). They are never replaced or modified after creation.
+Device keys are stored in the *device*'s [Local Encrypted Storage]. They are never replaced or modified after creation.
 The public DEK and DSK are pushed to the *Trustchain* in the `device_creation` *block*.
 The private DEK and DSK never leave the *device*.
 
 ## User keys
 
 Every *user* registered on the *Trustchain* has one active encryption key pair (UEK).
-User keys are stored in each *device*'s [LES](#device-id).
+User keys are stored in each *device*'s [Local Encrypted Storage].
 The private UEK is encrypted with each of the *user*'s *device*s' public [Device Encryption Key Pair] before being pushed to the *Trustchain*.
 It is pushed to the *Trustchain* in the `device_creation` *block* and updated whenever a *device* is revoked.
 
 ## User group keys
 
 A *user group* has one encryption key pair (GEK) and one signature key pair (GSK).
-*User group* keys are stored in the *device*'s [LES](#device-id).
-The private GSK is encrypted with the private GEK, which is encrypted with each *group member*'s [UEK](#user-keys).
+*User group* keys are stored in the *device*'s [Local Encrypted Storage].
+The private GSK is encrypted with the private GEK, which is encrypted with each *group member*'s [User Encryption Key Pair].
 They are pushed to the *Trustchain* in the `user_group_creation` *block* and updated whenever a *group member* is removed from a *user group*.
 
 ## Resource keys
@@ -155,16 +155,16 @@ They are pushed to the *Trustchain* in the `user_group_creation` *block* and upd
 A new resource key (REK) is randomly generated each time a *user* encrypts *data*.
 The *data* is symmetrically encrypted with the REK.
 The REK can be encrypted for *user*s or *user group*s.
-When sharing a resource key with a *user*, the REK is encrypted using the [UEK](#user-keys) of that *user* creating a shared encryption key (SEK).
-When sharing a resource key with a *user group*, the REK is encrypted using the [GEK](#user-group-keys) of that *user group* creating a shared encryption key (SEK).
+When sharing a resource key with a *user*, the REK is encrypted using the [User Encryption Key Pair] of that *user* creating a shared encryption key (SEK).
+When sharing a resource key with a *user group*, the REK is encrypted using the [Group Encryption Key Pair] of that *user group* creating a shared encryption key (SEK).
 SEKs are pushed to the *Trustchain* in `key_publish` *block*s.
-When received by a *device*, SEKs are stored in the [LES](#device-id).
+When received by a *device*, SEKs are stored in the [Local Encrypted Storage].
 
 ## Unlock key
 
 Once a session has been opened for the first time, it is highly advised to generate an unlock key (ULK) to be able to register new *device*s.
 When generating an unlock key, an *unlock device* is created and pushed to the *Trustchain*.
-The created [Device Encryption Key Pair] and [DSK](#device-keys) are not saved in the [LES](#device-id) but serialized in an opaque token: the unlock key (ULK).
+The created [Device Encryption Key Pair] and [Device Signature Key Pair] are not saved in the [Local Encrypted Storage] but serialized in an opaque token: the unlock key (ULK).
 
 ## Secret Provisional Identity
 
@@ -174,5 +174,5 @@ Each half contains the name of the authentication method, a value (in case of em
 
 ## Public Provisional Identity
 
-A public provisional identity (PProID) can be generated from a [SProID](#secret-provisional-identity) and consists of the [SProID](#secret-provisional-identity) without its secrets parts.
+A public provisional identity (PProID) can be generated from a [Secret Provisional Identity] and consists of the [Secret Provisional Identity] without its secrets parts.
 
