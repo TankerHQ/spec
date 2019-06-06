@@ -138,41 +138,41 @@ The private [Device Encryption Key Pair] and [Device Signature Key Pair] never l
 
 ## User keys
 
-Every *user* registered on the *Trustchain* has one active encryption key pair (UEK).
+Every *user* registered on the *Trustchain* has one active [User Encryption Key Pair] (UEK).
 User keys are stored in each *device*'s [Local Encrypted Storage].
-The private UEK is encrypted with each of the *user*'s *device*s' public [Device Encryption Key Pair] before being pushed to the *Trustchain*.
+The Private [User Encryption Key Pair] is encrypted with each of the *user*'s *device*s' public [Device Encryption Key Pair] before being pushed to the *Trustchain*.
 It is pushed to the *Trustchain* in the `device_creation` *block* and updated whenever a *device* is revoked.
 
 ## User group keys
 
-A *user group* has one encryption key pair (GEK) and one signature key pair (GSK).
+A *user group* has one [Group Encryption Key Pair] (GEK) and one [Group Signature Key Pair] (GSK).
 *User group* keys are stored in the *device*'s [Local Encrypted Storage].
-The private GSK is encrypted with the private GEK, which is encrypted with each *group member*'s [User Encryption Key Pair].
+The private [Group Signature Key Pair] is encrypted with the private [Group Eencryption Key Pair], which is encrypted with each *group member*'s [User Encryption Key Pair].
 They are pushed to the *Trustchain* in the `user_group_creation` *block* and updated whenever a *group member* is removed from a *user group*.
 
 ## Resource keys
 
-A new resource key (REK) is randomly generated each time a *user* encrypts *data*.
-The *data* is symmetrically encrypted with the REK.
-The REK can be encrypted for *user*s or *user group*s.
-When sharing a resource key with a *user*, the REK is encrypted using the [User Encryption Key Pair] of that *user* creating a shared encryption key (SEK).
-When sharing a resource key with a *user group*, the REK is encrypted using the [Group Encryption Key Pair] of that *user group* creating a shared encryption key (SEK).
-SEKs are pushed to the *Trustchain* in `key_publish` *block*s.
-When received by a *device*, SEKs are stored in the [Local Encrypted Storage].
+A new [Resource Encryption Key] (REK) is randomly generated each time a *user* encrypts *data*.
+The *data* is symmetrically encrypted with the [Resource Encryption Key].
+The [Resource Encryption Key] can be encrypted for *user*s or *user group*s.
+When sharing a resource key with a *user*, the [Resource Encryption Key] is encrypted using the [User Encryption Key Pair] of that *user* creating a [Shared Encryption Key] (SEK).
+When sharing a resource key with a *user group*, the [Resource Encryption Key] is encrypted using the [Group Encryption Key Pair] of that *user group* creating a [Sared Encryption Key] (SEK).
+[Share Encryption Key]s are pushed to the *Trustchain* in `key_publish` *block*s.
+When received by a *device*, they are stored in the [Local Encrypted Storage].
 
 ## Unlock key
 
-Once a session has been opened for the first time, it is highly advised to generate an unlock key (ULK) to be able to register new *device*s.
+Once a session has been opened for the first time, it is highly advised to generate an [Unlock Key] (ULK) to be able to register new *device*s.
 When generating an unlock key, an *unlock device* is created and pushed to the *Trustchain*.
-The created [Device Encryption Key Pair] and [Device Signature Key Pair] are not saved in the [Local Encrypted Storage] but serialized in an opaque token: the unlock key (ULK).
+The created [Device Encryption Key Pair] and [Device Signature Key Pair] are not saved in the [Local Encrypted Storage] but serialized in an opaque token: the [Unlock Key].
 
 ## Secret Provisional Identity
 
-A secret provisional identity (SProID) represents the identity of a user that is not yet registered on Tanker. It is split into two halves that are stored on the *application server* and on *Tanker server*s.
+A [Secret Provisional Identity] (SProID) represents the identity of a user that is not yet registered on Tanker. It is split into two halves that are stored on the *application server* and on *Tanker server*s.
 A provisional identity is attached to some authentication methods. For the moment only email is supported.
 Each half contains the name of the authentication method, a value (in case of email, the value is the email address), and encryption and signature key pairs.
 
 ## Public Provisional Identity
 
-A public provisional identity (PProID) can be generated from a [Secret Provisional Identity] and consists of the [Secret Provisional Identity] without its secrets parts.
+A [Public Provisional Identity] (PProID) can be generated from a [Secret Provisional Identity] and consists of the [Secret Provisional Identity] without its secrets parts.
 
