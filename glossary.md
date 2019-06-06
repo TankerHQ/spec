@@ -2,53 +2,53 @@
 
 <dl>
   <dt>application</dt>
-  <dd>any application, web, desktop, or mobile, that uses the *Tanker SDK* to protect *data* for its *user*s</dd>
+  <dd>any application, web, desktop, or mobile, that uses the <em>Tanker SDK</em> to protect <em>data</em> for its <em>user</em>s</dd>
 
   <dt>application server</dt>
-  <dd>server supporting the *application*, responsible for the *application*'s business logic, *data* storage, and user authentication</dd>
+  <dd>server supporting the <em>application</em>, responsible for the <em>application</em>'s business logic, <em>data</em> storage, and user authentication</dd>
 
   <dt>block</dt>
-  <dd>an atomic element of a *Trustchain*, signed by its *device* author and linked to other *block*s</dd>
+  <dd>an atomic element of a <em>Trustchain</em>, signed by its <em>device</em> author and linked to other <em>block</em>s</dd>
 
   <dt>customer</dt>
-  <dd>*Tanker*'s customer, the owner of the *application*, served to its *user*s</dd>
+  <dd><em>Tanker</em>'s customer, the owner of the <em>application</em>, served to its <em>user</em>s</dd>
 
   <dt>data</dt>
-  <dd>any data (including files), owned by the *user*, stored by the *customer* to be used in the *application*</dd>
+  <dd>any data (including files), owned by the <em>user</em>, stored by the <em>customer</em> to be used in the <em>application</em></dd>
 
   <dt>device</dt>
-  <dd>a web browser, moile device, or computer on which the *application* runs</dd>
+  <dd>a web browser, moile device, or computer on which the <em>application</em> runs</dd>
 
   <dt>group member</dt>
-  <dd>a *user* being part of a *user group*</dd>
+  <dd>a <em>user</em> being part of a <em>user group</em></dd>
 
   <dt>Tanker</dt>
-  <dd>provider of the *Tanker SDK*, the *Trustchain*, and the *unlock service*</dd>
+  <dd>provider of the <em>Tanker SDK</em>, the <em>Trustchain</em>, and the <em>unlock service</em></dd>
 
   <dt>Tanker SDK</dt>
-  <dd>a privacy SDK, intgrated by the *customer* into the *application*, allowing to encrypt, decrypt, and share data between *user*s</dd>
+  <dd>a privacy SDK, intgrated by the <em>customer</em> into the <em>application</em>, allowing to encrypt, decrypt, and share data between <em>user</em>s</dd>
 
   <dt>Tanker server</dt>
-  <dd>server hosting he *Trustchain*, and the *unlock service*</dd>
+  <dd>server hosting he <em>Trustchain</em>, and the <em>unlock service</em></dd>
 
   <dt>Trustchain</dt>
-  <dd>a tamper-proof, apend-only cryptographic log of chained and signed *block*s</dd>
+  <dd>a tamper-proof, apend-only cryptographic log of chained and signed <em>block</em>s</dd>
 
   <dt>unlock device</dt>
-  <dd>a 'virtual' devce associated with a *user*, it is the public part of an *unlock key* registered on the *Trustchain*</dd>
+  <dd>a 'virtual' devce associated with a <em>user</em>, it is the public part of an <em>unlock key</em> registered on the <em>Trustchain</em></dd>
 
   <dt>unlock key</dt>
-  <dd>a key stored either by the *user* or by the *unlock service* to validate new *device* creations</dd>
+  <dd>a key stored either by the <em>user</em> or by the <em>unlock service</em> to validate new <em>device</em> creations</dd>
 
   <dt>unlock service</dt>
-  <dd>an optional *Tanker* service involved in *device* management.</dd>
+  <dd>an optional <em>Tanker</em> service involved in <em>device</em> management.</dd>
 
   <dt>user</dt>
-  <dd>a user of the *application*, owning one or more *device*s</dd>
+  <dd>a user of the <em>application</em>, owning one or more <em>device</em>s</dd>
 
   <dt>user group</dt>
-  <dd>a group of *uer*s, the *group member*s, created and managed by *user*s. *Data* shared with a *user group* is accessible to all its *group member*s</dd>
+  <dd>a group of <em>uer</em>s, the <em>group member</em>s, created and managed by <em>user</em>s. <em>Data</em> shared with a <em>user group</em> is accessible to all its <em>group member</em>s</dd>
 
   <dt>resource</dt>
-  <dd>same as *data*</dd>
+  <dd>same as <em>data</em></dd>
 </dl>
