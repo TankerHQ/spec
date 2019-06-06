@@ -24,7 +24,7 @@ It should be noted that they are only valid within a single *Trustchain*.
  <dd>Used to encrypt the user keys</dd>
 
  <dt>Device Signature Key Pair (DSK)</dt>
- <dd>Used when the users signs a block - like the addition of a new device</dd>
+ <dd>Used when the user signs a block - like the addition of a new device</dd>
 
  <dt>Group Encryption Key Pair (GEK)</dt>
  <dd>Used when sharing data securely within a group</dd>
@@ -63,23 +63,23 @@ It should be noted that they are only valid within a single *Trustchain*.
  <dd>Same as Public Permanent Identity, but for a user not registered on the Trustchain yet</dd>
 </dl>
 
-[Device Encryption Key Pair]: concepts.md#device-keys "(DEK)"
-[Device ID]: concepts.md#device-id "(DID)"
-[Device Signature Key Pair]: concepts.md#device-keys "(DSK)"
-[Group Encryption Key Pair]: concepts.md#user-group-keys "(GEK)"
-[Group Signature Key Pair]: concepts.md#user-group-keys "(GSK)"
-[Local Encrypted Storage]: concepts.md#device-id "(LES)"
-[Resource Encryption Key]: concepts.md#resource-keys "(REK)"
-[Shared Encrypted Key]: concepts.md#resource-keys "(SEK)"
-[Trustchain Signature Key Pair]: concepts.md#trustchain-keys "(TSK)"
-[User Encryption Key Pair]: concepts.md#user-keys "(UEK)"
-[User ID]: concepts.md#user-id "(UID)"
-[Unlock Key]: concepts.md#unlock-key "(ULK)"
-[User Secret]: concepts.md#user-secret "(US)"
-[Secret Permanent Identity]: concepts.md#secret-permanent-identity "(SPerID)"
-[Public Permanent Identity]: concepts.md#public-permanent-identify "(PPerID)"
-[Secret Provisional Identity]: concepts.md#secret-provisional-identity "(SProID)"
-[Public Provisional Identity]: concepts.md#public-provisional-identity "(PProID)"
+[Device Encryption Key Pair]: concepts.md#device-keys "Unique identifier of a user"
+[Device ID]: concepts.md#device-id "Unique identifier of a device belonging to a user"
+[Device Signature Key Pair]: concepts.md#device-keys "Used when the user signs a block"
+[Group Encryption Key Pair]: concepts.md#user-group-keys "Used when sharing data securely within a group"
+[Group Signature Key Pair]: concepts.md#user-group-keys "Used when the user modifies a group"
+[Local Encrypted Storage]: concepts.md#device-id "A place where sensitive data is stored, encrypted at rest"
+[Resource Encryption Key]: concepts.md#resource-keys "A symmetric key that can be exchanged securely across users"
+[Shared Encrypted Key]: concepts.md#resource-keys "The result of encrypting a Resource Encryption Key"
+[Trustchain Signature Key Pair]: concepts.md#trustchain-keys "Root of the Trustchain - used to sign user additions"
+[User Encryption Key Pair]: concepts.md#user-keys "Used for sharing encrypted keys across users"
+[User ID]: concepts.md#user-id "Unique identifier of a user"
+[Unlock Key]: concepts.md#unlock-key "An opaque token that allows creating new devices"
+[User Secret]: concepts.md#user-secret "A secret generated and stored on the application server that protects the local encrypted storage"
+[Secret Permanent Identity]: concepts.md#secret-permanent-identity "An opaque string containing private data about user's identity"
+[Public Permanent Identity]: concepts.md#public-permanent-identify "Generated from a Secret Permanent Identity - essentialy equivalent to a user ID"
+[Secret Provisional Identity]: concepts.md#secret-provisional-identity "Same as Secret Permanent Identity, but for a user not registered on the Trustchain yet"
+[Public Provisional Identity]: concepts.md#public-provisional-identity "Same as Public Permanent Identity, but for a user not registered on the Trustchain yet"
 
 ## Trustchain keys
 
