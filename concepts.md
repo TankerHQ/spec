@@ -64,6 +64,9 @@ It should be noted that they are only valid within a single *Trustchain*.
  <dd>Same as Public Permanent Identity, but for a user not registered on the Trustchain yet</dd>
 </dl>
 
+// TODO: generate from above
+// [UID]: concepts.md#user_id "User ID: Any ID that can identify the user on both on the application server and the Trustchain"
+
 ## Trustchain keys
 
 A *Trustchain* is identified by a unique ID, a name, and a signature key pair (TSK).
