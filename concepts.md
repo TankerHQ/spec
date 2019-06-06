@@ -9,44 +9,60 @@ It should be noted that they are only valid within a single *Trustchain*.
 
 ## Summary
 
-| Abbreviation | Description                   |
-| ------------ | ----------------------------- |
-| DEK          | Device Encryption Key Pair    |
-| DID          | Device ID                     |
-| DSK          | Device Signature Key Pair     |
-| GEK          | Group Encryption Key Pair     |
-| GSK          | Group Signature Key Pair      |
-| LES          | Local Encrypted Storage       |
-| REK          | Resource Encryption Key       |
-| SEK          | Shared Encrypted Key          |
-| TSK          | Trustchain Signature Key Pair |
-| UEK          | User Encryption Key Pair      |
-| UID          | User ID                       |
-| ULK          | Unlock Key                    |
-| US           | User Secret                   |
-| SPerID       | Secret Permanent Identity     |
-| PPerID       | Public Permanent Identity     |
-| SProID       | Secret Provisional Identity   |
-| PProID       | Public Provisional Identity   |
 
-*[UID]: User ID
-*[US]: User Secret
-*[SPerID]: Secret Permanent Identity
-*[PPerID]: Public Permanent Identity
-*[SProID]: Secret Provisional Identity
-*[PProID]: Public Provisional Identity
-*[DID]: Device ID
-*[ULK]: Unlock Key
-*[LES]: Local Encrypted Storage
-*[TSK]: Trustchain Signature Key Pair
-*[DEK]: Device Encryption Key Pair
-*[DSK]: Device Signature Key Pair
-*[UEK]: User Encryption Key Pair
-*[GEK]: Group Encryption Key Pair
-*[GSK]: Group Signature Key Pair
-*[REK]: Resource Encryption Key
-*[SEK]: Shared Encrypted Key
-*[SEKs]: Shared Encrypted Keys
+<dl>
+  <dt>Device Encryption Key Pair (DEK)</dt>
+  <dd>Used for asymetric encryption and signature</dd>
+
+ <dt>Device ID (DID)</dt>
+ <dd>Short random string that identifies the device of a usery</dd>
+
+ <dt>Device Signature Key Pair (DSK)</dt>
+ <dd>Used when the users signs something - like the addition of a new device</dd>
+
+ <dt>Group Encryption Key Pair (GEK)</dt>
+ <dd>Used when the user shares encrypted resources with a group</dd>
+
+ <dt>Group Signature Key Pair (GSK)</dt>
+ <dd>Used when the user modifies a group - like adding a new member to it</dd>
+
+ <dt>Local Encrypted Storage (LES)</dt>
+ <dd>A place on the file system of the device where sensitive data is stored, encrypted at rest</dd>
+
+ <dt>Resource Encryption Key (REK)</dt>
+ <dd>A small symmetric key that can be exchanged securely across users</dd>
+
+ <dt>Shared Encrypted Key (SEK)</dt>
+ <dd>The result of encrypting a Resource Encryption Key</dd>
+
+ <dt>Trustchain Signature Key Pair (TSK)</dt>
+ <dd>Used to sign the first block of a trusthain. The private Trustchain Signature Key Pair is generated
+  on the device of the creator of the trustchain, the public counterpart is stored in the root block</dd>
+
+ <dt>User Encryption Key Pair (UEK)</dt>
+ <dd>Used for sharing shared encryted keys across users. It is rotated when a device is revoked</dd>
+
+ <dt>User ID (UID)</dt>
+ <dd>Any ID that can identify the user on both on the application server and the Trustchain</dd>
+
+ <dt>Unlock Key (ULK)</dt>
+ <dd>A secret that allows device addition</dd>
+
+ <dt>User Secret (US)</dt>
+ <dd>A secret generated and stored on the application server that protects the local encryted storage</dd>
+
+ <dt>Secret Permanent Identity (SPerID)</dt>
+ <dd>An opaque string containing private data about user's identity</dd>
+
+ <dt>Public Permanent Identity (PPerID)</dt>
+ <dd>An opaque string that can been seen as a verified public key</dd>
+
+ <dt>Secret Provisional Identity (SProID)</dt>
+ <dd>Same as Secret Permanent Identity, but for a user not registered on the Trustchain yet</dd>
+
+ <dt>Public Provisional Identity (PProID)</dt>
+ <dd>Same as Public Permanent Identity, but for a user not registered on the Trustchain yet</dd>
+</dl>
 
 ## Trustchain keys
 
