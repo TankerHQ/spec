@@ -140,7 +140,7 @@ The private DEK and DSK never leave the *device*.
 
 Every *user* registered on the *Trustchain* has one active encryption key pair (UEK).
 User keys are stored in each *device*'s [LES](#device-id).
-The private UEK is encrypted with each of the *user*'s *device*s' public [DEK](#device-keys) before being pushed to the *Trustchain*.
+The private UEK is encrypted with each of the *user*'s *device*s' public [Device Encryption Key Pair] before being pushed to the *Trustchain*.
 It is pushed to the *Trustchain* in the `device_creation` *block* and updated whenever a *device* is revoked.
 
 ## User group keys
@@ -164,7 +164,7 @@ When received by a *device*, SEKs are stored in the [LES](#device-id).
 
 Once a session has been opened for the first time, it is highly advised to generate an unlock key (ULK) to be able to register new *device*s.
 When generating an unlock key, an *unlock device* is created and pushed to the *Trustchain*.
-The created [DEK](#device-keys) and [DSK](#device-keys) are not saved in the [LES](#device-id) but serialized in an opaque token: the unlock key (ULK).
+The created [Device Encryption Key Pair] and [DSK](#device-keys) are not saved in the [LES](#device-id) but serialized in an opaque token: the unlock key (ULK).
 
 ## Secret Provisional Identity
 

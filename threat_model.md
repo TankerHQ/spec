@@ -139,7 +139,7 @@ Combinations not listed here have the same impact as the combination of their pa
 
 **Identities leak + data leak + Tanker control**
 
-*Attack*: The attacker gets the [US](#user-secret) from the *identities*. They get the encrypted [ULK](#unlock-key) from *Tanker*'s unlock service. Using both of those, they are able to decrypt the [ULK](#unlock-key). Using the [DEK](#device-keys) contained in the [ULK](#unlock-key) and the encrypted [UEK](#user-keys) in the *unlock device*'s creation block, they get the [UEK](#user-keys). Using the [UEK](#user-keys) and the key publish blocks, they can get the [REK](#resource-keys) needed to decrypt the encrypted user data.
+*Attack*: The attacker gets the [US](#user-secret) from the *identities*. They get the encrypted [ULK](#unlock-key) from *Tanker*'s unlock service. Using both of those, they are able to decrypt the [ULK](#unlock-key). Using the [Device Encryption Key Pair] contained in the [ULK](#unlock-key) and the encrypted [UEK](#user-keys) in the *unlock device*'s creation block, they get the [UEK](#user-keys). Using the [UEK](#user-keys) and the key publish blocks, they can get the [REK](#resource-keys) needed to decrypt the encrypted user data.
 
 *Impact*: The attacker gains access to all past encrypted data.
 

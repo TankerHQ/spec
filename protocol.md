@@ -22,7 +22,7 @@ Please note that when the user handles the [ULK](#unlock-key) themselves (withou
 Prerequisite: the *user* is registered on the *application server*, but not on the *Trustchain*.
 Once the *user* is authenticated, the *application* can fetch the *user*'s [SPerID](#secret-permanent-identity) from the *application server*.
 
-The *Tanker SDK* extracts the [US](#user-secret) and the [UID](#user-id) from the [SPerID](#secret-permanent-identity), and use them to create the *device*'s [LES](#device-id). Next, the *Tanker SDK* creates the [DEK](#device-keys), [DSK](#device-keys), and [UEK](#user-keys), and stores them to the [LES](#device-id).
+The *Tanker SDK* extracts the [US](#user-secret) and the [UID](#user-id) from the [SPerID](#secret-permanent-identity), and use them to create the *device*'s [LES](#device-id). Next, the *Tanker SDK* creates the [Device Encryption Key Pair], [DSK](#device-keys), and [UEK](#user-keys), and stores them to the [LES](#device-id).
 
 A `device_creation` *block* is then constructed with these keys, and signed with the ephemeral private key of the [delegation token](#delegation-token) found in the [SPerID](#secret-permanent-identity) retrieved earlier. The *block* is pushed to the *Trustchain* and verified by the *Tanker server*.
 
@@ -32,7 +32,7 @@ Assuming the pushed *block* is correct, the *Tanker server* acknowledges it, all
 
 Prerequisite: the *device* is already registered on the *Trustchain*, the [SPerID](#secret-permanent-identity) has been retrieved from the *application server* after the *user* has been authenticated against the *application server*.
 
-The *Tanker SDK* uses the [US](#user-secret) retrieved from the [SPerID](#secret-permanent-identity) to access the [DEK](#device-keys) and [DSK](#device-keys) stored in the [LES](#device-id).
+The *Tanker SDK* uses the [US](#user-secret) retrieved from the [SPerID](#secret-permanent-identity) to access the [Device Encryption Key Pair] and [DSK](#device-keys) stored in the [LES](#device-id).
 
 When the *user* opens their *Tanker* session, the *device* opens an HTTPS WebSocket connection with the *Tanker server*.
 Once the connection is established, the *device* asks for an authentication challenge.
@@ -62,7 +62,7 @@ If that is the case, the authentication is successful, and the session is open, 
 Prerequisite: the *user* has already registered their first *device*.
 
 To add an additional *device*, the *Tanker SDK* must first create an *unlock device* and push it to the *Trustchain*.
-The created [DEK](#device-keys) and [DSK](#device-keys) pairs are not saved in the [LES](#device-id) but serialized in an opaque token; the [ULK](#unlock-key).
+The created [Device Encryption Key Pair] and [DSK](#device-keys) pairs are not saved in the [LES](#device-id) but serialized in an opaque token; the [ULK](#unlock-key).
 
 This [ULK](#unlock-key) can either be given to the *user* to be stored in a safe place or stored on the *unlock service*. It can then be used to add any other *device*.
 
@@ -114,10 +114,10 @@ Except for the first *device*, which is validated in a specific way previously d
 
 Given the *user*'s [ULK](#unlock-key), the steps to register a new *device* are as follows:
 
-1. Extract the *unlock device*'s [DEK](#device-keys) and [DSK](#device-keys) from the [ULK](#unlock-key)
+1. Extract the *unlock device*'s [Device Encryption Key Pair] and [DSK](#device-keys) from the [ULK](#unlock-key)
 2. Pull the *Trustchain* up to the *unlock device*'s `device_creation` *block*, verify it and extract the [UEK](#user-keys) from it
-3. Decrypt the [UEK](#user-keys) using the  *unlock device*'s private [DEK](#device-keys)
-4. Generate the new *device*'s [DEK](#device-keys) and [DSK](#device-keys)
+3. Decrypt the [UEK](#user-keys) using the  *unlock device*'s private [Device Encryption Key Pair]
+4. Generate the new *device*'s [Device Encryption Key Pair] and [DSK](#device-keys)
 5. Construct the new *device*'s `device_creation` *block* and sign it with the *unlock device*'s private [DSK](#device-keys)
 6. Push the *block* to the *Trustchain*
 7. The *Tanker server* validates the *block*

@@ -12,7 +12,7 @@ The basic role of a *Trustchain* is to provide public key distribution between *
 
 ## Users and devices
 
-Devices are the basic entities we considered when designing the *Trustchain*. A *device* is an entity owned by a *user*. It stores a [DSK](#device-keys) and a [DEK](#device-keys). In practice, *devices* can be *users*' web browsers, mobile phones, desktop applications, etc.
+Devices are the basic entities we considered when designing the *Trustchain*. A *device* is an entity owned by a *user*. It stores a [DSK](#device-keys) and a [Device Encryption Key Pair]. In practice, *devices* can be *users*' web browsers, mobile phones, desktop applications, etc.
 
 At a basic level, *devices* can perform three types of actions:
 
@@ -34,9 +34,9 @@ The main actions for a block are:
 
 Blocks also contain a serialized payload, which contains different information depending on the nature of the block. Typical contents of a block payload are public keys, encrypted private or symmetric keys, and any data necessary to prove the block's validity.
 
-The payload of a key publish block &mdash; the block that shares a [REK](#resource-keys) between different *devices* &mdash; contains the recipient *device*'s ID and the [REK](#resource-keys) encrypted with its public [DEK](#device-keys).
+The payload of a key publish block &mdash; the block that shares a [REK](#resource-keys) between different *devices* &mdash; contains the recipient *device*'s ID and the [REK](#resource-keys) encrypted with its public [Device Encryption Key Pair].
 
-The payload of a *device* creation block contains the public [DEK](#device-keys) and [DSK](#device-keys) of the newly created *device*, plus an ephemeral key pair and an [extra signature](#Device creation and signature delegation).
+The payload of a *device* creation block contains the public [Device Encryption Key Pair] and [DSK](#device-keys) of the newly created *device*, plus an ephemeral key pair and an [extra signature](#Device creation and signature delegation).
 
 Blocks also have an index, which corresponds to the order in which they are added to the *Trustchain*.
 
@@ -91,7 +91,7 @@ The author also stores the block they just emitted, preventing the *Trustchain* 
 
 ### Trust on first use
 
-When first receiving a *device* creation block for a *user*, the recipient needs to trust that the block relates to the correct *user*. The block and the information it contains &mdash; notably the new *device*'s [DEK](#device-keys) and [DSK](#device-keys) &mdash; are then stored locally, preventing the need to ask this *device*'s public key again.
+When first receiving a *device* creation block for a *user*, the recipient needs to trust that the block relates to the correct *user*. The block and the information it contains &mdash; notably the new *device*'s [Device Encryption Key Pair] and [DSK](#device-keys) &mdash; are then stored locally, preventing the need to ask this *device*'s public key again.
 
 It is to be noted that because of the signature delegation scheme, the entity that needs to be trusted upon receiving blocks for a new *user* is **not** the *Trustchain* distribution system, but the private [TSK](#trustchain-keys) holder (i.e. the *application server*).
 
