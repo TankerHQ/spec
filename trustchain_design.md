@@ -110,7 +110,7 @@ The author also stores the block they just emitted, preventing the *Trustchain* 
 
 ### Trust on first use
 
-When first receiving a *device* creation block for a *user*, the recipient needs to trust that the block relates to the correct *user*. The block and the information it contains &mdash; notably the new *device*'s [Device Encryption Key Pair] and [Device Signature Key Pair] &mdash; are then stored locally, preventing the need to ask this *device*'s public key again.
+When first receiving a *device* creation block for a *user*, the recipient needs to trust that the block relates to the correct *user*. The block and the information it contains &mdash; notably the new *device*'s [Device Encryption Key Pair] and [Device Signature Key Pair] &mdash; are then stored locally, preventing the need to ask for this *device*'s public key again.
 
 It is to be noted that because of the signature delegation scheme, the entity that needs to be trusted upon receiving blocks for a new *user* is **not** the *Trustchain* distribution system, but the private [Trustchain Signature Key Pair] holder (i.e. the *application server*).
 
