@@ -160,7 +160,7 @@ A new [Resource Encryption Key] (REK) is randomly generated each time a *user* e
 The *data* is symmetrically encrypted with the [Resource Encryption Key].
 The [Resource Encryption Key] can be encrypted for *user*s or *user group*s.
 When sharing a resource key with a *user*, the [Resource Encryption Key] is encrypted using the [User Encryption Key Pair] of that *user* creating a [Shared Encryption Key] (SEK).
-When sharing a resource key with a *user group*, the [Resource Encryption Key] is encrypted using the [Group Encryption Key Pair] of that *user group* creating a [Sared Encryption Key] (SEK).
+When sharing a resource key with a *user group*, the [Resource Encryption Key] is encrypted using the [Group Encryption Key Pair] of that *user group* creating a [Shared Encryption Key] (SEK).
 [Share Encryption Key]s are pushed to the *Trustchain* in `key_publish` *block*s.
 When received by a *device*, they are stored in the [Local Encrypted Storage].
 
