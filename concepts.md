@@ -5,9 +5,10 @@
 [Device Signature Key Pair]: concepts.md#device-keys "Used when the user signs a block"
 [Group Encryption Key Pair]: concepts.md#user-group-keys "Used when sharing data securely within a group"
 [Group Signature Key Pair]: concepts.md#user-group-keys "Used when the user modifies a group"
-[Local Encrypted Storage]: concepts.md#device-id "A place where sensitive data is stored, encrypted at rest"
+[Local Encrypted Storage]: concepts.md#device-id "A place where key materials are stored, encrypted at rest while the Tanker session is closed"
+[Local Clear Storage]: concepts.md#device-id "A place where key materials are stored after they are decrypted while the Tanker session is open"
 [Resource Encryption Key]: concepts.md#resource-keys "A symmetric key that can be exchanged securely across users"
-[Shared Encrypted Key]: concepts.md#resource-keys "The result of encrypting a Resource Encryption Key"
+[Shared Encrypted Key]: concepts.md#resource-keys "The result of encrypting a Resource Encryption Key for a recipient"
 [Trustchain Signature Key Pair]: concepts.md#trustchain-keys "Root of the Trustchain - used to sign user additions"
 [User Encryption Key Pair]: concepts.md#user-keys "Used for sharing encrypted keys across users"
 [User ID]: concepts.md#user-id "Unique identifier of a user"
@@ -55,13 +56,16 @@ Here's a list of concepts used in the rest of this document:
  <dd>Used when the user modifies a group - like adding a new member to it</dd>
 
  <dt>Local Encrypted Storage (LES)</dt>
- <dd>A place where sensitive data is stored, encrypted at rest</dd>
+ <dd>A place where key materials are stored, encrypted at rest while the Tanker session is closed</dd>
+
+ <dt>Local Clear Storage (LCS)</dt>
+ <dd>A place where key materials are stored after they are decrypted while the Tanker session is open</dd>
 
  <dt>Resource Encryption Key (REK)</dt>
  <dd>A symmetric key that can be exchanged securely across users</dd>
 
  <dt>Shared Encrypted Key (SEK)</dt>
- <dd>The result of encrypting a Resource Encryption Key</dd>
+ <dd>The result of encrypting a Resource Encryption Key for a recipient</dd>
 
  <dt>Trustchain Signature Key Pair (TSK)</dt>
  <dd>Root of the Trustchain - used to sign user additions</dd>
@@ -151,7 +155,7 @@ It is pushed to the *Trustchain* in the `device_creation` *block* and updated wh
 
 A *user group* has one [Group Encryption Key Pair] (GEK) and one [Group Signature Key Pair] (GSK).
 *User group* keys are stored in the *device*'s [Local Encrypted Storage].
-The private [Group Signature Key Pair] is encrypted with the private [Group Eencryption Key Pair], which is encrypted with each *group member*'s [User Encryption Key Pair].
+The private [Group Signature Key Pair] is encrypted with the private [Group Encryption Key Pair], which is encrypted with each *group member*'s [User Encryption Key Pair].
 They are pushed to the *Trustchain* in the `user_group_creation` *block* and updated whenever a *group member* is removed from a *user group*.
 
 ### Resource keys
@@ -159,9 +163,9 @@ They are pushed to the *Trustchain* in the `user_group_creation` *block* and upd
 A new [Resource Encryption Key] (REK) is randomly generated each time a *user* encrypts *data*.
 The *data* is symmetrically encrypted with the [Resource Encryption Key].
 The [Resource Encryption Key] can be encrypted for *user*s or *user group*s.
-When sharing a resource key with a *user*, the [Resource Encryption Key] is encrypted using the [User Encryption Key Pair] of that *user* creating a [Shared Encryption Key] (SEK).
-When sharing a resource key with a *user group*, the [Resource Encryption Key] is encrypted using the [Group Encryption Key Pair] of that *user group* creating a [Shared Encryption Key] (SEK).
-[Share Encryption Key]s are pushed to the *Trustchain* in `key_publish` *block*s.
+When sharing a resource key with a *user*, the [Resource Encryption Key] is encrypted using the [User Encryption Key Pair] of that *user* creating a [Shared Encrypted Key] (SEK).
+When sharing a resource key with a *user group*, the [Resource Encryption Key] is encrypted using the [Group Encryption Key Pair] of that *user group* creating a [Shared Encrypted Key] (SEK).
+[Share Encrypted Key]s are pushed to the *Trustchain* in `key_publish` *block*s.
 When received by a *device*, they are stored in the [Local Encrypted Storage].
 
 ### Unlock key
