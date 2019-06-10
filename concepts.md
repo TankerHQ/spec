@@ -128,7 +128,7 @@ It should never be shared with other *user*s.
 It contains some secret key material such as the [User Secret] and [delegation token](#delegation-token).
 It represents the identity of the *user* for the *Tanker SDK* and is considered a proof of authentication against the *application server*.
 
-## Public Permanent Identity
+### Public Permanent Identity
 
 A [Public Permanent Identity] (PPerID) can be generated from a [Secret Permanent Identity], and is used to uniquely identify a *user*.
 It contains a [User ID], but no secret key material and it is safe to share publicly.
