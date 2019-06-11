@@ -1,8 +1,11 @@
-# How Tanker Works
+# Tanker: How it works
+## Technical specification of the Tanker SDK and protocol for end-to-end encryption
 
-Tanker technical and cryptographic specification.
+This document is a deep dive into the design of the Tanker SDK and its infrastructure, hte cryptographic underpinnings and algorythms, what transits over the protocol, and the security model. It aims to be open and answer all possible questions one might pose when considering adopting this technology.
 
-This describes the protocol and algorithms used by the various Tanker SDKs.
+If you have additional questions that you'd like to see answered, please open up an issue right here.
+
+We'd like to stress that you don't need to understand this spec in order to use the Tanker SDK. Its APIs are simple and require no cryptographic skills. To learn how to integrate the Tanker SDK in your own apps, please refer to our [docs](https://tanker.io/docs).
 
 ## Table of contents
 
@@ -10,4 +13,4 @@ This describes the protocol and algorithms used by the various Tanker SDKs.
 * [Concepts](concepts.md)
 * [Trustchain Design](trustchain_design.md)
 * [Protocol](protocol.md)
-* [Threat Model](threat_model.md)
+* [Threat Model](threat_model.md.
