@@ -34,58 +34,58 @@ For a glossary of global terms used in this spec, please see [the relevant secti
 Here's a list of concepts used in the rest of this document:
 
 <dl>
- <dt>User ID (UID)</dt>
+ <dt><a href="#user-id">User ID (UID)</a></dt>
   <dd>Unique identifier of a user</dd>
 
- <dt>Device ID (DID)</dt>
+ <dt><a href="#device-id">Device ID (DID)</a></dt>
  <dd>Unique identifier of a device belonging to a user</dd>
 
- <dt>User Secret (US)</dt>
+ <dt><a href="#user-secret">User Secret (US)</a></dt>
  <dd>A secret generated and stored on the application server that protects the local encrypted storage</dd>
 
- <dt>Device Encryption Key Pair (DEK)</dt>
+ <dt><a href="#device-keys">Device Encryption Key Pair (DEK)</a></dt>
  <dd>Used to encrypt the user keys</dd>
 
- <dt>Device Signature Key Pair (DSK)</dt>
+ <dt><a href="#device-keys">Device Signature Key Pair (DSK)</a></dt>
  <dd>Used when the user signs a block - like the addition of a new device</dd>
 
- <dt>Group Encryption Key Pair (GEK)</dt>
+ <dt><a href="#user-group-keys">Group Encryption Key Pair (GEK)</a></dt>
  <dd>Used when sharing data securely within a group</dd>
 
- <dt>Group Signature Key Pair (GSK)</dt>
+ <dt><a href="#user-group-keys">Group Signature Key Pair (GSK)</a></dt>
  <dd>Used when the user modifies a group - like adding a new member to it</dd>
 
- <dt>Local Encrypted Storage (LES)</dt>
+ <dt><a href="#device-keys">Local Encrypted Storage (LES)</a></dt>
  <dd>A place where key materials are stored, encrypted at rest while the Tanker session is closed</dd>
 
- <dt>Local Clear Storage (LCS)</dt>
+ <dt>Local Clear Storage (LCS)</a></dt>
  <dd>A place where key materials are stored after they are decrypted while the Tanker session is open</dd>
 
- <dt>Resource Encryption Key (REK)</dt>
+ <dt><a href="#resource-keys">Resource Encryption Key (REK)</a></dt>
  <dd>A symmetric key that can be exchanged securely across users</dd>
 
- <dt>Shared Encrypted Key (SEK)</dt>
+ <dt><a href="#resource-keys">Shared Encrypted Key (SEK)</a></dt>
  <dd>The result of encrypting a Resource Encryption Key for a recipient</dd>
 
- <dt>Trustchain Signature Key Pair (TSK)</dt>
+ <dt><a href="#trustchain-keys">Trustchain Signature Key Pair (TSK)</a></dt>
  <dd>Root of the Trustchain - used to sign user additions</dd>
 
- <dt>User Encryption Key Pair (UEK)</dt>
+ <dt><a href="#user-keys">User Encryption Key Pair (UEK)</a></dt>
  <dd>Used for sharing encrypted keys across users. It is rotated when a device is revoked</dd>
 
- <dt>Unlock Key (ULK)</dt>
+ <dt><a href="#unlock-key">Unlock Key (ULK)</a></dt>
  <dd>An opaque token that allows creating new devices</dd>
 
- <dt>Secret Permanent Identity (SPerID)</dt>
+ <dt><a href="#secret-provisional-identity">Secret Permanent Identity (SPerID)</a></dt>
  <dd>An opaque string containing private data about user's identity</dd>
 
- <dt>Public Permanent Identity (PPerID)</dt>
+ <dt><a href="#public-permanent-identity">Public Permanent Identity (PPerID)</a></dt>
  <dd>Generated from a Secret Permanent Identity - essentialy equivalent to a user ID</dd>
 
- <dt>Secret Provisional Identity (SProID)</dt>
+ <dt><a href="#secret-provisional-identity">Secret Provisional Identity (SProID)</a></dt>
  <dd>Same as Secret Permanent Identity, but for a user not registered on the Trustchain yet</dd>
 
- <dt>Public Provisional Identity (PProID)</dt>
+ <dt><a href="#public-provisional-identity">Public Provisional Identity (PProID)</a></dt>
  <dd>Same as Public Permanent Identity, but for a user not registered on the Trustchain yet</dd>
 </dl>
 
