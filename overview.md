@@ -1,6 +1,6 @@
 # Overview
 
-*Tanker* is a solution for implementing client-side encryption in *application*s. It supports end-to-end encryption, and provides an optional way for developers to ensure their *user*s can recover their cryptographic identities in case of *device* loss. This mechanism is referred to as *unlock* and depends on both the *application server* and a third-party verification server to protect and redistribute *user*s' cryptographic identities.
+*Tanker* is a solution for implementing client-side encryption in *application*s. It supports end-to-end encryption, and provides an optional way for developers to ensure their *user*s can recover their cryptographic identities in case of *device* loss. This mechanism is referred to as *identity verification service* and depends on both the *application server* and a third-party verification server to protect and redistribute *user*s' cryptographic identities.
 
 For this to work, a **Tanker app** needs to be created on the [Tanker Dashboard](https://dashboard.tanker.io), and then the *Tanker Core* SDK must be used to implement the Tanker solution into the app.
 
@@ -16,7 +16,7 @@ The following considerations were made when designing the solution:
 - Cryptographic materials must be tamper-proof
 - The integrity of cryptographic materials delivered by the *Trustchain* is checked client-side; it is not required to trust the Trustchain server
 - All pieces of *data* given to *Tanker* must be encrypted with a different key
-- The optional *unlock service* must not be able to access *user*s' *data*
+- The optional *identity verification service* must not be able to access *user*s' *data*
 - *Group* and *user* keys are rotated when appropriate to support revocation of *user*s and *device*s
 
 
@@ -78,28 +78,3 @@ Server certificates are verified on all platforms even if, in some cases, we can
 In such occurrences, the *Tanker Core* SDK comes with the certificates embedded in its binary code.
 
 
-## Trustchain
-
-The *Trustchain* is an append-only cryptographic log of chained and signed *block*s similar to a Blockchain (because all *block*s are signed by the *Tanker Core* SDK and linked together).
-It is operated by a Trustchain server and responsible for storing and distributing *block*s containing cryptographic materials required by the *Tanker Core* SDK to work. It is the source of truth for the public keys of all *device*s, *user*s, and *user group*s. The *Tanker Core* SDK pushes and pulls *block*s from the Trustchain.
-
-There is usually one *Trustchain* per *application*, but it is possible to have more to improve the segmentation of *user*s. An example would be to isolate a big corporate client of an *application* in its own *Trustchain*. *Trustchain*s are completely isolated from each other.
-
-## Unlock
-
-Unlock is the mechanism *Tanker* uses to register new *device*s for a *user*.
-It is based on an *unlock key* and has an associated *unlock device*. The *unlock device* is
-a virtual *device* associated with a *user* like all other *device*s.
-
-When a *user* signs up in an *application* using *Tanker*, an *unlock key* must be generated. It is possible to ask the *user* to store and remember it, or for ease of use, it can be stored on the *unlock service* with a set of credentials provided by the *user*.
-
-When a *user* signs into an *application* using *Tanker*, the *unlock key* must be provided to validate the new device. It can either be provided directly by the *user* or recovered thought the *unlock service* once the user proves their identity.
-
-### Unlock service
-
-*Tanker* provides an *unlock service* that trades off the end-to-end property for user experience. In these schemes, the *unlock key*
-ownership is split between the *application server* and the *Tanker* *unlock service*.
-
-The *unlock service* stores the *unlock key* encrypted by the *user secret*. The latter is stored and distributed by the *application server*. In other words, elements from both the *application server* and the *unlock service* are required to get the *unlock key*.
-
-To get the encrypted *unlock key* from the *unlock service*, the *user* must prove their identity. Currently we support authentication by password and through a verification email. Additional authentication factors are in the works.
