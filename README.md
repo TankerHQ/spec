@@ -16,4 +16,3 @@ We want to stress that you don't need to understand this spec in order to use th
 * [Concepts](concepts.md)
 * [Trustchain Design](trustchain_design.md)
 * [Protocol](protocol.md)
-* [Threat Model](threat_model.md)
