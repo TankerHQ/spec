@@ -43,13 +43,13 @@ Please note that when the user handles the [Verification Key] themselves (withou
 
 The first time the user signs up on a given device, the *Tanker Core* SDK generates *two* [Device Encryption Key Pair]s and two [Device Signature Key Pair]s, one for the *ghost device*, and one for the *physical device*. The ghost device pairs are not saved in the [Local Encrypted Storage] but serialized in an opaque token; the [Verification Key].
 
-Then, the user must choose one *verification method* (email, passphrase, or verification key).
+Then, the user must choose one *verification method*: email, passphrase, or verification key.
 
 What happens next depends on the chosen method:
 
 * By email: a verification code is sent to the email address
 * By passphrase: the application should ask the user to enter a passphrase
-* By verification key: the application displays the Verification key and ask the user to keep it somewhere safe.
+* By verification key: the application displays the Verification key and asks the user to keep it somewhere safe.
 
 The public keys of the ghost device and the physical device are pushed in two blocks to the Trustchain.
 
@@ -61,7 +61,7 @@ The first time the user signs in on a new device, their identity must be *verifi
 
 * By passphrase: the *user* must provide their passphrase to the *Tanker Core* SDK. It is hashed client-side, then sent to the *Tanker server* to fetch the encrypted [Verification Key].
 * By email: the *user* triggers a verification request through to the *application server* which in turn calls the *Tanker server*. The *Tanker server* then sends an email containing the *Tanker verification code* that must be provided to the *Tanker Core* SDK.
-* By verification key: the *user* directly give their verification key to the *Tanker Core SDK*.
+* By verification key: the *user* directly gives their verification key to the *Tanker Core SDK*.
 
 When using the 'passphrase', or 'email' verification methods, the *user* still needs to authenticate against the *application server* to obtain their [User Secret] to decrypt the [Verification Key].
 

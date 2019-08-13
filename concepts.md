@@ -197,7 +197,7 @@ When received by a *device*, they are stored in the [Local Encrypted Storage].
 
 ### Verification key
 
-Then [Verification Key] (VFK) is used to register new devices in a secure manner. See the [procotol documentation](protocol.md) for more details.
+The [Verification Key] (VFK) is used to register new devices in a secure manner. See the [procotol documentation](protocol.md) for more details.
 
 ### Secret Provisional Identity
 
