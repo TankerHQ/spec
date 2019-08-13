@@ -107,9 +107,8 @@ Creating an app gives a *app secret* and an *app ID*.
 
 ### Trustchain
 
-A Trustchain is a collection of signed blocks, attached to a given Tanker app. You can read more about it in the [trustchain_design.md](trustchain design) section.
-
-The basic role of a *Trustchain* is to provide public key distribution between *users* without being able to tamper with anything or access any private data.
+The *Trustchain* is an append-only cryptographic log of chained and signed *block*s similar to a Blockchain (because all *block*s are signed by the *Tanker Core* SDK and linked together).
+It is operated by a Trustchain server and responsible for storing and distributing *block*s containing cryptographic materials required by the *Tanker Core* SDK to work. It is the source of truth for the public keys of all *device*s, *user*s, and *user group*s. The *Tanker Core* SDK pushes and pulls *block*s from the Trustchain.
 
 ### Trustchain keys
 
