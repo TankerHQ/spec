@@ -41,7 +41,7 @@ Please note that when the user handles the [Verification Key] themselves (withou
 
 #### Signing up
 
-The first time the user signs up on a given device, the *Tanker Core* SDK generates *two* [Device Encryption Key Pair]s and two [Device Signature Key Pair]s, one for the *ghost device*, and one for the *physical device*. The ghost device pairs are not saved in the [Local Encrypted Storage] but serialized in an opaque token; the [Verification Key].
+The first time the user signs up on a given device, the *Tanker Core* SDK generates *two* [Device Encryption Key Pair]s and two [Device Signature Key Pair]s, one for the *ghost device*, and one for the *physical device*. The ghost device pairs are not saved in the [Local Encrypted Storage] but serialized in an opaque token: the [Verification Key].
 
 Then, the user must choose one *verification method*: email, passphrase, or verification key.
 
