@@ -19,8 +19,9 @@ The following considerations were made when designing the solution:
 
 
 
-## Tanker SDK
-The *Tanker SDK* integrates in your *application* and runs where your *application* runs. It is available in Javascript, Java, Objective-C, C, and Python.
+## Tanker Core SDK
+
+The *Tanker Core* SDK integrates in your *application* and runs where your *application* runs. It is available in Javascript, Java, Objective-C, C, and Python.
 
 It has 3 main functionalities:
 
@@ -50,21 +51,21 @@ We use the random generator provided by the Sodium library. The library uses the
 
 ### Symmetric Encryption
 
-The *Tanker SDK* uses *libsodium*’s `crypto_aead_xchacha20poly1305_ietf()`.
+The *Tanker Core* SDK uses *libsodium*’s `crypto_aead_xchacha20poly1305_ietf()`.
 As its name suggests, it uses the XChaCha20 algorithm with a 256-bits key size, a 192-bits nonce, and a 128-bits MAC size.
 
 ### Asymmetric Encryption
 
-The *Tanker SDK* uses *libsodium*'s `crypto_box` functions.
+The *Tanker Core* SDK uses *libsodium*'s `crypto_box` functions.
 These functions use *X25519*, which is an *ECDH* algorithm over *Curve25519*. It also uses *XSalsa20* and *Poly1305* for symmetric encryption.
 
 ### Data Signature
 
-The *Tanker SDK* uses *libsodium*'s `crypto_sign` functions with *Ed25519* keys.
+The *Tanker Core* SDK uses *libsodium*'s `crypto_sign` functions with *Ed25519* keys.
 
 ### Data and Password Hashing
 
-For general-purpose hashing, the *Tanker SDK* uses *libsodium*'s `crypto_generichash` function, which uses the *BLAKE2b* hash algorithm.
+For general-purpose hashing, the *Tanker Core* SDK uses *libsodium*'s `crypto_generichash` function, which uses the *BLAKE2b* hash algorithm.
 When *Tanker* needs to hash passwords to store them, it first hashes them on *device* as described above, then hashes them again server-side using the *Argon2* function provided by Golang's `x/crypto`. Subsequently, they are salted with a 32-bits randomly generated salt. *Tanker*'s *Argon2id* parameters are 2 passes on a maximum of 1 thread with a minimum of 32MB memory usage.
 
 ### Secure communication layer
@@ -72,13 +73,13 @@ When *Tanker* needs to hash passwords to store them, it first hashes them on *de
 All communications between actors are done through HTTPS.
 We use the [LibreSSL](http://www.libressl.org/) implementation on mobile and defer to the user-agent for web browsers and Node.js.
 Server certificates are verified on all platforms even if, in some cases, we cannot use the ones provided by the platform.
-In such occurrences, the *Tanker SDK* comes with the certificates embedded in its binary code.
+In such occurrences, the *Tanker Core* SDK comes with the certificates embedded in its binary code.
 
 
 ## Trustchain
 
-The *Trustchain* is an append-only cryptographic log of chained and signed *block*s similar to a Blockchain (because all *block*s are signed by the *Tanker SDK* and linked together).
-It is operated by a Trustchain server and responsible for storing and distributing *block*s containing cryptographic materials required by the *Tanker SDK* to work. It is the source of truth for the public keys of all *device*s, *user*s, and *user group*s. The *Tanker SDK* pushes and pulls *block*s from the Trustchain.
+The *Trustchain* is an append-only cryptographic log of chained and signed *block*s similar to a Blockchain (because all *block*s are signed by the *Tanker Core* SDK and linked together).
+It is operated by a Trustchain server and responsible for storing and distributing *block*s containing cryptographic materials required by the *Tanker Core* SDK to work. It is the source of truth for the public keys of all *device*s, *user*s, and *user group*s. The *Tanker Core* SDK pushes and pulls *block*s from the Trustchain.
 
 There is usually one *Trustchain* per *application*, but it is possible to have more to improve the segmentation of *user*s. An example would be to isolate a big corporate client of an *application* in its own *Trustchain*. *Trustchain*s are completely isolated from each other.
 

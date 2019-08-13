@@ -17,13 +17,13 @@ Applications should also implement the best in class security recommendations: p
 **Past data**: The attacker gains access to data uploaded to the application before the attack and up until appropriate actions are taken by the *user* (revoking the device)  
 **Future data**: The attacker gains access to data uploaded to the application after the attack, even if appropriate actions are taken by the *user* (revoking the device)  
 
-The *Tanker* column corresponds to the use of the currently released *Tanker SDK*.
+The *Tanker* column corresponds to the use of the currently released *Tanker Core* SDK.
 
-The *Tanker identity verification* column corresponds to the use of a future version of the *Tanker SDK*, in which we would have implemented the client-side verification of identities.
+The *Tanker identity verification* column corresponds to the use of a future version of the *Tanker Core* SDK, in which we would have implemented the client-side verification of identities.
 
-The *Tanker device management* column corresponds to the use of a future version of the *Tanker SDK*, in which we would have implemented a more usable device management API (revocation, devices listing, etc). The application uses these APIs to provide device management actions to its users.
+The *Tanker device management* column corresponds to the use of a future version of the *Tanker Core* SDK, in which we would have implemented a more usable device management API (revocation, devices listing, etc). The application uses these APIs to provide device management actions to its users.
 
-The *Tanker split-view protection* column corresponds to the use of a future version of the *Tanker SDK*, in which we would have implemented a gossiping scheme preventing split view attacks.
+The *Tanker split-view protection* column corresponds to the use of a future version of the *Tanker Core* SDK, in which we would have implemented a gossiping scheme preventing split view attacks.
 
 ## Tanker risk factors
 

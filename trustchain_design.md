@@ -23,9 +23,9 @@
 
 ## Key exchanges
 
-The *Tanker SDK* provides tools to encrypt, decrypt and share *resources* between *users*. It does so using state-of-the-art cryptographic algorithms like elliptic-curve cryptography (ECDH, EdDSA) and stream ciphers (xchacha20-Poly1305) to encrypt those *resources* and share encryption keys between *users*.
+The *Tanker Core* SDK provides tools to encrypt, decrypt and share *resources* between *users*. It does so using state-of-the-art cryptographic algorithms like elliptic-curve cryptography (ECDH, EdDSA) and stream ciphers (xchacha20-Poly1305) to encrypt those *resources* and share encryption keys between *users*.
 
-When a user intents to share a resource with another user or group of users, the *Tanker SDK* encrypts the *resource* with the symmetric [Resource Encryption Key] it generates; this [Resource Encryption Key] is then encrypted asymmetrically for the listed recipients, using their public keys. The challenge in this scheme is being sure that the [Resource Encryption Key] is shared with the right *user*, without forcing *users* to physically exchange their public keys.
+When a user intents to share a resource with another user or group of users, the *Tanker Core* SDK encrypts the *resource* with the symmetric [Resource Encryption Key] it generates; this [Resource Encryption Key] is then encrypted asymmetrically for the listed recipients, using their public keys. The challenge in this scheme is being sure that the [Resource Encryption Key] is shared with the right *user*, without forcing *users* to physically exchange their public keys.
 
 The basic role of a *Trustchain* is to provide public key distribution between *users* without being able to tamper with anything or access any private data.
 
@@ -116,13 +116,13 @@ It is to be noted that because of the signature delegation scheme, the entity th
 
 ### Forward secrecy
 
-Forward secrecy is, despite being an interesting property, **not **implemented in the *Tanker SDK*. The reason is that the *Tanker SDK* is not targeted solely at encrypting ephemeral message exchanges, but also persistent data. We want *users* to be able to decrypt anything at any time with any of their *devices*, which means that we cannot use a forward secure scheme.
+Forward secrecy is, despite being an interesting property, **not **implemented in the *Tanker Core* SDK. The reason is that the *Tanker Core* SDK is not targeted solely at encrypting ephemeral message exchanges, but also persistent data. We want *users* to be able to decrypt anything at any time with any of their *devices*, which means that we cannot use a forward secure scheme.
 
-We consider implementing an optional forward secure scheme tailored for messaging in a future version of the *Tanker SDK*.
+We consider implementing an optional forward secure scheme tailored for messaging in a future version of the *Tanker Core* SDK.
 
 ## Separation of trust
 
-The *Tanker SDK* is based on the separation of trust. Any *user* needs to trust:
+The *Tanker Core* SDK is based on the separation of trust. Any *user* needs to trust:
 
 - the *application* to store and distribute encrypted data
 - *Tanker* to distribute blocks

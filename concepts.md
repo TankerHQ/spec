@@ -20,8 +20,8 @@
 [Public Provisional Identity]: concepts.md#public-provisional-identity "Same as Public Permanent Identity, but for a user not registered on the Trustchain yet"
 
 
-The *Tanker SDK* provides security based on the principle of separation of knowledge between the *Tanker server*, the *user* and the *application server*.
-To establish trust between these actors and to enable sharing of encrypted *data* between *user*s, the *Tanker SDK* produces and uses cryptographic keys, IDs, and tokens.
+The *Tanker Core* SDK provides security based on the principle of separation of knowledge between the *Tanker server*, the *user* and the *application server*.
+To establish trust between these actors and to enable sharing of encrypted *data* between *user*s, the *Tanker Core* SDK produces and uses cryptographic keys, IDs, and tokens.
 The following section describes these elements, how they are generated, used, and, when applicable, stored.
 It should be noted that they are only valid within a single *Trustchain*.
 
@@ -105,7 +105,7 @@ As such, it is only known by the *customer* and cannot be recovered by *Tanker* 
 
 The [User ID] (UID) identifies a *user* on the *Trustchain*.
 It is provided by the *application* when the *user* is created, and is part of the user's [Secret Permanent Identity] (SPerID).
-The *Tanker SDK* cryptographically hashes *User ID*s locally before sending them to the *Tanker server*.
+The *Tanker Core* SDK cryptographically hashes *User ID*s locally before sending them to the *Tanker server*.
 
 ### User secret
 
@@ -116,7 +116,7 @@ It is used to encrypt and decrypt the [Local Encrypted Storage] and the [Unlock 
 
 ### Delegation token
 
-A delegation token is proof of the *user*'s authentication with the *application server*. It is generated when the *user* opens their first session in the *Tanker SDK*.
+A delegation token is proof of the *user*'s authentication with the *application server*. It is generated when the *user* opens their first session in the *Tanker Core* SDK.
 The delegation token is composed of an ephemeral signature key pair, a delegation signature, and the [User ID].
 The delegation signature is created by combining the ephemeral public key and the [User ID], then signing the result with the private [Trustchain Signature Key Pair].
 The delegation token is only used when the *user* creates their first *device* on the *Trustchain*, to sign the first `device_creation` *block* of that *user*.
@@ -126,7 +126,7 @@ The delegation token is only used when the *user* creates their first *device* o
 The [Secret Permanent Identity] (SPerID) is generated and stored by the *application server* and provided to a user only after successful authentication against the *application server*.
 It should never be shared with other *user*s.
 It contains some secret key material such as the [User Secret] and [delegation token](#delegation-token).
-It represents the identity of the *user* for the *Tanker SDK* and is considered a proof of authentication against the *application server*.
+It represents the identity of the *user* for the *Tanker Core* SDK and is considered a proof of authentication against the *application server*.
 
 ### Public Permanent Identity
 
@@ -135,7 +135,7 @@ It contains a [User ID], but no secret key material and it is safe to share publ
 
 ### Device ID
 
-Each *user* must have at least one *device*. *Device*s are identified in the *Tanker SDK* by a randomly attributed [Device ID] (DID). Each *device* has a [Local Clear Storage] (LCS) and a [Local Encrypted Storage] (LES).
+Each *user* must have at least one *device*. *Device*s are identified in the *Tanker Core* SDK by a randomly attributed [Device ID] (DID). Each *device* has a [Local Clear Storage] (LCS) and a [Local Encrypted Storage] (LES).
 
 ### Device keys
 
