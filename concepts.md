@@ -1,5 +1,7 @@
 # Concepts
 
+[Tanker App]: concepts.md#tanker-app "An application created in the Tanker dashboard"
+[Trustchain]: concepts.md#trustchain "A Trustchain is a collection of signed blocks, attached to a given app"
 [Device Encryption Key Pair]: concepts.md#device-keys "Unique identifier of a user"
 [Device ID]: concepts.md#device-id "Unique identifier of a device belonging to a user"
 [Device Signature Key Pair]: concepts.md#device-keys "Used when the user signs a block"
@@ -23,6 +25,7 @@
 The *Tanker Core* SDK provides security based on the principle of separation of knowledge between the *Tanker server*, the *user* and the *application server*.
 To establish trust between these actors and to enable sharing of encrypted *data* between *user*s, the *Tanker Core* SDK produces and uses cryptographic keys, IDs, and tokens.
 The following section describes these elements, how they are generated, used, and, when applicable, stored.
+
 It should be noted that they are only valid within a single *Trustchain*.
 
 ![IDs and keys ownership](./img/keys.png)
@@ -34,6 +37,12 @@ For a glossary of global terms used in this spec, please see [the relevant secti
 Here's a list of concepts used in the rest of this document:
 
 <dl>
+ <dt><a href="#tanker-app">Tanker App</a></dt>
+  <dd>An application created in the Tanker dashboard</dd>
+
+ <dt><a href="#trustchain">Trustchain</a></dt>
+  <dd>A Trustchain is a collection of signed blocks, attached to a given app<dd>
+
  <dt><a href="#user-id">User ID (UID)</a></dt>
   <dd>Unique identifier of a user</dd>
 
@@ -91,15 +100,29 @@ Here's a list of concepts used in the rest of this document:
 
 They are explained in more detail below.
 
+### Tanker app
+
+An app is created in the <a href="https://dashboard.tanker.io">Tanker dashboard</a> and managed its creator.
+Creating an app gives a *app secret* and an *app ID*.
+
+### Trustchain
+
+A Trustchain is a collection of signed blocks, attached to a given Tanker app. You can read more about it in the [trustchain_design.md](trustchain design) section.
+
+The basic role of a *Trustchain* is to provide public key distribution between *users* without being able to tamper with anything or access any private data.
+
 ### Trustchain keys
 
 A *Trustchain* is identified by a unique ID, a name, and a [Trustchain Signature Key Pair] (TSK).
-The name is informative and is never used in the SDK.
-The public part of the TSK is included in the *Trustchain*'s root *block*.
-The *Trustchain* ID is actually the hash of the *Trustchain* root *block*.
+The name is informative only.
 
-The TSK is generated client-side by the *customer* using the [Tanker dashboard](https://dashboard.tanker.io) during the *Trustchain* creation.
-As such, it is only known by the *customer* and cannot be recovered by *Tanker* in any way.
+The TSK is generated client-side by the *customer* during the *Trustchain* creation and is called *app secret* in  the dashboard.
+
+As such, it is only known by the *customer* and cannot be recovered by *Tanker* in any way - except if the "test mode" is enabled.
+
+The public part of the TSK is included in the *Trustchain*'s root *block*.
+The *Trustchain* ID is actually the hash of the *Trustchain* root *block* and is named *app ID* in the dashboard.
+
 
 ### User ID
 
