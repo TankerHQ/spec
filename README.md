@@ -1,7 +1,10 @@
 # Tanker: How it works
+
 ## Technical specification of the Tanker SDK and protocol for end-to-end encryption
 
-This document is a deep dive into the design of the Tanker SDK and its infrastructure, the cryptographic underpinnings and algorithms, what transits over the protocol, and the security model. It aims to be open and answer all possible questions one might ask when considering adopting this technology.
+This document is a deep dive into the design of the *Tanker Core* SDK and its infrastructure, the cryptographic underpinnings and algorithms, what transits over the protocol, and the security model. It aims to be open and answer all possible questions one might ask when considering adopting this technology.
+
+Note that since *Tanker FileKit is implemented on top of *Tanker Core*, this specification works for both products.
 
 If you have additional questions that you'd like to see answered, please [open an issue](../../issues/new).
 
