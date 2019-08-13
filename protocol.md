@@ -11,7 +11,7 @@
 [Trustchain Signature Key Pair]: concepts.md#trustchain-keys "Root of the Trustchain - used to sign user additions"
 [User Encryption Key Pair]: concepts.md#user-keys "Used for sharing encrypted keys across users"
 [User ID]: concepts.md#user-id "Unique identifier of a user"
-[Unlock Key]: concepts.md#unlock-key "An opaque token that allows creating new devices"
+[Verification Key]: concepts.md#verification-key "An opaque token that allows creating new devices"
 [User Secret]: concepts.md#user-secret "A secret generated and stored on the application server that protects the local encrypted storage"
 [Secret Permanent Identity]: concepts.md#secret-permanent-identity "An opaque string containing private data about user's identity"
 [Public Permanent Identity]: concepts.md#public-permanent-identify "Generated from a Secret Permanent Identity - essentialy equivalent to a user ID"
@@ -24,7 +24,7 @@ The following chapter describes how the previously defined [concepts](#concepts)
 
 The protocols have been split in 3 sections for ease of reading:
 
-- The [cryptographic identity management](#cryptographic-identity-management) section describes how the *Tanker Core* SDK ensures that a *user*'s cryptographic identity is available on every *device*, and how the optional *unlock service* prevents a *user* from losing their cryptographic identity
+- The [cryptographic identity management](#cryptographic-identity-management) section describes how the *Tanker Core* SDK ensures that a *user*'s cryptographic identity is available on every *device*, and how the optional *identity verification service* prevents a *user* from losing their cryptographic identity
 - The [encryption](#encryption) section describes how *resource*s are encrypted and shared with *user*s
 - The [group encryption](#group-encryption) section describes how *user group*s are managed and how to share encrypted *resource*s with them
 
@@ -35,7 +35,35 @@ The following diagram describes how the different protocols interact together wh
 
 ![Protocol parts involved in opening a Tanker session](./img/open_chart.png "Protocol parts involved in opening a Tanker session")
 
-Please note that when the user handles the [Unlock Key] themselves (without using the *unlock service*), the system is fully end-to-end.
+Please note that when the user handles the [Verification Key] themselves (without using the *identity verification service*), the system is fully end-to-end.
+
+### Session management
+
+#### Signing up
+
+The first time the user signs up on a given device, the *Tanker Core* SDK generates *two* [Device Encryption Key Pair]s and two [Device Signature Key Pair]s, one for the *ghost device*, and one for the *physical device*. The ghost device pairs are not saved in the [Local Encrypted Storage] but serialized in an opaque token; the [Verification Key].
+
+Then, the user must choose one *verification method* (email, passphrase, or verification key).
+
+What happens next depends on the chosen method:
+
+* By email: a verification code is sent to the email address
+* By passphrase: the application should ask the user to enter a passphrase
+* By verification key: the application displays the Verification key and ask the user to keep it somewhere safe.
+
+The public keys of the ghost device and the physical device are pushed in two blocks to the Trustchain.
+
+If the user chose 'email' or 'passphrase' as the verification method, the [Verification Key] is encrypted on the *device* with the [User Secret] and sent to the *Tanker server*.
+
+#### Signing in
+
+The first time the user signs in on a new device, their identity must be *verified* using the method selected during sign up.
+
+* By passphrase: the *user* must provide their passphrase to the *Tanker Core* SDK. It is hashed client-side, then sent to the *Tanker server* to fetch the encrypted [Verification Key].
+* By email: the *user* triggers a verification request through to the *application server* which in turn calls the *Tanker server*. The *Tanker server* then sends an email containing the *Tanker verification code* that must be provided to the *Tanker Core* SDK.
+* By verification key: the *user* directly give their verification key to the *Tanker Core SDK*.
+
+When using the 'passphrase', or 'email' verification methods, the *user* still needs to authenticate against the *application server* to obtain their [User Secret] to decrypt the [Verification Key].
 
 ### User registration
 
@@ -75,70 +103,21 @@ This allows the *Tanker server* to check that:
 - the *device* is correctly associated with the provided [User ID]
 - the signature matches the challenge
 
-If that is the case, the authentication is successful, and the session is open, otherwise the connection is closed.
-
-### Unlock key registration
-
-Prerequisite: the *user* has already registered their first *device*.
-
-To add an additional *device*, the *Tanker Core* SDK must first create an *unlock device* and push it to the *Trustchain*.
-The created [Device Encryption Key Pair] and [Device Signature Key Pair] pairs are not saved in the [Local Encrypted Storage] but serialized in an opaque token; the [Unlock Key].
-
-This [Unlock Key] can either be given to the *user* to be stored in a safe place or stored on the *unlock service*. It can then be used to add any other *device*.
-
-### Unlock with the unlock service
-
-#### Unlock setup
-
-Prerequisite: the *user*'s *device* is authenticated against the *Tanker server* and they have created a [Unlock Key].
-
-Tanker offers an *unlock service* to store the [Unlock Key] safely for the *user*.
-
-The [Unlock Key] is first encrypted on the *device* with the [User Secret] and sent to the *Tanker server*.
-Its access is protected by one of the following methods:
-
-- Password protection: the *user* sets a password that is used later for [unlocking by password](#unlock-by-password)
-- Email protection: the *user* sets up their email address that is used later for [unlocking by email](#unlock-by-email)
-
-#### Unlock by password
-
-Prerequisite: the *user* has set up the *Tanker* *unlock service* with password protection beforehand and is now trying to use a new *device* that is not registered on the *Trustchain* yet.
-
-The *user* must provide their password to the *Tanker Core* SDK. It is hashed client-side, then sent to the *Tanker server* to fetch the encrypted [Unlock Key].
-
-The *user* still needs to authenticate against the *application server* to obtain their [User Secret] to decrypt the [Unlock Key].
-
-The *user* can then use the [Unlock Key] to [register a new
-device](#device-registration).
-
-#### Unlock by email
-
-Prerequisite: the *user* has set up the *Tanker* *unlock service* with email protection beforehand and is now trying to use a new *device* that is not registered on the *Trustchain* yet.
-
-The unlocking by email process is used to authenticate a *user* against the *Tanker server* when they don't have a password or have forgotten it.
-
-The *user* triggers an unlock through a request to the *application server* which in turn calls the *Tanker server*. The *Tanker server* then sends an email containing the *Tanker verification code*.
-
-The *user* clicks on the link contained in the email. It allows them to be authenticated against the *Tanker server* to fetch their encrypted [Unlock Key].
-
-The *user* still needs to authenticate against the *application server* to obtain their [User Secret] to decrypt the [Unlock Key]. The *application* usually includes an additional token in the aforementioned email for that.
-
-The *user* can then use the [Unlock Key] to [register a new
-device](#device-registration).
+If any of these check fail, the connection is closed.
 
 ### Device registration
 
-Prerequisite: the *user* has created a [Unlock Key].
+Prerequisite: the *user* has created a [Verification Key].
 
-Except for the first *device*, which is validated in a specific way previously described, additional *device*s must be validated by an already registered *device*. In practice, these *device*s are validated by the *unlock device*.
+Except for the first *device*, which is validated in a specific way previously described, additional *device*s must be validated by an already registered *device*. In practice, these *device*s are validated by the *ghost device*.
 
-Given the *user*'s [Unlock Key], the steps to register a new *device* are as follows:
+Given the *user*'s [Verification Key], the steps to register a new *device* are as follows:
 
-1. Extract the *unlock device*'s [Device Encryption Key Pair] and [Device Signature Key Pair] from the [Unlock Key]
-2. Pull the *Trustchain* up to the *unlock device*'s `device_creation` *block*, verify it and extract the [User Encryption Key Pair] from it
-3. Decrypt the [User Encryption Key Pair] using the  *unlock device*'s private [Device Encryption Key Pair]
+1. Extract the *ghost device*'s [Device Encryption Key Pair] and [Device Signature Key Pair] from the [Verification Key]
+2. Pull the *Trustchain* up to the *ghost device*'s `device_creation` *block*, verify it and extract the [User Encryption Key Pair] from it
+3. Decrypt the [User Encryption Key Pair] using the  *ghost device*'s private [Device Encryption Key Pair]
 4. Generate the new *device*'s [Device Encryption Key Pair] and [Device Signature Key Pair]
-5. Construct the new *device*'s `device_creation` *block* and sign it with the *unlock device*'s private [Device Signature Key Pair]
+5. Construct the new *device*'s `device_creation` *block* and sign it with the *ghost device*'s private [Device Signature Key Pair]
 6. Push the *block* to the *Trustchain*
 7. The *Tanker server* validates the *block*
 8. The new *device* authenticates against the *Tanker server*

@@ -28,7 +28,7 @@ The *Tanker split-view protection* column corresponds to the use of a future ver
 ## Tanker risk factors
 
 
-*Attack*: An attacker gains control to all of *Tanker*'s APIs, *Trustchain* blocks, their distribution and the unlock service.
+*Attack*: An attacker gains control to all of *Tanker*'s APIs, *Trustchain* blocks, their distribution and the identity verification service.
 
 
 *Impact*: The attacker **cannot access any application data in any way.**
@@ -139,7 +139,7 @@ Combinations not listed here have the same impact as the combination of their pa
 
 **Identities leak + data leak + Tanker control**
 
-*Attack*: The attacker gets the [User Secret] from the *identities*. They get the encrypted [Unlock Key] from *Tanker*'s unlock service. Using both of those, they are able to decrypt the [Unlock Key]. Using the [Device Encryption Key Pair] contained in the [Unlock Key] and the encrypted [User Encryption Key Pair] in the *unlock device*'s creation block, they get the [User Encryption Key Pair]. Using the [User Encryption Key Pair] and the key publish blocks, they can get the [Resource Encryption Key] needed to decrypt the encrypted user data.
+*Attack*: The attacker gets the [User Secret] from the *identities*. They get the encrypted [Verification Key] from *Tanker*'s identity verification service. Using both of those, they are able to decrypt the [Verification Key]. Using the [Device Encryption Key Pair] contained in the [Verification Key] and the encrypted [User Encryption Key Pair] in the *ghost device*'s creation block, they get the [User Encryption Key Pair]. Using the [User Encryption Key Pair] and the key publish blocks, they can get the [Resource Encryption Key] needed to decrypt the encrypted user data.
 
 *Impact*: The attacker gains access to all past encrypted data.
 

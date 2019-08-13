@@ -12,7 +12,7 @@
 [Trustchain Signature Key Pair]: concepts.md#trustchain-keys "Root of the Trustchain - used to sign user additions"
 [User Encryption Key Pair]: concepts.md#user-keys "Used for sharing encrypted keys across users"
 [User ID]: concepts.md#user-id "Unique identifier of a user"
-[Unlock Key]: concepts.md#unlock-key "An opaque token that allows creating new devices"
+[Verification Key]: concepts.md#verification-key "An opaque token that allows creating new devices"
 [User Secret]: concepts.md#user-secret "A secret generated and stored on the application server that protects the local encrypted storage"
 [Secret Permanent Identity]: concepts.md#secret-permanent-identity "An opaque string containing private data about user's identity"
 [Public Permanent Identity]: concepts.md#public-permanent-identify "Generated from a Secret Permanent Identity - essentialy equivalent to a user ID"
