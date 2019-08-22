@@ -17,13 +17,13 @@
 [Verification Key]: concepts.md#verification-key "An opaque token that allows creating new devices"
 [User Secret]: concepts.md#user-secret "A secret generated and stored on the application server that protects the local encrypted storage"
 [Secret Permanent Identity]: concepts.md#secret-permanent-identity "An opaque string containing private data about user's identity"
-[Public Permanent Identity]: concepts.md#public-permanent-identify "Generated from a Secret Permanent Identity - essentialy equivalent to a user ID"
+[Public Permanent Identity]: concepts.md#public-permanent-identity "Generated from a Secret Permanent Identity - essentialy equivalent to a user ID"
 [Secret Provisional Identity]: concepts.md#secret-provisional-identity "Same as Secret Permanent Identity, but for a user not registered on the Trustchain yet"
 [Public Provisional Identity]: concepts.md#public-provisional-identity "Same as Public Permanent Identity, but for a user not registered on the Trustchain yet"
 
 
-The *Tanker Core* SDK provides security based on the principle of separation of knowledge between the *Tanker server*, the *user* and the *application server*.
-To establish trust between these actors and to enable sharing of encrypted *data* between *user*s, the *Tanker Core* SDK produces and uses cryptographic keys, IDs, and tokens.
+*Tanker Core* provides security based on the principle of separation of knowledge between the *Tanker server*, the *user* and the *application server*.
+To establish trust between these actors and to enable sharing of encrypted *data* between *user*s, *Tanker Core* produces and uses cryptographic keys, IDs, and tokens.
 The following section describes these elements, how they are generated, used, and, when applicable, stored.
 
 It should be noted that they are only valid within a single *Trustchain*.
@@ -107,26 +107,26 @@ Creating an app gives a *app secret* and an *app ID*.
 
 ### Trustchain
 
-The *Trustchain* is an append-only cryptographic log of chained and signed *block*s similar to a Blockchain (because all *block*s are signed by the *Tanker Core* SDK and linked together).
-It is operated by a Trustchain server and responsible for storing and distributing *block*s containing cryptographic materials required by the *Tanker Core* SDK to work. It is the source of truth for the public keys of all *device*s, *user*s, and *user group*s. The *Tanker Core* SDK pushes and pulls *block*s from the Trustchain.
+The *Trustchain* is an append-only cryptographic log of chained and signed *block*s similar to a Blockchain (because all *block*s are signed by *Tanker Core* and linked together).
+It is operated by a Trustchain server and responsible for storing and distributing *block*s containing cryptographic materials required by *Tanker Core* to work. It is the source of truth for the public keys of all *device*s, *user*s, and *user group*s. *Tanker Core* pushes and pulls *block*s from the Trustchain.
 
 ### Trustchain keys
 
-A *Trustchain* is identified by a unique ID, a name, and a [Trustchain Signature Key Pair] (TSK).
+A *Trustchain* is identified by a unique ID, a name, and a [Trustchain Signature Key Pair].
 The name is informative only.
 
-The TSK is generated client-side by the *customer* during the *Trustchain* creation and is called *app secret* in  the dashboard.
+The [Trustchain Signature Key Pair] is generated client-side by the *customer* during the *Trustchain* creation and is called *app secret* in  the dashboard.
 
 As such, it is only known by the *customer* and cannot be recovered by *Tanker* in any way - except if the "test mode" is enabled.
 
-The public part of the TSK is included in the *Trustchain*'s root *block*.
+The public part of the [Trustchain Signature Key Pair] is included in the *Trustchain*'s root *block*.
 The *Trustchain* ID is actually the hash of the *Trustchain* root *block* and is named *app ID* in the dashboard.
 
 ### User ID
 
-The [User ID] (UID) identifies a *user* on the *Trustchain*.
-It is provided by the *application* when the *user* is created, and is part of the user's [Secret Permanent Identity] (SPerID).
-The *Tanker Core* SDK cryptographically hashes *User ID*s locally before sending them to the *Tanker server*.
+The [User ID] identifies a *user* on the *Trustchain*.
+It is provided by the *application* when the *user* is created, and is part of the user's [Secret Permanent Identity].
+*Tanker Core* cryptographically hashes *User ID*s locally before sending them to the *Tanker server*.
 
 
 ### Tanker Session
@@ -143,78 +143,78 @@ It is used to encrypt and decrypt the [Local Encrypted Storage] and the [Verific
 
 ### Delegation token
 
-A delegation token is proof of the *user*'s authentication with the *application server*. It is generated when the *user* opens their first session in the *Tanker Core* SDK.
+A delegation token is proof of the *user*'s authentication with the *application server*. It is generated when the *user* opens their first session in *Tanker Core*.
 The delegation token is composed of an ephemeral signature key pair, a delegation signature, and the [User ID].
 The delegation signature is created by combining the ephemeral public key and the [User ID], then signing the result with the private [Trustchain Signature Key Pair].
 The delegation token is only used when the *user* creates their first *device* on the *Trustchain*, to sign the first `device_creation` *block* of that *user*.
 
 ### Secret Permanent Identity
 
-The [Secret Permanent Identity] (SPerID) is generated and stored by the *application server* and provided to a user only after successful authentication against the *application server*.
+The [Secret Permanent Identity] is generated and stored by the *application server* and provided to a user only after successful authentication against the *application server*.
 It should never be shared with other *user*s.
 It contains some secret key material such as the [User Secret] and [delegation token](#delegation-token).
-It represents the identity of the *user* for the *Tanker Core* SDK and is considered a proof of authentication against the *application server*.
+It represents the identity of the *user* for *Tanker Core* and is considered a proof of authentication against the *application server*.
 
 ### Public Permanent Identity
 
-A [Public Permanent Identity] (PPerID) can be generated from a [Secret Permanent Identity], and is used to uniquely identify a *user*.
+A [Public Permanent Identity] can be generated from a [Secret Permanent Identity], and is used to uniquely identify a *user*.
 It contains a [User ID], but no secret key material and it is safe to share publicly.
 
 ### Device ID
 
-Each *user* must have at least one *device*. *Device*s are identified in the *Tanker Core* SDK by a randomly attributed [Device ID] (DID). Each *device* has a [Local Clear Storage] (LCS) and a [Local Encrypted Storage] (LES).
+Each *user* must have at least one *device*. *Device*s are identified in *Tanker Core* by a randomly attributed [Device ID]. Each *device* has a [Local Clear Storage] and a [Local Encrypted Storage].
 
 ### Device keys
 
-Each *device* registered on the *Trustchain* has one [Device Encryption Key Pair] (DEK) and one [Device Signature Key Pair] (DSK).
+Each *device* registered on the *Trustchain* has one [Device Encryption Key Pair] and one [Device Signature Key Pair].
 Device keys are stored in the *device*'s [Local Encrypted Storage]. They are never replaced or modified after creation.
 The public [Device Encryption Key Pair] and [Device Signature Key Pair] are pushed to the *Trustchain* in the `device_creation` *block*.
 The private [Device Encryption Key Pair] and [Device Signature Key Pair] never leave the *device*.
 
 ### User keys
 
-Every *user* registered on the *Trustchain* has one active [User Encryption Key Pair] (UEK).
+Every *user* registered on the *Trustchain* has one active [User Encryption Key Pair].
 User keys are stored in each *device*'s [Local Encrypted Storage].
 The Private [User Encryption Key Pair] is encrypted with each of the *user*'s *device*s' public [Device Encryption Key Pair] before being pushed to the *Trustchain*.
 It is pushed to the *Trustchain* in the `device_creation` *block* and updated whenever a *device* is revoked.
 
 ### User group keys
 
-A *user group* has one [Group Encryption Key Pair] (GEK) and one [Group Signature Key Pair] (GSK).
+A *user group* has one [Group Encryption Key Pair] and one [Group Signature Key Pair].
 *User group* keys are stored in the *device*'s [Local Encrypted Storage].
 The private [Group Signature Key Pair] is encrypted with the private [Group Encryption Key Pair], which is encrypted with each *group member*'s [User Encryption Key Pair].
 They are pushed to the *Trustchain* in the `user_group_creation` *block* and updated whenever a *group member* is removed from a *user group*.
 
 ### Resource keys
 
-A new [Resource Encryption Key] (REK) is randomly generated each time a *user* encrypts *data*.
+A new [Resource Encryption Key] is randomly generated each time a *user* encrypts *data*.
 The *data* is symmetrically encrypted with the [Resource Encryption Key].
 The [Resource Encryption Key] can be encrypted for *user*s or *user group*s.
-When sharing a resource key with a *user*, the [Resource Encryption Key] is encrypted using the [User Encryption Key Pair] of that *user* creating a [Shared Encrypted Key] (SEK).
-When sharing a resource key with a *user group*, the [Resource Encryption Key] is encrypted using the [Group Encryption Key Pair] of that *user group* creating a [Shared Encrypted Key] (SEK).
+When sharing a resource key with a *user*, the [Resource Encryption Key] is encrypted using the [User Encryption Key Pair] of that *user* creating a [Shared Encrypted Key].
+When sharing a resource key with a *user group*, the [Resource Encryption Key] is encrypted using the [Group Encryption Key Pair] of that *user group* creating a [Shared Encrypted Key].
 [Shared Encrypted Key]s are pushed to the *Trustchain* in `key_publish` *block*s.
 When received by a *device*, they are stored in the [Local Encrypted Storage].
 
 ### Verification key
 
-The [Verification Key] (VFK) is used to register new devices in a secure manner. See the [procotol documentation](protocol.md) for more details.
+The [Verification Key] is used to register new devices in a secure manner. See the [procotol documentation](protocol.md) for more details.
 
 ### Secret Provisional Identity
 
-A [Secret Provisional Identity] (SProID) represents the identity of a user that is not yet registered on Tanker. It is split into two halves that are stored on the *application server* and on *Tanker server*s.
+A [Secret Provisional Identity] represents the identity of a user that is not yet registered on Tanker. It is split into two halves that are stored on the *application server* and on *Tanker server*s.
 A provisional identity is attached to some authentication methods. For the moment only email is supported.
 Each half contains the name of the authentication method, a value (in case of email, the value is the email address), and encryption and signature key pairs.
 
 ### Public Provisional Identity
 
-A [Public Provisional Identity] (PProID) can be generated from a [Secret Provisional Identity] and consists of the [Secret Provisional Identity] without its secrets parts.
+A [Public Provisional Identity] can be generated from a [Secret Provisional Identity] and consists of the [Secret Provisional Identity] without its secrets parts.
 
 
 ## Glossary
 
 <dl>
   <dt>application</dt>
-  <dd>any application, web, desktop, or mobile, that uses the <em>Tanker SDK</em> to protect <em>data</em> for its <em>user</em>s</dd>
+  <dd>any application, web, desktop, or mobile, that uses <em>Tanker Core</em> to protect <em>data</em> for its <em>user</em>s</dd>
 
   <dt>application server</dt>
   <dd>server supporting the <em>application</em>, responsible for the <em>application</em>'s business logic, <em>data</em> storage, and user authentication</dd>
@@ -235,10 +235,10 @@ A [Public Provisional Identity] (PProID) can be generated from a [Secret Provisi
   <dd>a <em>user</em> being part of a <em>user group</em></dd>
 
   <dt>Tanker</dt>
-  <dd>provider of the <em>Tanker SDK</em>, the <em>Trustchain</em>, and the <em>identity verification service</em></dd>
+  <dd>provider of <em>Tanker Core</em>, the <em>Trustchain</em>, and the <em>identity verification service</em></dd>
 
-  <dt>Tanker SDK</dt>
-  <dd>a privacy SDK, intgrated by the <em>customer</em> into the <em>application</em>, allowing to encrypt, decrypt, and share data between <em>user</em>s</dd>
+  <dt>Tanker Core</dt>
+  <dd>a privacy SDK, integrated by the <em>customer</em> into the <em>application</em>, allowing to encrypt, decrypt, and share data between <em>user</em>s</dd>
 
   <dt>Tanker server</dt>
   <dd>server hosting he <em>Trustchain</em>, and the <em>identity verification service</em></dd>

@@ -15,7 +15,7 @@
 [Verification Key]: concepts.md#verification-key "An opaque token that allows creating new devices"
 [User Secret]: concepts.md#user-secret "A secret generated and stored on the application server that protects the local encrypted storage"
 [Secret Permanent Identity]: concepts.md#secret-permanent-identity "An opaque string containing private data about user's identity"
-[Public Permanent Identity]: concepts.md#public-permanent-identify "Generated from a Secret Permanent Identity - essentialy equivalent to a user ID"
+[Public Permanent Identity]: concepts.md#public-permanent-identity "Generated from a Secret Permanent Identity - essentialy equivalent to a user ID"
 [Secret Provisional Identity]: concepts.md#secret-provisional-identity "Same as Secret Permanent Identity, but for a user not registered on the Trustchain yet"
 [Public Provisional Identity]: concepts.md#public-provisional-identity "Same as Public Permanent Identity, but for a user not registered on the Trustchain yet"
 
@@ -23,9 +23,9 @@
 
 ## Key exchanges
 
-The *Tanker Core* SDK provides tools to encrypt, decrypt and share *resources* between *users*. It does so using state-of-the-art cryptographic algorithms like elliptic-curve cryptography (ECDH, EdDSA) and stream ciphers (xchacha20-Poly1305) to encrypt those *resources* and share encryption keys between *users*.
+*Tanker Core* provides tools to encrypt, decrypt and share *resources* between *users*. It does so using state-of-the-art cryptographic algorithms like elliptic-curve cryptography (ECDH, EdDSA) and stream ciphers (xchacha20-Poly1305) to encrypt those *resources* and share encryption keys between *users*.
 
-When a user intents to share a resource with another user or group of users, the *Tanker Core* SDK encrypts the *resource* with the symmetric [Resource Encryption Key] it generates; this [Resource Encryption Key] is then encrypted asymmetrically for the listed recipients, using their public keys. The challenge in this scheme is being sure that the [Resource Encryption Key] is shared with the right *user*, without forcing *users* to physically exchange their public keys.
+When a user intents to share a resource with another user or group of users, *Tanker Core* encrypts the *resource* with the symmetric [Resource Encryption Key] it generates; this [Resource Encryption Key] is then encrypted asymmetrically for the listed recipients, using their public keys. The challenge in this scheme is being sure that the [Resource Encryption Key] is shared with the right *user*, without forcing *users* to physically exchange their public keys.
 
 The basic role of a *Trustchain* is to provide public key distribution between *users* without being able to tamper with anything or access any private data.
 
@@ -116,13 +116,13 @@ It is to be noted that because of the signature delegation scheme, the entity th
 
 ### Forward secrecy
 
-Forward secrecy is, despite being an interesting property, **not **implemented in the *Tanker Core* SDK. The reason is that the *Tanker Core* SDK is not targeted solely at encrypting ephemeral message exchanges, but also persistent data. We want *users* to be able to decrypt anything at any time with any of their *devices*, which means that we cannot use a forward secure scheme.
+Forward secrecy is, despite being an interesting property, **not **implemented in *Tanker Core*. The reason is that *Tanker Core* is not targeted solely at encrypting ephemeral message exchanges, but also persistent data. We want *users* to be able to decrypt anything at any time with any of their *devices*, which means that we cannot use a forward secure scheme.
 
-We consider implementing an optional forward secure scheme tailored for messaging in a future version of the *Tanker Core* SDK.
+We consider implementing an optional forward secure scheme tailored for messaging in a future version of *Tanker Core*.
 
 ## Separation of trust
 
-The *Tanker Core* SDK is based on the separation of trust. Any *user* needs to trust:
+*Tanker Core* is based on the separation of trust. Any *user* needs to trust:
 
 - the *application* to store and distribute encrypted data
 - *Tanker* to distribute blocks
@@ -130,5 +130,5 @@ The *Tanker Core* SDK is based on the separation of trust. Any *user* needs to t
 
 A collusion between *Tanker* and the *application* could result in a split view attack, in which an alternate, seemingly valid version of the *Trustchain* is strategically distributed to *users* in order to trick them into sharing data with the wrong entity.
 
-We plan on implementing a gossiping scheme in future versions of the SDK, which would prevent split view attacks.
+We plan on implementing a gossiping scheme in future versions of *Tanker Core*, which would prevent split view attacks.
 
