@@ -1,14 +1,14 @@
 # Overview
 
-*Tanker* is a solution for implementing client-side encryption in *application*s. It supports end-to-end encryption, and provides an optional way for developers to ensure their *user*s can recover their cryptographic identities in case of *device* loss. This mechanism is referred to as *identity verification service* and depends on both the *application server* and a third-party verification server to protect and redistribute *user*s' cryptographic identities.
+*Tanker* is a solution for implementing client-side encryption in *application*s. It supports end-to-end encryption, and, in case of *device* loss, it provides an optional way for developers to ensure their *user*s can recover their cryptographic identities. This mechanism is referred to as *identity verification service* and depends on both the *application server* and a third-party verification server to protect and redistribute *user*s' cryptographic identities.
 
-For this to work, a **Tanker app** needs to be created on the [Tanker Dashboard](https://dashboard.tanker.io), and then the *Tanker Core* SDK must be used to implement the Tanker solution into the app.
+For this to work, a **Tanker app** needs to be created on the [Tanker Dashboard](https://dashboard.tanker.io), and then *Tanker Core* must be used to implement the Tanker solution into the app.
 
 ![Tanker big picture](./img/servers.png)
 
 ## Design considerations
 
-Special care has been taken to ensure that, from an end-user standpoint, *Tanker* integrates seamlessly in *application*s, despite the challenges involved in doing end-to-end encryption. For developers, we made sure that the SDK is easy-to-use and intuitive, despite the complexity under the hood.
+Special care has been taken to ensure that, from an end-user standpoint, *Tanker* integrates seamlessly in *application*s, despite the challenges involved in doing end-to-end encryption. For developers, we made sure that the *Tanker Core* solution is easy-to-use and intuitive, despite the complexity under the hood.
 
 The following considerations were made when designing the solution:
 
@@ -21,9 +21,9 @@ The following considerations were made when designing the solution:
 
 
 
-## Tanker Core SDK
+## Tanker Core
 
-The *Tanker Core* SDK integrates in your *application* and runs where your *application* runs. It is available in Javascript, Java, Objective-C, C, and Python.
+*Tanker Core* integrates in your *application* and runs where your *application* runs. It is available in Javascript, Java, Objective-C, C, and Python.
 
 It has 3 main functionalities:
 
@@ -53,21 +53,21 @@ We use the random generator provided by the Sodium library. The library uses the
 
 ### Symmetric Encryption
 
-The *Tanker Core* SDK uses *libsodium*’s `crypto_aead_xchacha20poly1305_ietf()`.
+*Tanker Core* uses *libsodium*’s `crypto_aead_xchacha20poly1305_ietf()`.
 As its name suggests, it uses the XChaCha20 algorithm with a 256-bits key size, a 192-bits nonce, and a 128-bits MAC size.
 
 ### Asymmetric Encryption
 
-The *Tanker Core* SDK uses *libsodium*'s `crypto_box` functions.
+*Tanker Core* uses *libsodium*'s `crypto_box` functions.
 These functions use *X25519*, which is an *ECDH* algorithm over *Curve25519*. It also uses *XSalsa20* and *Poly1305* for symmetric encryption.
 
 ### Data Signature
 
-The *Tanker Core* SDK uses *libsodium*'s `crypto_sign` functions with *Ed25519* keys.
+*Tanker Core* uses *libsodium*'s `crypto_sign` functions with *Ed25519* keys.
 
 ### Data and Password Hashing
 
-For general-purpose hashing, the *Tanker Core* SDK uses *libsodium*'s `crypto_generichash` function, which uses the *BLAKE2b* hash algorithm.
+For general-purpose hashing, *Tanker Core* uses *libsodium*'s `crypto_generichash` function, which uses the *BLAKE2b* hash algorithm.
 When *Tanker* needs to hash passwords to store them, it first hashes them on *device* as described above, then hashes them again server-side using the *Argon2* function provided by Golang's `x/crypto`. Subsequently, they are salted with a 32-bits randomly generated salt. *Tanker*'s *Argon2id* parameters are 2 passes on a maximum of 1 thread with a minimum of 32MB memory usage.
 
 ### Secure communication layer
@@ -75,6 +75,6 @@ When *Tanker* needs to hash passwords to store them, it first hashes them on *de
 All communications between actors are done through HTTPS.
 We use the [LibreSSL](http://www.libressl.org/) implementation on mobile and defer to the user-agent for web browsers and Node.js.
 Server certificates are verified on all platforms even if, in some cases, we cannot use the ones provided by the platform.
-In such occurrences, the *Tanker Core* SDK comes with the certificates embedded in its binary code.
+In such occurrences, *Tanker Core* comes with the certificates embedded in its binary code.
 
 

@@ -14,7 +14,7 @@
 [Verification Key]: concepts.md#verification-key "An opaque token that allows creating new devices"
 [User Secret]: concepts.md#user-secret "A secret generated and stored on the application server that protects the local encrypted storage"
 [Secret Permanent Identity]: concepts.md#secret-permanent-identity "An opaque string containing private data about user's identity"
-[Public Permanent Identity]: concepts.md#public-permanent-identify "Generated from a Secret Permanent Identity - essentialy equivalent to a user ID"
+[Public Permanent Identity]: concepts.md#public-permanent-identity "Generated from a Secret Permanent Identity - essentialy equivalent to a user ID"
 [Secret Provisional Identity]: concepts.md#secret-provisional-identity "Same as Secret Permanent Identity, but for a user not registered on the Trustchain yet"
 [Public Provisional Identity]: concepts.md#public-provisional-identity "Same as Public Permanent Identity, but for a user not registered on the Trustchain yet"
 
@@ -24,7 +24,7 @@ The following chapter describes how the previously defined [concepts](#concepts)
 
 The protocols have been split in 3 sections for ease of reading:
 
-- The [cryptographic identity management](#cryptographic-identity-management) section describes how the *Tanker Core* SDK ensures that a *user*'s cryptographic identity is available on every *device*, and how the optional *identity verification service* prevents a *user* from losing their cryptographic identity
+- The [cryptographic identity management](#cryptographic-identity-management) section describes how *Tanker Core* ensures that a *user*'s cryptographic identity is available on every *device*, and how the optional *identity verification service* prevents a *user* from losing their cryptographic identity
 - The [encryption](#encryption) section describes how *resource*s are encrypted and shared with *user*s
 - The [group encryption](#group-encryption) section describes how *user group*s are managed and how to share encrypted *resource*s with them
 
@@ -41,7 +41,7 @@ Please note that when the user handles the [Verification Key] themselves (withou
 
 #### Signing up
 
-The first time the user signs up on a given device, the *Tanker Core* SDK generates *two* [Device Encryption Key Pair]s and two [Device Signature Key Pair]s, one for the *ghost device*, and one for the *physical device*. The ghost device pairs are not saved in the [Local Encrypted Storage] but serialized in an opaque token: the [Verification Key].
+The first time the user signs up on a given device, *Tanker Core* generates *two* [Device Encryption Key Pair]s and two [Device Signature Key Pair]s, one for the *ghost device*, and one for the *physical device*. The ghost device pairs are not saved in the [Local Encrypted Storage] but serialized in an opaque token: the [Verification Key].
 
 Then, the user must choose one *verification method*: email, passphrase, or verification key.
 
@@ -59,9 +59,9 @@ If the user chose 'email' or 'passphrase' as the verification method, the [Verif
 
 The first time the user signs in on a new device, their identity must be *verified* using the method selected during sign up.
 
-* By passphrase: the *user* must provide their passphrase to the *Tanker Core* SDK. It is hashed client-side, then sent to the *Tanker server* to fetch the encrypted [Verification Key].
-* By email: the *user* triggers a verification request through to the *application server* which in turn calls the *Tanker server*. The *Tanker server* then sends an email containing the *Tanker verification code* that must be provided to the *Tanker Core* SDK.
-* By verification key: the *user* directly gives their verification key to the *Tanker Core SDK*.
+* By passphrase: the *user* must provide their passphrase to *Tanker Core*. It is hashed client-side, then sent to the *Tanker server* to fetch the encrypted [Verification Key].
+* By email: the *user* triggers a verification request through to the *application server* which in turn calls the *Tanker server*. The *Tanker server* then sends an email containing the *Tanker verification code* that must be provided to *Tanker Core*.
+* By verification key: the *user* directly gives their verification key to *Tanker Core*.
 
 When using the 'passphrase', or 'email' verification methods, the *user* still needs to authenticate against the *application server* to obtain their [User Secret] to decrypt the [Verification Key].
 
@@ -70,7 +70,7 @@ When using the 'passphrase', or 'email' verification methods, the *user* still n
 Prerequisite: the *user* is registered on the *application server*, but not on the *Trustchain*.
 Once the *user* is authenticated, the *application* can fetch the *user*'s [Secret Permanent Identity] from the *application server*.
 
-The *Tanker Core* SDK extracts the [User Secret] and the [User ID] from the [Secret Permanent Identity], and use them to create the *device*'s [Local Encrypted Storage]. Next, the *Tanker Core* SDK creates the [Device Encryption Key Pair], [Device Signature Key Pair], and [User Encryption Key Pair], and stores them to the [Local Encrypted Storage].
+*Tanker Core* extracts the [User Secret] and the [User ID] from the [Secret Permanent Identity], and use them to create the *device*'s [Local Encrypted Storage]. Next, *Tanker Core* creates the [Device Encryption Key Pair], [Device Signature Key Pair], and [User Encryption Key Pair], and stores them to the [Local Encrypted Storage].
 
 A `device_creation` *block* is then constructed with these keys, and signed with the ephemeral private key of the [delegation token](#delegation-token) found in the [Secret Permanent Identity] retrieved earlier. The *block* is pushed to the *Trustchain* and verified by the *Tanker server*.
 
@@ -80,21 +80,21 @@ Assuming the pushed *block* is correct, the *Tanker server* acknowledges it, all
 
 Prerequisite: the *device* is already registered on the *Trustchain*, the [Secret Permanent Identity] has been retrieved from the *application server* after the *user* has been authenticated against the *application server*.
 
-The *Tanker Core* SDK uses the [User Secret] retrieved from the [Secret Permanent Identity] to access the [Device Encryption Key Pair] and [Device Signature Key Pair] stored in the [Local Encrypted Storage].
+*Tanker Core* uses the [User Secret] retrieved from the [Secret Permanent Identity] to access the [Device Encryption Key Pair] and [Device Signature Key Pair] stored in the [Local Encrypted Storage].
 
 When the *user* opens their *Tanker* session, the *device* opens an HTTPS WebSocket connection with the *Tanker server*.
 Once the connection is established, the *device* asks for an authentication challenge.
 
 This challenge is an array of bytes made of:
 
-- a fixed prefix shared between the *Tanker server* and all *Tanker Core* SDK implementations
+- a fixed prefix shared between the *Tanker server* and all of the *Tanker Core* implementations
 - a random part
 
 The *device* then sends the authentication message containing:
 
 - the signature of the challenge with the private [Device Signature Key Pair]
 - the [User ID]
-- the `Trustchain ID`
+- the *Trustchain* ID
 - the public [Device Signature Key Pair], acting as a unique identifier for the *device*
 
 This allows the *Tanker server* to check that:
@@ -131,9 +131,9 @@ Prerequisite: the *user*'s *device* is authenticated against the *Tanker server*
 Encrypting *data* implies automatically sharing the [Resource Encryption Key] with the user themselves so that their other devices can decrypt the data. The steps to encrypt a resource are as follows:
 
 1. The *application* calls `tanker.encrypt`
-2. The *Tanker Core* SDK generates the [Resource Encryption Key]
-3. The *Tanker Core* SDK symmetrically encrypts the given *data* with the [Resource Encryption Key]
-4. The *Tanker Core* SDK shares the [Resource Encryption Key] with the recipients as described in [Sharing with users](#sharing-with-users) and [Sharing with user groups](#sharing-with-user-groups)
+2. *Tanker Core* generates the [Resource Encryption Key]
+3. *Tanker Core* symmetrically encrypts the given *data* with the [Resource Encryption Key]
+4. *Tanker Core* shares the [Resource Encryption Key] with the recipients as described in [Sharing with users](#sharing-with-users) and [Sharing with user groups](#sharing-with-user-groups)
 
 ### Sharing with users
 
@@ -143,14 +143,14 @@ Given the [Resource Encryption Key], sharing encrypted *data* with another *user
 
 1. The *application* fetches the [Public Permanent Identity] for the recipient from the *application server*
 2. The *application* calls `tanker.share` with the [Public Permanent Identity]
-3. The *Tanker Core* SDK fetches the recipient's `device_creation` *block*s from the *Trustchain*
-4. The *Tanker Core* SDK verifies them and extract the recipient's public [User Encryption Key Pair]
-5. The *Tanker Core* SDK asymmetrically encrypts the [Resource Encryption Key] with the public [User Encryption Key Pair], creating the [Shared Encrypted Key]
-6. The *Tanker Core* SDK creates a `key_publish` *block* containing the [Shared Encrypted Key] and the recipient's public [User Encryption Key Pair], and pushes it to the *Trustchain*
+3. *Tanker Core* fetches the recipient's `device_creation` *block*s from the *Trustchain*
+4. *Tanker Core* verifies them and extract the recipient's public [User Encryption Key Pair]
+5. *Tanker Core* asymmetrically encrypts the [Resource Encryption Key] with the public [User Encryption Key Pair], creating the [Shared Encrypted Key]
+6. *Tanker Core* creates a `key_publish` *block* containing the [Shared Encrypted Key] and the recipient's public [User Encryption Key Pair], and pushes it to the *Trustchain*
 7. The *Tanker server* validates the *block* and notifies all the recipients' *device*s
 8. The recipient's *device* retrieves the *block*, verifies it and decrypts the [Shared Encrypted Key] using the private [User Encryption Key Pair], obtaining the [Resource Encryption Key]
 9. The *application* calls `tanker.decrypt` on the recipient's *device*
-10. The *Tanker Core* SDK decrypts the data using the [Resource Encryption Key]
+10. *Tanker Core* decrypts the data using the [Resource Encryption Key]
 
 ## Group encryption
 ### User group creation
@@ -161,13 +161,13 @@ The steps to create a new *user group* are as follows:
 
 1. The *application* fetches the [Public Permanent Identity] for each future *group member*
 2. The *application* calls `tanker.createGroup` with the obtained [Public Permanent Identity]s
-3. The *Tanker Core* SDK fetches all future *group member*s' `device_creation` *block*s from the *Trustchain*
-4. The *Tanker Core* SDK verifies them and extracts their public [User Encryption Key Pair]
-5. The *Tanker Core* SDK generates the [Group Encryption Key Pair] and the [Group Signature Key Pair]
-6. The *Tanker Core* SDK encrypts the private [Group Signature Key Pair] with the public [Group Encryption Key Pair]
-7. The *Tanker Core* SDK encrypts the private [Group Encryption Key Pair] with each future *group member*'s public [User Encryption Key Pair]
-8. Using the private [Group Signature Key Pair], the *Tanker Core* SDK signs the public and encrypted private [Group Encryption Key Pair] and [Group Signature Key Pair]
-9. The *Tanker Core* SDK creates a `user_group_creation` *block* with all of the above and pushes it to the *Trustchain*
+3. *Tanker Core* fetches all future *group member*s' `device_creation` *block*s from the *Trustchain*
+4. *Tanker Core* verifies them and extracts their public [User Encryption Key Pair]
+5. *Tanker Core* generates the [Group Encryption Key Pair] and the [Group Signature Key Pair]
+6. *Tanker Core* encrypts the private [Group Signature Key Pair] with the public [Group Encryption Key Pair]
+7. *Tanker Core* encrypts the private [Group Encryption Key Pair] with each future *group member*'s public [User Encryption Key Pair]
+8. Using the private [Group Signature Key Pair], *Tanker Core* signs the public and encrypted private [Group Encryption Key Pair] and [Group Signature Key Pair]
+9. *Tanker Core* creates a `user_group_creation` *block* with all of the above and pushes it to the *Trustchain*
 10. The *Tanker server* validates the *block* and sends the update to all *group member*s' *device*s
 11. Each *group member*s' *device* retrieves the *block*, verifies it and decrypts the [Group Encryption Key Pair] and [Group Signature Key Pair] using their private [User Encryption Key Pair]
 
@@ -179,14 +179,14 @@ Sharing with a *user group* is pretty much the same as sharing with a *user* but
 The steps are as follows:
 
 1. The *application* calls `tanker.share` with the [GID](#group-id) to share with
-2. The *Tanker Core* SDK fetches the recipient *group*'s public [Group Encryption Key Pair] from the *Trustchain*, if not already present in the [Local Encrypted Storage]
-3. The *Tanker Core* SDK encrypts the [Resource Encryption Key] with the public [Group Encryption Key Pair]. The result is the [Shared Encrypted Key] for this particular *user group* and *resource*
-4. The *Tanker Core* SDK creates a *block* containing the [Shared Encrypted Key] and the recipient public [Group Encryption Key Pair]
-5. The *Tanker Core* SDK pushes the *block* to the *Trustchain*
+2. *Tanker Core* fetches the recipient *group*'s public [Group Encryption Key Pair] from the *Trustchain*, if not already present in the [Local Encrypted Storage]
+3. *Tanker Core* encrypts the [Resource Encryption Key] with the public [Group Encryption Key Pair]. The result is the [Shared Encrypted Key] for this particular *user group* and *resource*
+4. *Tanker Core* creates a *block* containing the [Shared Encrypted Key] and the recipient public [Group Encryption Key Pair]
+5. *Tanker Core* pushes the *block* to the *Trustchain*
 6. The *Tanker server* validates the *block* and notifies all the recipients' *device*s
 8. The recipients' *device*s retrieve the *block*, verify it and decrypt the [Shared Encrypted Key] using the private [Group Encryption Key Pair], obtaining the [Resource Encryption Key]
 7. The *application* calls `tanker.decrypt` on one of the recipient group's *device*s
-10. The *Tanker Core* SDK decrypts the data using the [Resource Encryption Key]
+10. *Tanker Core* decrypts the data using the [Resource Encryption Key]
 
 ## Preregistration
 ### Provisional identity creation
@@ -204,11 +204,11 @@ Prerequisite: the *user*'s *device* is authenticated against the *Tanker server*
 1. The *application* requests a public identity for a user's email which is not registered yet
 2. The *application server* generates a [Public Provisional Identity] and sends it back to the *application*
 3. The *application* calls `tanker.share` with the *application* [Public Provisional Identity]
-4. The *Tanker Core* SDK requests a [Public Provisional Identity] for the user from the *Tanker server*
+4. *Tanker Core* requests a [Public Provisional Identity] for the user from the *Tanker server*
 5. The *Tanker server* generates a [Public Provisional Identity]
-6. The *Tanker Core* SDK asymmetrically encrypts the [Resource Encryption Key] with the *application* [Public Provisional Identity]'s encryption key
-7. The *Tanker Core* SDK asymmetrically encrypts the previous result with the *Tanker* [Public Provisional Identity]'s encryption key to get the [Shared Encrypted Key]
-8. The *Tanker Core* SDK creates a `key_publish` *block* containing the [Shared Encrypted Key] and both of the recipient's [Public Provisional Identity]s' public signature keys, and pushes it to the *Trustchain*
+6. *Tanker Core* asymmetrically encrypts the [Resource Encryption Key] with the *application* [Public Provisional Identity]'s encryption key
+7. *Tanker Core* asymmetrically encrypts the previous result with the *Tanker* [Public Provisional Identity]'s encryption key to get the [Shared Encrypted Key]
+8. *Tanker Core* creates a `key_publish` *block* containing the [Shared Encrypted Key] and both of the recipient's [Public Provisional Identity]s' public signature keys, and pushes it to the *Trustchain*
 9. The *Tanker server* validates and holds the block until it is claimed
 
 ### Creating a group with a provisional user
@@ -218,14 +218,14 @@ Prerequisite: the *user*'s *device* is authenticated against the *Tanker server*
 1. The *application* requests a public identity for a user's email which is not registered yet
 2. The *application server* generates the [Public Provisional Identity] for the future *group member*
 3. The *application* calls `tanker.createGroup` with the obtained [Public Provisional Identity]
-4. The *Tanker Core* SDK requests a [Public Provisional Identity] for the user from the *Tanker server*
+4. *Tanker Core* requests a [Public Provisional Identity] for the user from the *Tanker server*
 5. The *Tanker server* generates a [Public Provisional Identity]
-6. The *Tanker Core* SDK generates the [Group Encryption Key Pair] and the [Group Signature Key Pair]
-7. The *Tanker Core* SDK encrypts the private [Group Signature Key Pair] with the public [Group Encryption Key Pair]
-8. The *Tanker Core* SDK encrypts the private [Group Encryption Key Pair] with the *application* [Public Provisional Identity]'s encryption key
-9. The *Tanker Core* SDK encrypts the result of the previous step with the *Tanker* [Public Provisional Identity]'s encryption key
-10. Using the private [Group Signature Key Pair], the *Tanker Core* SDK signs the public and encrypted private [Group Encryption Key Pair] and [Group Signature Key Pair]
-11. The *Tanker Core* SDK creates a `user_group_creation` *block* with all of the above and pushes it to the *Trustchain*
+6. *Tanker Core* generates the [Group Encryption Key Pair] and the [Group Signature Key Pair]
+7. *Tanker Core* encrypts the private [Group Signature Key Pair] with the public [Group Encryption Key Pair]
+8. *Tanker Core* encrypts the private [Group Encryption Key Pair] with the *application* [Public Provisional Identity]'s encryption key
+9. *Tanker Core* encrypts the result of the previous step with the *Tanker* [Public Provisional Identity]'s encryption key
+10. Using the private [Group Signature Key Pair], *Tanker Core* signs the public and encrypted private [Group Encryption Key Pair] and [Group Signature Key Pair]
+11. *Tanker Core* creates a `user_group_creation` *block* with all of the above and pushes it to the *Trustchain*
 12. The *Tanker server* validates and holds the block until it is claimed
 
 ### Claiming a provisional identity
@@ -235,12 +235,12 @@ Prerequisite: the *user*'s *device* is authenticated against the *Tanker server*
 1. The *application server* sends an email to the *user* with a verification code
 2. The *device* gets the *application* [Secret Provisional Identity] using the verification code
 3. The *Tanker server* sends an email to the *user* with a verification code
-4. The *Tanker Core* SDK gets the *Tanker* [Secret Provisional Identity] using the verification code
-5. The *Tanker Core* SDK encrypts both [Secret Provisional Identity]s' private encryption keys with the [User Encryption Key Pair]
-6. The *Tanker Core* SDK signs its [Device ID] with the *application* [Secret Provisional Identity]'s private signature key
-7. The *Tanker Core* SDK signs its [Device ID] with the *Tanker* [Secret Provisional Identity]'s private signature key
-8. The *Tanker Core* SDK creates a block with both [Secret Provisional Identity]s' public signature keys, the aforementioned signatures, and the encrypted [Secret Provisional Identity] keys and pushes it to the *Trustchain*
+4. *Tanker Core* gets the *Tanker* [Secret Provisional Identity] using the verification code
+5. *Tanker Core* encrypts both [Secret Provisional Identity]s' private encryption keys with the [User Encryption Key Pair]
+6. *Tanker Core* signs its [Device ID] with the *application* [Secret Provisional Identity]'s private signature key
+7. *Tanker Core* signs its [Device ID] with the *Tanker* [Secret Provisional Identity]'s private signature key
+8. *Tanker Core* creates a block with both [Secret Provisional Identity]s' public signature keys, the aforementioned signatures, and the encrypted [Secret Provisional Identity] keys and pushes it to the *Trustchain*
 9. The *Tanker server* validates the block and stores it
 10. The *Tanker server* publishes all the `key_publish` and *group* blocks related to the claimed provisional identity to the *device*
-11. The *Tanker Core* SDK decrypts the [Shared Encrypted Key]s with both [Secret Provisional Identity]s' private encryption keys when needed
-12. The *Tanker Core* SDK decrypts the [Group Encryption Key Pair]s with both [Secret Provisional Identity]s' private encryption keys when needed
+11. *Tanker Core* decrypts the [Shared Encrypted Key]s with both [Secret Provisional Identity]s' private encryption keys when needed
+12. *Tanker Core* decrypts the [Group Encryption Key Pair]s with both [Secret Provisional Identity]s' private encryption keys when needed
