@@ -2,13 +2,12 @@
 
 [Tanker App]: concepts.md#tanker-app "An application created in the Tanker dashboard"
 [Trustchain]: concepts.md#trustchain "A Trustchain is a collection of signed blocks, attached to a given app"
-[Device Encryption Key Pair]: concepts.md#device-keys "Unique identifier of a user"
+[Device Encryption Key Pair]: concepts.md#device-keys "Used to encrypt the user keys"
 [Device ID]: concepts.md#device-id "Unique identifier of a device belonging to a user"
 [Device Signature Key Pair]: concepts.md#device-keys "Used when the user signs a block"
 [Group Encryption Key Pair]: concepts.md#user-group-keys "Used when sharing data securely within a group"
 [Group Signature Key Pair]: concepts.md#user-group-keys "Used when the user modifies a group"
 [Local Encrypted Storage]: concepts.md#device-id "A place where key materials are stored, encrypted at rest while the Tanker session is closed"
-[Local Clear Storage]: concepts.md#device-id "A place where key materials are stored after they are decrypted while the Tanker session is open"
 [Resource Encryption Key]: concepts.md#resource-keys "A symmetric key that can be exchanged securely across users"
 [Shared Encrypted Key]: concepts.md#resource-keys "The result of encrypting a Resource Encryption Key for a recipient"
 [Trustchain Signature Key Pair]: concepts.md#trustchain-keys "Root of the Trustchain - used to sign user additions"
@@ -66,9 +65,6 @@ Here's a list of concepts used in the rest of this document:
 
  <dt><a href="#device-keys">Local Encrypted Storage (LES)</a></dt>
  <dd>A place where key materials are stored, encrypted at rest while the Tanker session is closed</dd>
-
- <dt>Local Clear Storage (LCS)</a></dt>
- <dd>A place where key materials are stored after they are decrypted while the Tanker session is open</dd>
 
  <dt><a href="#resource-keys">Resource Encryption Key (REK)</a></dt>
  <dd>A symmetric key that can be exchanged securely across users</dd>
@@ -162,7 +158,7 @@ It contains a [User ID], but no secret key material and it is safe to share publ
 
 ### Device ID
 
-Each *user* must have at least one *device*. *Device*s are identified in *Tanker Core* by a randomly attributed [Device ID]. Each *device* has a [Local Clear Storage] and a [Local Encrypted Storage].
+Each *user* must have at least one *device*. *Device*s are identified in *Tanker Core* by a randomly attributed [Device ID]. Each *device* has a [Local Encrypted Storage].
 
 ### Device keys
 
