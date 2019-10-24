@@ -17,4 +17,6 @@ We want to stress that you don't need to understand this spec in order to use th
 * [Trustchain Design](trustchain_design.md)
 * [Protocol](protocol.md)
 * [Blocks format](blocks_format.md)
+* [Blocks verification rules](blocks_verification.md)
+* [Encryption formats](encryption_formats.md)
 * [Threat model](threat_model.md)
