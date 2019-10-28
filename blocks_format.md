@@ -2,7 +2,13 @@ All exchanges in Tanker’s protocol are done in the form of blocks, representin
 
 Blocks contain a serialized payload, which contains different information depending on the nature of the block. Typical contents of a block payload are public keys, encrypted private or symmetric keys, and any data necessary to prove the block's validity. 
 
-Every block is signed by its author, whose signature key must have been created in a previous block, creating a cryptographic signatures chain, similar to a blockchain’s structure.
+Every block is signed by its author, whose signature public key must have been published in a previous block. This creates a cryptographic signatures chain, similar to a blockchain’s structure.
+
+## Definitions
+
+- A *variable buffer* is composed of a varint defining the length of the buffer followed by the buffer itself.
+- A *list* is composed of a varint defining the number of elements in it followed by the elements themselves.
+- Some payloads use a nested structure, they are defined at the end.
 
 ## Block format
 
@@ -10,18 +16,21 @@ A block must be smaller than 4MiB (checked server-side only).
 
 Blocks and payloads are serialized in a custom binary format.
 
-- A variable buffer is a varint defining the length of the buffer followed by the buffer itself.
-- A list is a varint defining the number of elements in it followed by the elements themselves.
-
 | **Field name** | **Type**                | **Description**                                              |
 | -------------- | ----------------------- | ------------------------------------------------------------ |
-| version        | varint                  | The serialisation version                                    |
+| version        | varint                  | The serialization version                                    |
 | index          | varint                  | The index of this block                                      |
 | trustchain_id  | variable buffer         | The ID of the Trustchain this block belongs to               |
 | nature         | varint                  | The nature of the block defining the type of the payload     |
 | payload        | variable buffer         | The contents of the block, see payloads                      |
 | author         | fixed buffer (32 bytes) | Hash of the block of the authority who has emitted this block. When the author block is a device, this is also the device id. |
-| signature      | fixed buffer (64 bytes) | The signature of the block                                   |
+| signature      | fixed buffer (64 bytes) | The signature of the hash of the block by the author's key (except for device creations)                                   |
+
+A block is identified by its hash. A block hash is the hash of the concatenation of:
+
+- The block nature
+- The author hash
+- The serialized payload
 
 ## Block nature
 
@@ -56,6 +65,7 @@ The nature of a block indicates the type of action the block represents, and so 
 Notes: 
 
 - The author field of the root block is always 0-filled.
+- The signature field of the root block is always 0-filled.
 - The appId is the hash of the root block, linking it to the public signature key
 
 ### DeviceCreation v1
@@ -101,9 +111,7 @@ See DeviceCreation 1 for other details.
 | device_public_signature_key    | fixed buffer (32 bytes) | The public signature key of the added device                 |
 | device_public_encryption_key   | fixed buffer (32 bytes) | The public encryption key of the added device                |
 | user_key_pair                  | UserKeyPair             | The user public encryption key and the corresponding private key encrypted for the new device |
-| is_ghost_device                | flag (last byte)        | This device is not a real device                             |
-
-The last byte is a byte array with multiple flags. The byte array flags are in the same order as the fields in the DeviceCreation3 structure. is_ghost_device bitmask is 00000001
+| is_ghost_device                | flag (1 byte)        | This device is not a real physical device                             |
 
 See DeviceCreation 1 for other details.
 
@@ -158,7 +166,7 @@ Possible author natures: Device Creations.
 
 Possible author natures: Device Creations.
 
-This block can only add members, not remove them. The list of added members is the list of users in encrypted_group_keys_for_users. It does not rotate the group keys. Because it's so different from the UserGroupUpdate, we decided to make a different block.
+This block can only add members, not remove them. The list of added members is the list of users in encrypted_group_keys_for_users. It does not rotate the group keys. Because it's so different from the UserGroupUpdate (which can add and remove users, not implemented yet), we decided to make a different block.
 
 ### UserGroupAddition v2
 
@@ -175,7 +183,7 @@ This block can only add members, not remove them. The list of added members is t
 | **Field name** | **Type**                   | **Description**                                  |
 | -------------- | -------------------------- | ------------------------------------------------ |
 | recipient      | fixed buffer (32 bytes)    | The recipient deviceId                           |
-| mac            | fixed buffer (16 bytes)    | The resource ID of the data this key can decrypt |
+| resource_id    | fixed buffer (16 bytes)    | The resource ID of the data this key can decrypt |
 | key            | variable buffer (72 bytes) | The encrypted decryption key for the resource    |
 
 The key is encrypted with a DH between the author's device's private key and the recipient's device's public key. Note that this field uses a variable buffer, but its effective size is fixed.
@@ -220,8 +228,8 @@ Possible author nature: Device Creations.
 | tanker_public_signature_key             | fixed buffer (32 bytes)  |                                                        |
 | author_signature_by_app_key             | fixed buffer (64 bytes)  | The author device id signed by the preregistration key |
 | author_signature_by_tanker_key          | fixed buffer (64 bytes)  | The author device id signed by the preregistration key |
-| recipient_user_public_key               | fixed buffer (32 bytes)  |                                                        |
-| encrypted_private_provisional_user_keys | fixed buffer (112 bytes) |                                                        |
+| recipient_user_public_key               | fixed buffer (32 bytes)  | The user public key of the user                        |
+| encrypted_private_provisional_user_keys | fixed buffer (112 bytes) | The provisional private keys encrypted with the user key |
 
 ## Substructures
 
@@ -256,7 +264,7 @@ The buffer is encrypted as a sodium sealed box.
 
 ### DoubleEncryptedKey
 
-An DoubleEncryptedKey is a 128-byte buffer corresponding to a 32-bytes cleartext, encrypted twice as a sodium sealed box.
+An DoubleEncryptedKey is a 128-byte buffer corresponding to a 32-bytes cleartext, encrypted twice with two different keys as sodium sealed boxes.
 
 ### GroupEncryptedKey
 
@@ -280,5 +288,3 @@ An DoubleEncryptedKey is a 128-byte buffer corresponding to a 32-bytes cleartext
 | pending_app_public_signature_key       | fixed buffer (32 bytes)  | The public preshare key of the recipient of this key         |
 | pending_tanker_public_signature_key    | fixed buffer (32 bytes)  | The public preshare key of the recipient of this key         |
 | encrypted_group_private_encryption_key | fixed buffer (128 bytes) | The private encryption key of the group encrypted for the user key |
-
- 

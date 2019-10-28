@@ -35,7 +35,7 @@ Verification:
 
 Server-side verifications:
 
-- The user_id must not already exist on the Trustchain
+- The user_id must not already exist on the Trustchain (in case of a first device)
 - The device public signature and encryption key must be unique
 
 ### DeviceCreation v2
@@ -45,7 +45,7 @@ Server-side verifications:
 ### DeviceCreation v3
 
 - The user PublicEncryptionKey must be unique
-- It cannot change the user PublicEncryptionKey (if the user already has one)
+- It cannot change the user PublicEncryptionKey (in case of a secondary device)
 
 ## Device Revocations
 
@@ -56,7 +56,7 @@ Verification:
 - The revoked device must belong to the author
 - The revoked device must not already be revoked
 
-A device can revoke itself, even if it is the last of a user's devices.
+Note: A device can revoke itself, even if it is the last of a user's devices.
 
 ### DeviceRevocation v1
 
@@ -76,6 +76,9 @@ A device can revoke itself, even if it is the last of a user's devices.
 - It should not contain any extra encrypted_keys_for_devices
 - encrypted_keys_for_devices should target the user's devices
 
+This blocks supports the case where the user does not have a user key because it
+is the block that is used to upgrade a user without user key to a user with one.
+
 ## User groups
 
 ### UserGroupCreation v1 & v2
@@ -89,7 +92,7 @@ Verification:
 Server side:
 
 - The public encryption and signature keys must be unique
-- The keys in encrypted_group_private_encryption_keys_for_users.public_user_encryption_key should be non-obsolete keys
+- The keys in encrypted_group_private_encryption_keys_for_users.public_user_encryption_key should be non-obsolete keys (this is a best effort)
 
 ### UserGroupAddition v1 & v2
 
@@ -105,7 +108,7 @@ Server side:
 
 ## Key publishes
 
-Only server-side verification is needed for key publishes. Client-side verification is useless as key publishes are leaves of the Trustchain tree → either the key can be recovered or it cannot.
+Only server-side verification is needed for key publishes. Client-side verification is useless as key publishes are leaves of the Trustchain tree → either the key can be decrypted or it cannot.
 
 Server side:
 
@@ -126,10 +129,10 @@ Server side:
 
 Server side:
 
-- The recipient field must contain a valid user public key (one that has not been superseeded)
+- The recipient field must contain a valid user public key (one that has not been superseeded, this is a best effort)
 
 ### KeyPublishToUserGroup
 
 Server side:
 
-- The recipient_group_public_encryption_key must be the last group public key of a group
+- The recipient_group_public_encryption_key must be the last group public key of a group (this is a best effort)
