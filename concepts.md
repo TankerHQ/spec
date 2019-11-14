@@ -206,6 +206,15 @@ Each half contains the name of the authentication method, a value (in case of em
 
 A [Public Provisional Identity] can be generated from a [Secret Provisional Identity] and consists of the [Secret Provisional Identity] without its secrets parts.
 
+### TLS
+
+Transport Layer Security is always used between *Tanker Core* and *Tanker Server* to exchange information.
+This guarantees the confidentiality and authenticity of the data exchanged.
+
+### Resource ID
+
+The unique ID part of an encrypted data.
+This ID is used by *Tanker core* to associate encrypted data with their encryption key.
 
 ## Glossary
 
