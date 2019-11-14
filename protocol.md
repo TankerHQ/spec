@@ -42,7 +42,7 @@ Please note that when the user handles the [Verification Key] themselves (withou
 
 #### Signing up
 
-The first time the user signs up on a given device, *Tanker Core* generates *two* [Device Encryption Key Pair]s and two [Device Signature Key Pair]s, one for the *ghost device*, and one for the *physical device*. The ghost device pairs are not saved in the [Local Encrypted Storage] but serialized in an opaque token: the [Verification Key].
+The first time the user signs up on a given device, *Tanker Core* generates *two* [Device Encryption Key Pair]s and two [Device Signature Key Pair]s, one for the *virtual device*, and one for the *physical device*. The virtual device pairs are not saved in the [Local Encrypted Storage] but serialized in an opaque token: the [Verification Key].
 
 Then, the user must choose one *verification method*: email, passphrase, or verification key.
 
@@ -110,13 +110,11 @@ If any of these check fail, the connection is closed.
 
 Prerequisite: the *user* has created a [Verification Key].
 
-Except for the first *device*, which is validated in a specific way previously described, additional *device*s must be validated by an already registered *device*. In practice, these *device*s are validated by the *ghost device*.
+Except for the first *device*, which is validated in a specific way previously described in the [Sign up process](#sign-up), additional *device*s must be validated by an already registered *device*. In practice, these *device*s are validated by the *virtual device*.
 
 Given the *user*'s [Verification Key], the steps to register a new *device* are as follows:
 
-1. Extract the *ghost device*'s [Device Encryption Key Pair] and [Device Signature Key Pair] from the [Verification Key]
-2. Pull the *Trustchain* up to the *ghost device*'s `device_creation` *block*, verify it and extract the [User Encryption Key Pair] from it
-3. Decrypt the [User Encryption Key Pair] using the  *ghost device*'s private [Device Encryption Key Pair]
+1. Extract the *virtual device*'s [Device Encryption Key Pair] and [Device Signature Key Pair] from the [Verification Key]
 4. Generate the new *device*'s [Device Encryption Key Pair] and [Device Signature Key Pair]
 5. Construct the new *device*'s `device_creation` *block* and sign it with the *ghost device*'s private [Device Signature Key Pair]
 6. Push the *block* to the *Trustchain*

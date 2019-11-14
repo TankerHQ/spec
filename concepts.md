@@ -252,6 +252,7 @@ This ID is used by *Tanker core* to associate encrypted data with their encrypti
   <dt>Trustchain</dt>
   <dd>a tamper-proof, append-only cryptographic log of chained and signed <em>block</em>s</dd>
 
+  <dt>virtual device</dt>
   <dd>a 'virtual' device associated with a <em>user</em>, it is the public part of an <em>verification key</em> registered on the <em>Trustchain</em></dd>
 
   <dt>verification key</dt>
