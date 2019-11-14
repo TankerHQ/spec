@@ -199,6 +199,7 @@ The [Verification Key] is used to register new devices in a secure manner. See t
 ### Secret Provisional Identity
 
 A [Secret Provisional Identity] represents the identity of a user that is not yet registered on Tanker. It is split into two halves that are stored on the *application server* and on *Tanker server*s.
+A provisional identity is attached to some authentication methods. For the moment, email and OpenID connect `IDToken`s are supported.
 Each half contains the name of the authentication method, a value (in case of email, the value is the email address), an encryption key pair and a signature key pair.
 
 ### Public Provisional Identity
