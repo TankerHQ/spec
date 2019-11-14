@@ -29,11 +29,11 @@
 
 When a user intents to share a resource with another user or group of users, *Tanker Core* encrypts the *resource* with the symmetric [Resource Encryption Key] it generates; this [Resource Encryption Key] is then encrypted asymmetrically for the listed recipients, using their public keys. The challenge in this scheme is being sure that the [Resource Encryption Key] is shared with the right *user*, without forcing *users* to physically exchange their public keys.
 
-The basic role of a *Trustchain* is to provide public key distribution between *users* without being able to tamper with anything or access any private data.
+The primary role of the *Trustchain* server is to provide public key distribution between *users* without being able to tamper with anything or access any private data. This guaranty is provided by the *Trustchain* itself.
 
 ## Users and devices
 
-Devices are the basic entities we considered when designing the *Trustchain*. A *device* is an entity owned by a *user*. It stores a [Device Signature Key Pair] and a [Device Encryption Key Pair]. In practice, *devices* can be *users*' web browsers, mobile phones, desktop applications, etc.
+Devices are the simplest entities we considered when designing the *Trustchain*. A *device* is an entity owned by a *user*. It stores a [Device Signature Key Pair] and a [Device Encryption Key Pair]. In practice, *devices* can be *users*' web browsers, mobile phones, desktop applications, etc.
 
 At a basic level, *devices* can perform three types of actions:
 
@@ -49,9 +49,9 @@ Each action corresponds to one or more block natures, which essentially represen
 
 The main actions for a block are:
 
-* *device* creation blocks
-* *device* revocation blocks
-* key publish blocks
+- *device* creation blocks
+- *device* revocation blocks
+- key publish blocks
 
 Blocks also contain a serialized payload, which contains different information depending on the nature of the block. Typical contents of a block payload are public keys, encrypted private or symmetric keys, and any data necessary to prove the block's validity.
 
@@ -61,7 +61,7 @@ The payload of a *device* creation block contains the public [Device Encryption 
 
 Blocks also have an index, which corresponds to the order in which they are added to the *Trustchain*.
 
-Finally, blocks are signed by their author. For key publishes and *device* revocations, this author is the *device* on which the *user* took the action. For *device* creations, the author is a delegation signed by a valid authority. We'll discuss this in the next section.
+Finally, blocks are signed by their author. For key publishes and *device* revocation blocks, this author is the *device* on which the *user* took the action. For *device* creations, the author is a delegation signed by a valid authority. We'll discuss this in the next section.
 
 This creates an oriented rooted tree structure:
 
@@ -76,7 +76,6 @@ We mentioned earlier that the author of a *device* creation block is a delegatio
 A valid authority can be either the [Trustchain Signature Key Pair] owner (i.e. the *application server*) or a valid *device* owned by the same *user*. The future *device* obtains an ephemeral signature key pair from the authority, signed together with the *user*'s ID by the authority's private signature key. This is called a delegation signature and it acts as a proof that the authority verified the identity of the *user* and authorized them to create a new *device*.
 
 A new block is then created, containing the ephemeral public signature key, the delegation signature and the new *device*'s public keys. The block is signed by the new *device* using the private ephemeral signature key, linking it to the authority.
-
 
 ## The root block
 
@@ -112,25 +111,20 @@ The author also stores the block they just emitted, preventing the *Trustchain* 
 
 ### Trust on first use
 
-When first receiving a *device* creation block for a *user*, the recipient needs to trust that the block relates to the correct *user*. The block and the information it contains &mdash; notably the new *device*'s [Device Encryption Key Pair] and [Device Signature Key Pair] &mdash; are then stored locally, preventing the need to ask for this *device*'s public key again.
+When first receiving a *device* creation block for a *user*, the recipient needs to trust this block relates to the correct *user*. The block and the information it contains &mdash; especially the new *device*'s [Device Encryption Key Pair] and [Device Signature Key Pair] &mdash; are then stored locally, preventing the need to ask for this *device*'s public key again.
 
-It is to be noted that because of the signature delegation scheme, the entity that needs to be trusted upon receiving blocks for a new *user* is **not** the *Trustchain* distribution system, but the private [Trustchain Signature Key Pair] holder (i.e. the *application server*).
+It has to be noted that because of the signature delegation scheme, the entity that needs to be trusted upon receiving blocks for a new *user* is **not** the *Trustchain* distribution system, but the private [Trustchain Signature Key Pair] holder (i.e. the *application server*).
 
 ### Forward secrecy
 
-Forward secrecy is, despite being an interesting property, **not **implemented in *Tanker Core*. The reason is that *Tanker Core* is not targeted solely at encrypting ephemeral message exchanges, but also persistent data. We want *users* to be able to decrypt anything at any time with any of their *devices*, which means that we cannot use a forward secure scheme.
-
-We consider implementing an optional forward secure scheme tailored for messaging in a future version of *Tanker Core*.
+Forward secrecy is, despite being an interesting property, **not** implemented in *Tanker Core*. The reason is that *Tanker Core* is not targeted solely at encrypting ephemeral message exchanges, but also persistent data. We want *users* to be able to decrypt anything at any time with any of their *devices*, which means that we cannot use a forward secure scheme.
 
 ## Separation of trust
 
-*Tanker Core* is based on the separation of trust. Any *user* needs to trust:
+*Tanker Core* is based on the separation of trust principle. Any *user* needs to trust:
 
 - the *application* to store and distribute encrypted data
 - *Tanker* to distribute blocks
 - *Tanker* and the *application* not to collude
 
 A collusion between *Tanker* and the *application* could result in a split view attack, in which an alternate, seemingly valid version of the *Trustchain* is strategically distributed to *users* in order to trick them into sharing data with the wrong entity.
-
-We plan on implementing a gossiping scheme in future versions of *Tanker Core*, which would prevent split view attacks.
-

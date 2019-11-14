@@ -194,7 +194,7 @@ Possible author nature: Device Creations.
 
 | **Field name**       | **Type**                | **Description**                                  |
 | -------------------- | ----------------------- | ------------------------------------------------ |
-| recipient_public_key | fixed buffer (32 bytes) | The recipient user public key                    |
+| recipient_public_key | fixed buffer (32 bytes) | The recipient user public encryption key                    |
 | resource_id          | fixed buffer (16 bytes) | The resource ID of the data this key can decrypt |
 | encrypted_key        | EncryptedKey (80 bytes) | The encrypted decryption key for the resource    |
 
@@ -204,7 +204,7 @@ Possible author nature: Device Creations.
 
 | **Field name**             | **Type**                | **Description**                                  |
 | -------------------------- | ----------------------- | ------------------------------------------------ |
-| recipient_group_public_key | fixed buffer (32 bytes) | The recipient group public key                   |
+| recipient_group_public_key | fixed buffer (32 bytes) | The recipient group public encryption key                   |
 | resource_id                | fixed buffer (16 bytes) | The resource ID of the data this key can decrypt |
 | encrypted_key              | EncryptedKey (80 bytes) | The encrypted decryption key for the resource    |
 
@@ -288,3 +288,4 @@ An DoubleEncryptedKey is a 128-byte buffer corresponding to a 32-bytes cleartext
 | pending_app_public_signature_key       | fixed buffer (32 bytes)  | The public preshare key of the recipient of this key         |
 | pending_tanker_public_signature_key    | fixed buffer (32 bytes)  | The public preshare key of the recipient of this key         |
 | encrypted_group_private_encryption_key | fixed buffer (128 bytes) | The private encryption key of the group encrypted for the user key |
+
