@@ -221,10 +221,41 @@ The steps to create a new *user group* are as follows:
 1. *Tanker Core* generates the [Group Encryption Key Pair] and the [Group Signature Key Pair]
 1. *Tanker Core* encrypts the private [Group Signature Key Pair] with the public [Group Encryption Key Pair]
 1. *Tanker Core* encrypts the private [Group Encryption Key Pair] with each future *group member*'s public [User Encryption Key Pair]
-1. Using the private [Group Signature Key Pair], *Tanker Core* signs the public and encrypted private [Group Encryption Key Pair] and [Group Signature Key Pair]
+1. Using the private [Group Signature Key Pair], *Tanker Core* signs the public and the encrypted private [Group Encryption Key Pair] and [Group Signature Key Pair]
 1. *Tanker Core* creates a `user_group_creation` *block* with all of the above and pushes it to the *Trustchain*
-1. The *Tanker server* validates the *block* and sends the update to all *group member*s' *device*s
-1. Each *group member*s' *device* retrieves the *block*, verifies it and decrypts the [Group Encryption Key Pair] and [Group Signature Key Pair] using their private [User Encryption Key Pair]
+1. The *Tanker server* validates the *block*
+
+### Add users to a user group
+
+This operation adds users to an existing user group. The group ID, [Group Encryption Key Pair] and the [Group Signature Key Pair] remains unchanged at the end of the operation.
+
+Prerequisite: the *user*'s *device* is authenticated against the *Tanker server*. The *user* is a member of the group they want to add users to.
+
+1. The *application* fetches the [Public Permanent Identity] for each new *group member* to add
+1. *Tanker Core* fetches all future *group member*s `device_creation` *block*s from the *Trustchain*
+1. *Tanker Core* verifies them and extracts their public [User Encryption Key Pair]
+1. *Tanker Core* encrypts the private [Group Signature Key Pair] with the public [Group Encryption Key Pair]
+1. *Tanker Core* encrypts the private [Group Encryption Key Pair] with each added *group member*'s public [User Encryption Key Pair]
+1. Using the new private [Group Signature Key Pair], *Tanker Core* signs all the non-signature fields, in the order defined [here](blocks_format.md#usergroupupdate)
+1. Using the previous private [Group Signature Key Pair], *Tanker Core* signs all the non-signature fields, in the order defined [here](blocks_format.md#usergroupupdate)
+1. *Tanker Core* creates a `user_group_addition` *block* with all of the above and pushes it to the *Trustchain*
+1. The *Tanker server* validates the *block*
+
+### Update users in a user group
+
+This operation is similar to the previous one, the only difference is that it rotates the [Group Encryption Key Pair] and the [Group Signature Key Pair]. The group ID remains unchanged.
+
+Prerequisite: the *user*'s *device* is authenticated against the *Tanker server*. The *user* is a member of the group they want to update users to.
+
+1. The *application* fetches the [Public Permanent Identity] for each *group member* to add
+1. The *application* fetches the [Public Permanent Identity] for each *group member* to remove
+1. *Tanker Core* fetches all future *group member*s' `device_creation` *block*s from the *Trustchain*
+1. *Tanker Core* generates the new [Group Encryption Key Pair] and the [Group Signature Key Pair]
+1. *Tanker Core* encrypts the new private [Group Signature Key Pair] with the new public [Group Encryption Key Pair]
+1. *Tanker Core* encrypts the new private [Group Encryption Key Pair] with each future *group member*'s public [User Encryption Key Pair]
+1. Using the new private [Group Signature Key Pair], *Tanker Core* signs the new public and the new encrypted private [Group Encryption Key Pair] and [Group Signature Key Pair]
+1. *Tanker Core* creates a `user_group_update` *block* with all of the above and pushes it to the *Trustchain*
+1. The *Tanker server* validates the *block*
 
 ### Sharing with user groups
 
@@ -234,7 +265,7 @@ Sharing with a *user group* is pretty much the same as sharing with a *user* but
 The steps are as follows:
 
 1. The *application* fetches the [GID](#group-id) to share with
-1. *Tanker Core* looks for the [Group Encryption Key Pair] associated with [GID](#group-id) in the [Local Encrypted Storage]
+1. *Tanker Core* looks for the [Group Encryption Key Pair] associated with the [GID](#group-id) in the [Local Encrypted Storage]
 1. If the [Group Encryption Key Pair] is not already present, *Tanker Core* fetches the corresponding `user_group_creation` from the Trustchain
 1. *Tanker Core* verifies the received `user_group_creation`
 1. *Tanker Core* encrypts the [Resource Encryption Key] with the public [Group Encryption Key Pair]. The result is the [Shared Encrypted Key] for this particular *user group* and *resource*
