@@ -4,6 +4,7 @@
 [Device Encryption Key Pair]: concepts.md#device-keys "Used to encrypt the user keys"
 [Device ID]: concepts.md#device-id "Unique identifier of a device belonging to a user"
 [Device Signature Key Pair]: concepts.md#device-keys "Used when the user signs a block"
+[Delegation Token]: concepts.md#delegation-token "Part of a Secret Permanent Identity. Combination of an ephemeral private key and the user ID and the signature of them both"
 [Group Encryption Key Pair]: concepts.md#user-group-keys "Used when sharing data securely within a group"
 [Group Signature Key Pair]: concepts.md#user-group-keys "Used when the user modifies a group"
 [Local Encrypted Storage]: concepts.md#device-id "A place where key materials are stored, encrypted at rest while the Tanker session is closed"
@@ -19,7 +20,8 @@
 [Secret Provisional Identity]: concepts.md#secret-provisional-identity "Same as Secret Permanent Identity, but for a user not registered on the Trustchain yet"
 [Public Provisional Identity]: concepts.md#public-provisional-identity "Same as Public Permanent Identity, but for a user not registered on the Trustchain yet"
 [TLS]: concepts.md#transport-layer-security "Tanker Core and server uses the TLS protocol to communicate across the Internet, preventing eavesdropping and tampering"
-[Resource ID]: concepts.md
+[Resource ID]: concepts.md#resource-id "The unique ID part of an encrypted data"
+[Verification Method]: concepts.md#Verification-method "A verfication methond allow a user to retrieve its verification key"
 
 # Protocol
 
@@ -45,42 +47,50 @@ Please note that when the user handles the [Verification Key] themselves (withou
 
 ### Session management
 
-#### Signing up
+Before being able to encrypt/decrypt and exchange keys, a *user* must exist on the *Trustchain*. This means they have at least one valid *device* (not revoked) registered on *Trustchain*. To exists on the *Trustchain*, the *Tanker server* will ask *user*'s proof of authentication from the *application server* . The *application server* must be able to generate [Secret Permanent Identity] and deliver it to the *application* securely.
 
-The first time the user signs up on a given device, *Tanker Core* generates *two* [Device Encryption Key Pair]s and two [Device Signature Key Pair]s, one for the *virtual device*, and one for the *physical device*. The virtual device pairs are not saved in the [Local Encrypted Storage] but serialized in an opaque token: the [Verification Key].
+One of the first action taken by *Tanker Core* is to ask the *Tanker server* for the user existence on the *Trustchain* and if so, if the current *device* exists. The result of this request will either initiate a [user registration](#user-registration), a [device registration](#device-registration), or the required follow-up to a [device authentication](#device-authentication).
 
-Then, the user must choose one *verification method*: email, passphrase, or verification key.
+If no [Local Encrypted Storage] is found, *Tanker Core* will create one automatically. *Tanker Core* extracts the [User Secret] and the [User ID] from the [Secret Permanent Identity], and use them to create the *device*'s [Local Encrypted Storage].
 
-What happens next depends on the chosen method:
+#### User Registration
 
-* By email: a verification code is sent to the email address
-* By passphrase: the application should ask the user to enter a passphrase
-* By verification key: the application should display the [Verification Key] and entrust the user to keep it safe.
-
-The public keys of the virtual device and the physical device are pushed in two blocks to the Trustchain.
-
-If the user chose 'email' or 'passphrase' as the verification method, the [Verification Key] is encrypted on the *device* with the [User Secret] and sent to the *Tanker server*.
-
-#### Signing in
-
-The first time the user signs in on a new device, their identity must be *verified* using the method selected during the sign up process.
-
-* By passphrase: the *user* must provide their passphrase to *Tanker Core*. It is hashed client-side, then sent to the *Tanker server* to fetch the encrypted [Verification Key].
-* By email: the *user* triggers a verification request through the *application server* which in turn calls the *Tanker server*. Then, the *Tanker server* sends an email containing the *Tanker verification code* which must be provided to *Tanker Core*.
-* By verification key: the *user* directly gives their verification key to *Tanker Core*.
-
-While using the 'passphrase', or 'email' verification methods, the *user* still needs their [User Secret] to decrypt the [Verification Key]. They would need to authenticate against the *application server* to obtain it.
-
-### User registration
-
-Prerequisite: the *user* is registered on the *application server*, but not on the *Trustchain*.
+Prerequisite: The *user* is registered on the *application*, but not on the *Trustchain*.
 Once the *user* is authenticated, the *application* can fetch the *user*'s [Secret Permanent Identity] from the *application server*.
 
-*Tanker Core* extracts the [User Secret] and the [User ID] from the [Secret Permanent Identity], and use them to create the *device*'s [Local Encrypted Storage]. Next, *Tanker Core* creates the [Device Encryption Key Pair], [Device Signature Key Pair], and [User Encryption Key Pair], and stores them to the [Local Encrypted Storage].
+First, if they are not found, *Tanker Core* creates a [Device Encryption Key Pair], [Device Signature Key Pair], for the *physical device*, and a [User Encryption Key Pair]. It stores them in the the [Local Encrypted Storage].
 
-A `device_creation` *block* is then constructed with these keys, and signed with the ephemeral private key of the [delegation token](#delegation-token) found in the [Secret Permanent Identity] retrieved earlier. The *block* is pushed to the *Trustchain* and verified by the *Tanker server*.
+*Tanker Core* creates another [Device Encryption Key Pair] and [Device Signature Key Pair] for the *virtual device*. But instead of storing them, it serializes them as an opaque token, the [Verification Key].
 
-Assuming the pushed *block* is correct, the *Tanker server* acknowledges it, allowing the *device* to [authenticate itself](#device-authentication).
+A first `device_creation` block is constructed with the *virtual device*'s public [Device Encryption Key Pair] and public [Device Signature Key Pair] and the encrypted [User Encryption Key Pair]. This block is signed with the ephemeral private key of the [Delegation Token]found in the [Secret Permanent Identity].
+
+Then, a second `device_creation` block is created with the *physical device*'s [Device Encryption Key Pair] and [Device Signature Key Pair]. *Tanker Core* creates a new ephemeral key pair, signs this block with the ephemeral private key and uses the *virtual device*'s [Device Signature Key Pair] to sign the *delegation* and fill the block's *delegation_signature* field.
+
+Finally, both `device_creation` *block*s are pushed to the *Trustchain*, the *virtual device* before the *physical one*, and the [Verification Key] is uploaded to the *Tanker server* according to the [Verification Method] used by the *user*.
+
+Assuming the pushed *block*s are correct, the *Tanker server* acknowledges them, allowing the just created *device* to proceed and [authenticate itself](#device-authentication).
+
+#### Device Registration
+
+Prerequisite: the *user* used one of its registered verification method to let *Tanker Core* retrieve its [Verification key], see [Verification Methods](#verification-methods) for a complete explanation.
+
+The first time the *user* signs in on a new device, their identity must be *verified* using one of their [Verification Method]s.
+
+Given the *user*'s [Verification Key], the steps to register a new *device*:
+
+1. The *user* uses one the [Verification Method]s available to them to obtain their [Verification Key]
+1. *Tanker Core* extracts the *virtual device*'s [Device Encryption Key Pair] and [Device Signature Key Pair] from the [Verification Key]
+1. *Tanker Core* requests the last *encrypted user key* from the *Tanker server* and the *virtual device*'s *device id*
+1. *Tanker Core* extracts the encrypted [User Encryption Key Pair] and the *device id* from it
+1. *Tanker Core* decrypts the [User Encryption Key Pair] using the *virtual device*'s [Device Encryption Key Pair]
+1. *Tanker Core* generates the new *device*'s [Device Encryption Key Pair] and [Device Signature Key Pair]
+1. *Tanker Core* constructs the new *device*'s `device_creation` *block* with the *device id*, retrieved from the *Tanker server*, as the block author
+1. *Tanker Core* uses the *virtual device*'s private [Device Signature Key Pair] to sign the delegation and fill the block's *delegation signature* field
+1. *Tanker Core* creates a new ephemeral signature key pair
+1. *Tanker Core* signs the block with private ephemeral key pair
+1. *Tanker Core* pushes the *block* to the *Trustchain*
+1. The *Tanker server* validates the *block*
+1. The new *device* can now [authenticate itself](#device-authentication)
 
 ### Device authentication
 
@@ -88,45 +98,77 @@ Prerequisite: the *device* is already registered on the *Trustchain*, the [Secre
 
 *Tanker Core* uses the [User Secret] retrieved from the [Secret Permanent Identity] to access the [Device Encryption Key Pair] and [Device Signature Key Pair] stored in the [Local Encrypted Storage].
 
-When the *user* opens their *Tanker* session, the *device* opens a connection with the *Tanker server*.
-Once the connection is established, the *device* asks for an authentication challenge.
+The *device* initiates the authentication by requesting an *authentication challenge* from *Tanker server*. This challenge made of:
 
-This challenge is an array of bytes made of:
+- A fixed prefix shared between the *Tanker server* and all of the *Tanker Core* implementations
+- A random part
 
-- a fixed prefix shared between the *Tanker server* and all of the *Tanker Core* implementations
-- a random part
+The *device* then sends the *authentication message* containing:
 
-The *device* then sends the authentication message containing:
-
-- the signature of the challenge with the private [Device Signature Key Pair]
-- the [User ID]
-- the *Trustchain* ID
-- the public [Device Signature Key Pair], acting as a unique identifier for the *device*
+- The signature of the challenge with the private [Device Signature Key Pair]
+- The [User ID]
+- The *Tanker App* ID
+- The public [Device Signature Key Pair], acting as a unique identifier for the *device*
 
 This allows the *Tanker server* to check that:
 
-- the *device* is registered on the *Trustchain*
-- the *device* is correctly associated with the provided [User ID]
-- the signature matches the challenge
+- The *device* is registered on the *Trustchain*
+- The *device* is correctly associated with the provided [User ID]
+- The signature matches the challenge
 
 If any of these check fail, the connection is closed.
 
-### Device registration
+### Verification Methods
 
-Prerequisite: the *user* has created a [Verification Key].
+*Tanker Core* requires at least one verification method to be registered at all time for the *user*. These methods allow a *user* to register a new *device* on the trustchain by providing a shared proof between him and the *Tanker server*.
 
-Except for the first *device*, which is validated in a specific way previously described in the [Sign up process](#sign-up), additional *device*s must be validated by an already registered *device*. In practice, these *device*s are validated by the *virtual device*.
+The only way to add more *device*s, after the first one created during [user registration](#user-registration), is to sign a new `device_creation` block containing the new device's keys with a *user*'s existing device.
 
-Given the *user*'s [Verification Key], the steps to register a new *device* are as follows:
+For this purpose, during [user registration](#user_registration) *Tanker Core* creates a *virtual device* and pushes its `device_creation` block. This *device* is not a "physical" one, it has no [Local Encrypted Storage]. Instead, the [Device Signature Key Pair] and the [Device Encryption Key Pair] are serialized as an opaque token, we call it the [Verification Key]. The [Verification Key] is encrypted with the [User Secret] and stored on the *Tanker server*.
 
-1. Extract the *virtual device*'s [Device Encryption Key Pair] and [Device Signature Key Pair] from the [Verification Key]
-2. Pull the *Trustchain* up to the *virtual device*'s `device_creation` *block*, verify it and extract the [User Encryption Key Pair] from it
-3. Decrypt the [User Encryption Key Pair] using the *virtual device*'s private [Device Encryption Key Pair]
-4. Generate the new *device*'s [Device Encryption Key Pair] and [Device Signature Key Pair]
-5. Construct the new *device*'s `device_creation` *block* and sign it with the *virtual device*'s private [Device Signature Key Pair]
-6. Push the *block* to the *Trustchain*
-7. The *Tanker server* validates the *block*
-8. The new *device* authenticates against the *Tanker server*
+*User*s can use their [Verification Key] 'as is' when registering a new device. But *Tanker Core* proposes an easier way to handle the [Verification Key].
+
+[Verification Method] registration happens at least once during [User Registration] and can be done anytime by the *user* through an authenticated device.
+
+#### Verification Key
+
+*Tanker Core* accepts a [Verification Key]. It will be used 'as is'. See [device registration](#device-registration) for how the [Verfication Key] is used to register a device.
+
+#### Passphrase
+
+The *user* provides a passphrase when registering a new [Verification Method]. The passphrase will be hashed by *Tanker Core* before sending it to the *Tanker server*. The *Tanker server* will rehash with a salt the received hashed passphrase before storing it alongside the user's [Verification Key].
+
+When the *user* needs to [register a new device](#device-registration), they will provide their passphrase. *Tanker Core* will hash the passphrase before sending it to the *Tanker server*. Then, the *Tanker server* will rehash with the seed the received hashed passphrase and match this result with the stored passphrase. If they match, the *Tanker server* will return the encrypted [Verification Key].
+
+#### Email
+
+For the *application* to offer Email as a verification method, they need to send `HTTP` requests to the *Tanker server*. To allow that, the *application* administrator needs to register their domain origin of their requests to the *Tanker App*.
+
+Before registering an email address as a [Verfication Method], the *Tanker server* must make sure the *user* has access to this email address.
+
+The steps to verify the *user*'s email address and register their email [Verification Method] are as follow:
+
+1. The *user* provides an email address
+1. The *application* makes a request to the *Tanker server* with the provided email adress and some payload for the email message
+1. The *Tanker server* generates a [Verification Code]
+1. The *Tanker server* records the hashed email address and the [Verification Code]
+1. The *Tanker server* sends an email to the provided email address with the [Verification Code]
+1. The *user* provides the [Verification Code] to the *application*
+1. The *application* forwards the email address of the *user* and the [Verification Code] to *Tanker Core*
+1. *Tanker Core* hashes the email address and, with the [Verification Code], sends a request to the *Tanker server*
+1. The *Tanker server* will match the provided hashed email address and the [Verification Code]
+
+If the *Tanker server* does not returns an error, it means the process has ended sucessfully and the *user* has now registered their provided email address as a [Verification Method].
+
+The process to [register a new device](#device-registration) with an email [Verification Method] is the same as described above. The only difference is that at the end of the process the *Tanker server* returns the *user*'s [Verification Key].
+
+#### OpenID Connect
+
+For the *application* to offer OpenID Connect as a verification method, *application* owners need to register their `OIDC`'s `Client ID` to the *Tanker App*.
+
+The *user* authenticates against the OpenID Connect provider, which will allow the *application* to receive the *user* `ID Token`. Then, the *application* can provide this `ID Token` to *Tanker Core* during [user registration](#user-registration) or later on. The *Tanker server* will verify the provided `ID Token` according to [the OpenID recommandation](https://openid.net/specs/openid-connect-core-1_0.html#IDTokenValidation) and hash it before storing it.
+
+The process to [register a new device](#device-registration) with an `OIDC` [Verification Method] is the same as described above. The only difference is that at the end of the process the *Tanker server* returns the *user*'s [Verification Key].
 
 ## Encryption and Decryption
 
@@ -162,11 +204,11 @@ Prerequisite: the user's has access to the encrypted data
 
 1. *Tanker Core* extracts the [Resource ID] from the encrypted data
 1. *Tanker Core* retrieves for the recipients' *device* the `key_publish` *block*,
-1. *Tanker Core* verifies the retrieved block
 1. *Tanker Core* decrypts the [Shared Encrypted Key] of the `key_publish` block using the private [User Encryption Key Pair], obtaining the [Resource Encryption Key]
 1. *Tanker Core* decrypts the data using the [Resource Encryption Key]
 
 ## Group encryption
+
 ### User group creation
 
 Prerequisite: the *user*'s *device* is authenticated against the *Tanker server*.
@@ -192,7 +234,7 @@ Sharing with a *user group* is pretty much the same as sharing with a *user* but
 The steps are as follows:
 
 1. The *application* fetches the [GID](#group-id) to share with
-1. *Tanker Core* look for the [Group Encryption Key Pair] associated with [GID](#group-id) in the [Local Encrypted Storage]
+1. *Tanker Core* looks for the [Group Encryption Key Pair] associated with [GID](#group-id) in the [Local Encrypted Storage]
 1. If the [Group Encryption Key Pair] is not already present, *Tanker Core* fetches the corresponding `user_group_creation` from the Trustchain
 1. *Tanker Core* verifies the received `user_group_creation`
 1. *Tanker Core* encrypts the [Resource Encryption Key] with the public [Group Encryption Key Pair]. The result is the [Shared Encrypted Key] for this particular *user group* and *resource*
@@ -206,11 +248,11 @@ Prerequisite: the *user*'s *device* is authenticated against the *Tanker server*
 
 1. *Tanker Core* extracts the [Resource ID] from the encrypted data
 1. *Tanker Core* retrieves for the recipients' *device* the `key_publish` *block*,
-1. *Tanker Core* verifies the retrieved block
 1. *Tanker Core* decrypts the [Shared Encrypted Key] using the private [Group Encryption Key Pair], obtaining the [Resource Encryption Key]
 1. *Tanker Core* decrypts the data using the [Resource Encryption Key]
 
 ## Preregistration
+
 ### Provisional identity creation
 
 *Tanker* supports sharing with users that are not yet registered.
