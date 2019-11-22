@@ -25,17 +25,20 @@
 
 # Protocol
 
-The following chapter describes how the previously defined [concepts](#concepts) are used in Tanker.
+The following chapters describe how the previously defined [concepts](#concepts) are used in Tanker.
 
-The protocols have been split in 3 sections for ease of reading:
+The protocols have been split in 4 sections for ease of reading:
 
-- The [cryptographic identity management](#cryptographic-identity-management) section describes how *Tanker Core* ensures that a *user*'s cryptographic identity is available on every *device*, and how the optional *identity verification service* prevents a *user* from losing their cryptographic identity
-- The [encryption](#encryption) section describes how *resource*s are encrypted and shared with *user*s
-- The [group encryption](#group-encryption) section describes how *user group*s are managed and how to share encrypted *resource*s with them
+- The [session management](#session-management) section describes how *Tanker Core* ensures that a *user*'s cryptographic identity is available on every *device*, and how the optional *identity verification service* prevents a *user* from losing their cryptographic identity
+- The [verification methods](#verification-methods) section describes how different methods are available to the user to retrieve it's cryptographic identity using the *Tanker Identity* service.
+- The [encryption and decryption](#encryption-and-decryption) section describes how *resource*s are encrypted, decrypted, and shared with *user*s
+- The [preregistration](#preregistration) section describes how a registred user can shared a resource to a non yet registered user.
 
-# Communication
+# Communications
 
 Every communication and information exchanges between *Tanker Core* and the *Tanker Server* are done through [TLS] connection. In the same way, exchanges between *Tanker Core* and the *application server* also use [TLS], in particular for Tanker Identity retrievals.
+
+# Session management
 
 ## Cryptographic identity management
 
@@ -45,11 +48,9 @@ The following diagram describes how the different protocols interact together wh
 
 Please note that when the user handles the [Verification Key] themselves (without using the *identity verification service*), the system is fully end-to-end.
 
-# Session management
+Before being able to encrypt/decrypt and exchange keys, a *user* must exist on the *Trustchain*. This means they have at least one valid *device* (not revoked) registered on *Trustchain*. To register on the *Trustchain*, the *Tanker server* asks for the *user*'s proof of authentication against the *application server*. The *application server* must be able to generate a [Secret Permanent Identity] and deliver it to the *application* securely.
 
-Before being able to encrypt/decrypt and exchange keys, a *user* must exist on the *Trustchain*. This means they have at least one valid *device* (not revoked) registered on *Trustchain*. To exists on the *Trustchain*, the *Tanker server* will ask *user*'s proof of authentication from the *application server* . The *application server* must be able to generate [Secret Permanent Identity] and deliver it to the *application* securely.
-
-One of the first action taken by *Tanker Core* is to ask the *Tanker server* for the user existence on the *Trustchain* and if so, if the current *device* exists. The result of this request will either initiate a [user registration](#user-registration), a [device registration](#device-registration), or the required follow-up to a [device authentication](#device-authentication).
+One of the first action taken by *Tanker Core* is to ask the *Tanker server* for the user's existence on the *Trustchain* and if so, if the current *device* exists. The result of this request will either initiate a [user registration](#user-registration), a [device registration](#device-registration), or the required follow-up to a [device authentication](#device-authentication).
 
 If no [Local Encrypted Storage] is found, *Tanker Core* will create one automatically. *Tanker Core* extracts the [User Secret] and the [User ID] from the [Secret Permanent Identity], and use them to create the *device*'s [Local Encrypted Storage].
 
