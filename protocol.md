@@ -119,6 +119,14 @@ This allows the *Tanker server* to check that:
 
 If any of these check fail, the connection is closed.
 
+## Device Revokation
+
+Prerequisite: The *user* has a session opened.
+
+A *user* may want to dispose of a device, for various reasons (eg: not used anymore, compromission, etc). A revoked device cannot authenticate itself to the *Tanker server* anymore, it won't new received blocks for newly shared resources, but it could still decrypts the one received before its revokation. Some *Tanker Core* implementation may attempt to destroy the [Local Encrypted Storage] when receiving the `device_revocation` block. The *user* uses one of its authenticated *device* to revoke another. The targeted *device* may or may not be connected at the time of the revocation.
+
+The *user* provides the device ID they want to revoke. *Tanker Core* generates a new [User Encryption Key] and encrypts the privake key for every *user*'s devices with their public [Device Encryption Key Pair]. *Tanker Core* also encrypts the previous private [User Encryption Key Pair] with the new public [User Encryption Key Pair].*Tanker Core* constructs a `device_revocation` block with all of the above and push it to the *Trustchain*.
+
 # Verification Methods
 
 *Tanker Core* requires at least one verification method to be registered at all time for the *user*. These methods allow a *user* to register a new *device* on the trustchain by providing a shared proof between him and the *Tanker server*.

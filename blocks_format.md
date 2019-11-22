@@ -257,12 +257,12 @@ Possible author nature: Device Creations.
 
 ### NewUserKey
 
-| **Field name**                      | **Type**                    | **Description**                                              |
-| ----------------------------------- | --------------------------- | ------------------------------------------------------------ |
-| public_encryption_key               | fixed buffer (32 bytes)     | The current public encryption key of the user                |
-| previous_public_encryption_key      | fixed buffer (32 bytes)     | The previous public encryption key of the user or 0-array    |
-| encrypted_key_for_previous_user_key | fixed buffer (80 bytes)     | The new user private key encrypted for previous user key or 0-array |
-| encrypted_keys_for_devices          | list(EncryptedKeyForDevice) | The new user private key encrypted for other devices         |
+| **Field name**                                    | **Type**                    | **Description**                                              |
+| ------------------------------------------------- | --------------------------- | ------------------------------------------------------------ |
+| public_encryption_key                             | fixed buffer (32 bytes)     | The current public encryption key of the user                |
+| previous_public_encryption_key                    | fixed buffer (32 bytes)     | The previous public encryption key of the user or 0-array    |
+| previous_private_user_key_encrypted_with_user_key | fixed buffer (80 bytes)     | The previous private user key encrypted with the new user key or 0-array |
+| encrypted_private_user_keys_for_devices           | list(EncryptedKeyForDevice) | The new user private key encrypted for other devices         |
 
 ### EncryptedKeyForDevice
 
