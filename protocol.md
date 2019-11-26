@@ -293,6 +293,8 @@ Prerequisite: the *user*'s *device* is authenticated against the *Tanker server*
 
 # Preregistration
 
+![Claiming a provisional identity](./img/preshare.png "Claiming a provisional identity")
+
 ## Provisional identity creation
 
 *Tanker* supports sharing with users that are not yet registered.
