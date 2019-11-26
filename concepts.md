@@ -19,6 +19,7 @@
 [Public Permanent Identity]: concepts.md#public-permanent-identity "Generated from a Secret Permanent Identity - essentialy equivalent to a user ID"
 [Secret Provisional Identity]: concepts.md#secret-provisional-identity "Same as Secret Permanent Identity, but for a user not registered on the Trustchain yet"
 [Public Provisional Identity]: concepts.md#public-provisional-identity "Same as Public Permanent Identity, but for a user not registered on the Trustchain yet"
+[Verification Method]: concepts.md#verification-method "A verification method allows a user to retrieve their verification key"
 
 *Tanker Core*'s security is based on the separation of knowledge, between the *Tanker server*, the *user*, and the *application server*.
 To establish trust between these actors and to enable sharing of encrypted *data* between *user*s, *Tanker Core* produces and uses cryptographic keys, IDs, and tokens.
@@ -94,6 +95,9 @@ Here's a list of concepts used in the rest of this document:
 
  <dt><a href="#resource-id">Resource ID</a></dt>
  <dd>The unique ID of an encrypted data</dd>
+
+ <dt><a href="#verification-method">Verification Method</a></dt>
+ <dd>Allows a *user* to retrieve their verification key. Used during Device or User registration</dd>
 </dl>
 
 They are explained in more detail below.
@@ -147,15 +151,11 @@ The delegation token is only used when the *user* creates their first *device* o
 
 ### Secret Permanent Identity
 
-The [Secret Permanent Identity] is generated and stored by the *application server* and provided to a user only after successful authentication against the *application server*.
-It should never be shared with other *user*s.
-It contains some secret key material such as the [User Secret] and [delegation token](#delegation-token).
-It represents the identity of the *user* for *Tanker Core* and is considered a proof of authentication against the *application server*.
+The [Secret Permanent Identity] is generated and stored by the *application server* and provided to a user only after successful authentication against the *application server*. It should never be shared with other *user*s. It contains some secret key material such as the [User Secret] and [delegation token](#delegation-token). It represents the identity of the *user* for *Tanker Core* and is considered a proof of authentication against the *application server*.
 
 ### Public Permanent Identity
 
-A [Public Permanent Identity] can be generated from a [Secret Permanent Identity], and is used to uniquely identify a *user*.
-It contains a [User ID], but no secret key material and it is safe to share publicly.
+A [Public Permanent Identity] can be generated from a [Secret Permanent Identity], and is used to uniquely identify a *user*. It contains a [User ID], but no secret key material and it is safe to share publicly.
 
 ### Device ID
 
@@ -164,43 +164,32 @@ Each *user* must have at least one *device*. *Device*s are identified in *Tanker
 ### Device keys
 
 Each *device* registered on the *Trustchain* has one [Device Encryption Key Pair] and one [Device Signature Key Pair].
-Device keys are stored in the *device*'s [Local Encrypted Storage]. They are never replaced or modified after creation.
-The public [Device Encryption Key Pair] and [Device Signature Key Pair] are pushed to the *Trustchain* in the `device_creation` *block*.
-The private [Device Encryption Key Pair] and [Device Signature Key Pair] never leave the *device*.
+Device keys are stored in the *device*'s [Local Encrypted Storage]. They are never replaced or modified after creation. The public [Device Encryption Key Pair] and [Device Signature Key Pair] are pushed to the *Trustchain* in the `device_creation` *block*. The private [Device Encryption Key Pair] and [Device Signature Key Pair] never leave the *device*.
 
 ### User keys
 
-Every *user* registered on the *Trustchain* has one active [User Encryption Key Pair].
-User keys are stored in each *device*'s [Local Encrypted Storage].
-The Private [User Encryption Key Pair] is encrypted with each of the *user*'s *device*s' public [Device Encryption Key Pair] before being pushed to the *Trustchain*.
-It is pushed to the *Trustchain* in the `device_creation` *block* and updated whenever a *device* is revoked.
+Every *user* registered on the *Trustchain* has one active [User Encryption Key Pair]. User keys are stored in each *device*'s [Local Encrypted Storage]. The Private [User Encryption Key Pair] is encrypted with each of the *user*'s *device*s' public [Device Encryption Key Pair] before being pushed to the *Trustchain*. It is pushed to the *Trustchain* in the `device_creation` *block* and updated whenever a *device* is revoked.
 
 ### User group keys
 
-A *user group* has one [Group Encryption Key Pair] and one [Group Signature Key Pair].
-*User group* keys are stored in the *device*'s [Local Encrypted Storage].
-The private [Group Signature Key Pair] is encrypted with the private [Group Encryption Key Pair], which is encrypted with each *group member*'s [User Encryption Key Pair].
-They are pushed to the *Trustchain* in the `user_group_creation` *block* and updated whenever a *group member* is removed from a *user group*.
+A *user group* has one [Group Encryption Key Pair] and one [Group Signature Key Pair]. *User group* keys are stored in the *device*'s [Local Encrypted Storage]. The private [Group Signature Key Pair] is encrypted with the private [Group Encryption Key Pair], which is encrypted with each *group member*'s [User Encryption Key Pair]. They are pushed to the *Trustchain* in the `user_group_creation` *block* and updated whenever a *group member* is removed from a *user group*.
 
 ### Resource keys
 
-A new [Resource Encryption Key] is randomly generated each time a *user* encrypts *data*.
-The *data* is symmetrically encrypted with the [Resource Encryption Key].
-The [Resource Encryption Key] can be encrypted for *user*s or *user group*s.
-When sharing a resource key with a *user*, the [Resource Encryption Key] is encrypted using the [User Encryption Key Pair] of that *user* creating a [Shared Encrypted Key].
-When sharing a resource key with a *user group*, the [Resource Encryption Key] is encrypted using the [Group Encryption Key Pair] of that *user group* creating a [Shared Encrypted Key].
-[Shared Encrypted Key]s are pushed to the *Trustchain* in `key_publish` *block*s.
-When received by a *device*, they are stored in the [Local Encrypted Storage].
+A new [Resource Encryption Key] is randomly generated each time a *user* encrypts *data*. The *data* is symmetrically encrypted with the [Resource Encryption Key]. The [Resource Encryption Key] can be encrypted for *user*s or *user group*s. When sharing a resource key with a *user*, the [Resource Encryption Key] is encrypted using the [User Encryption Key Pair] of that *user* creating a [Shared Encrypted Key]. When sharing a resource key with a *user group*, the [Resource Encryption Key] is encrypted using the [Group Encryption Key Pair] of that *user group* creating a [Shared Encrypted Key]. [Shared Encrypted Key]s are pushed to the *Trustchain* in `key_publish` *block*s. When received by a *device*, they are stored in the [Local Encrypted Storage].
 
 ### Verification key
 
 The [Verification Key] is used to register new devices in a secure manner. See the [protocol documentation](protocol.md) for more details.
 
+### Verification Method
+
+A [Verification Method] is used to protect the encrypted [Verification Key] on the *Tanker server*. The user must provide a proof of their identity to access it. The *user* must establish this proof with the *application* and the *Tanker server* before being available to the user.
+
 ### Secret Provisional Identity
 
 A [Secret Provisional Identity] represents the identity of a user that is not yet registered on Tanker. It is split into two halves that are stored on the *application server* and on *Tanker server*s.
-A provisional identity is attached to some authentication methods. For the moment, email and OpenID connect `IDToken`s are supported.
-Each half contains the name of the authentication method, a value (in case of email, the value is the email address), an encryption key pair, and a signature key pair.
+A provisional identity is attached to some authentication methods. For the moment, email and OpenID connect `IDToken`s are supported. Each half contains the name of the authentication method, a value (in case of email, the value is the email address), an encryption key pair, and a signature key pair.
 
 ### Public Provisional Identity
 
