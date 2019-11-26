@@ -1,4 +1,6 @@
-Blocks are stored on Tanker's infrastructure and distributed to the different clients. 
+# Block Verifications
+
+Blocks are stored on Tanker's infrastructure and distributed to the different clients.
 
 The tree structure of the Trustchain can be read to reconstruct the state of each user's devices at any given time, and verified to make sure every action taken was legitimate at the time. Such a verification is done by every Tanker client receiving a new block, before extracting any information from their payload. Each block’s signature is verified, then their author’s block’s signature recursively until the root block is reached.
 
@@ -18,7 +20,6 @@ Verification:
 
 - The author of the block must be a zero-array
 - The signature of the block must be a zero-array
-- There must be no block before this one
 - The hash of the block must match the Trustchain ID
 
 Server side:
@@ -136,3 +137,18 @@ Server side:
 Server side:
 
 - The recipient_group_public_encryption_key must be the last group public key of a group (this is a best effort)
+
+## Claims
+
+### ProvisionalIdentityClaim
+
+Verification:
+
+- The author_signature_by_app_key must be the signature of the (device id + app_public_signature_key + tanker_public_singature_key) by the app_public_signature_key
+- The author_signature_by_tanker_key must be the signature of (device_id + app_public_signature_key + tanker_public_signature_key) by the tanker_public_signature_key
+- The user_id must match the user_id of the author
+
+Server side:
+
+- The recipient_user_public_key must not be obsolete (best effort)
+- The key pair must be already claimed
