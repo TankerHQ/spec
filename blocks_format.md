@@ -1,3 +1,5 @@
+# Block Formats
+
 All exchanges in Tanker’s protocol are done in the form of blocks, representing the actions taken by users. Such actions can be, for example: the creation of a new device, the creation or update of a user group, or the sharing of an encryption key to a user.
 
 Blocks contain a serialized payload, which contains different information depending on the nature of the block. Typical contents of a block payload are public keys, encrypted private or symmetric keys, and any data necessary to prove the block's validity.
@@ -303,4 +305,3 @@ An DoubleEncryptedKey is a 128-byte buffer corresponding to a 32-bytes cleartext
 | pending_app_public_signature_key       | fixed buffer (32 bytes)  | The public preshare key of the recipient of this key         |
 | pending_tanker_public_signature_key    | fixed buffer (32 bytes)  | The public preshare key of the recipient of this key         |
 | encrypted_group_private_encryption_key | fixed buffer (128 bytes) | The private encryption key of the group encrypted for the user key |
-

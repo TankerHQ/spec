@@ -1,3 +1,5 @@
+# Encryption Formats
+
 This document details the different encryption format used at Tanker:
 
 Note that encrypted data emitted is always bigger than the clear data provided. The overhead is due to:
@@ -70,7 +72,7 @@ It is still used in the JS SDK when the same key is used to encrypt multiple tim
 | Encrypted data     | Variable length | = clear data size |
 | MAC                | Fixed length    | 16 bytes          |
 
-This format aims at providing the shortest encryption overhead possible. 
+This format aims at providing the shortest encryption overhead possible.
 
 It is safe for use in “one-time encryption” situation.
 
@@ -162,7 +164,7 @@ The Resource ID is randomly generated once, and is the same in every chunk.
 
 The IV seed is randomly generated for each chunk.
 
-The IV used in encryption is derived from the IV seed and the index of the block with the following formula: IV = H(IV seed, index). The index is concatenated as an uint64 little endian and starts from 0. 
+The IV used in encryption is derived from the IV seed and the index of the block with the following formula: IV = H(IV seed, index). The index is concatenated as an uint64 little endian and starts from 0.
 
 This designs avoids using the same Key+IV combination multiple times if we need to support chunk rewriting, while also protecting against a malicious storage service that tries to reorder the chunks.
 
