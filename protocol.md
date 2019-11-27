@@ -34,13 +34,13 @@ The protocols have been split in 4 sections for ease of reading:
 - The [encryption and decryption](#encryption-and-decryption) section describes how *resource*s are encrypted, decrypted, and shared with *user*s
 - The [preregistration](#preregistration) section describes how a registred user can shared a resource to a non yet registered user.
 
-# Communications
+## Communications
 
 Every communication and information exchanges between *Tanker Core* and the *Tanker Server* are done through [TLS] connection. In the same way, exchanges between *Tanker Core* and the *application server* also use [TLS], in particular for Tanker Identity retrievals.
 
-# Session management
+## Session management
 
-## Cryptographic identity management
+### Cryptographic identity management
 
 The following diagram describes how the different protocols interact together when opening a *Tanker* session.
 
@@ -54,7 +54,7 @@ One of the first action taken by *Tanker Core* is to ask the *Tanker server* for
 
 If no [Local Encrypted Storage] is found, *Tanker Core* will create one automatically. *Tanker Core* extracts the [User Secret] and the [User ID] from the [Secret Permanent Identity], and use them to create the *device*'s [Local Encrypted Storage].
 
-## User Registration
+### User Registration
 
 Prerequisite: The *user* is registered on the *application*, but not on the *Trustchain*.
 Once the *user* is authenticated, the *application* can fetch the *user*'s [Secret Permanent Identity] from the *application server*.
@@ -71,7 +71,7 @@ Finally, both `device_creation` *block*s are pushed to the *Trustchain*, the *vi
 
 Assuming the pushed *block*s are correct, the *Tanker server* acknowledges them, allowing the just created *device* to proceed and [authenticate itself](#device-authentication).
 
-## Device Registration
+### Device Registration
 
 Prerequisite: the *user* used one of its registered verification method to let *Tanker Core* retrieve its [Verification key], see [Verification Methods](#verification-methods) for a complete explanation.
 
@@ -93,7 +93,7 @@ Given the *user*'s [Verification Key], the steps to register a new *device*:
 1. The *Tanker server* validates the *block*
 1. The new *device* can now [authenticate itself](#device-authentication)
 
-## Device authentication
+### Device authentication
 
 Prerequisite: the *device* is already registered on the *Trustchain*, the [Secret Permanent Identity] has been retrieved from the *application server* after the *user* has been authenticated against the *application server*.
 
@@ -119,7 +119,7 @@ This allows the *Tanker server* to check that:
 
 If any of these check fail, the connection is closed.
 
-## Device Revokation
+### Device Revokation
 
 Prerequisite: The *user* has a session opened.
 
@@ -127,7 +127,7 @@ A *user* may want to dispose of a device, for various reasons (eg: not used anym
 
 The *user* provides the device ID they want to revoke. *Tanker Core* generates a new [User Encryption Key] and encrypts the privake key for every *user*'s devices with their public [Device Encryption Key Pair]. *Tanker Core* also encrypts the previous private [User Encryption Key Pair] with the new public [User Encryption Key Pair].*Tanker Core* constructs a `device_revocation` block with all of the above and push it to the *Trustchain*.
 
-# Verification Methods
+## Verification Methods
 
 *Tanker Core* requires at least one verification method to be registered at all time for the *user*. These methods allow a *user* to register a new *device* on the trustchain by providing a shared proof between him and the *Tanker server*.
 
@@ -139,17 +139,17 @@ For this purpose, during [user registration](#user_registration) *Tanker Core* c
 
 [Verification Method] registration happens at least once during [User Registration] and can be done anytime by the *user* through an authenticated device.
 
-## Verification Key
+### Verification Key
 
 *Tanker Core* accepts a [Verification Key]. It will be used 'as is'. See [device registration](#device-registration) for how the [Verfication Key] is used to register a device.
 
-## Passphrase
+### Passphrase
 
 The *user* provides a passphrase when registering a new [Verification Method]. The passphrase will be hashed by *Tanker Core* before sending it to the *Tanker server*. The *Tanker server* will rehash with a salt the received hashed passphrase before storing it alongside the user's [Verification Key].
 
 When the *user* needs to [register a new device](#device-registration), they will provide their passphrase. *Tanker Core* will hash the passphrase before sending it to the *Tanker server*. Then, the *Tanker server* will rehash with the seed the received hashed passphrase and match this result with the stored passphrase. If they match, the *Tanker server* will return the encrypted [Verification Key].
 
-## Email
+### Email
 
 For the *application* to offer Email as a verification method, they need to send `HTTP` requests to the *Tanker server*. To allow that, the *application* administrator needs to register their domain origin of their requests to the *Tanker App*.
 
@@ -171,7 +171,7 @@ If the *Tanker server* does not returns an error, it means the process has ended
 
 The process to [register a new device](#device-registration) with an email [Verification Method] is the same as described above. The only difference is that at the end of the process the *Tanker server* returns the *user*'s [Verification Key].
 
-## OpenID Connect
+### OpenID Connect
 
 For the *application* to offer OpenID Connect as a verification method, *application* owners need to register their `OIDC`'s `Client ID` to the *Tanker App*.
 
@@ -179,9 +179,9 @@ The *user* authenticates against the OpenID Connect provider, which will allow t
 
 The process to [register a new device](#device-registration) with an `OIDC` [Verification Method] is the same as described above. The only difference is that at the end of the process the *Tanker server* returns the *user*'s [Verification Key].
 
-# Encryption and Decryption
+## Encryption and Decryption
 
-## Data encryption
+### Data encryption
 
 Prerequisite: the *user*'s *device* is authenticated against the *Tanker server*.
 
@@ -193,7 +193,7 @@ The steps to encrypt a resource are as follows:
 2. *Tanker Core* symmetrically encrypts the given *data* with the [Resource Encryption Key]
 3. *Tanker Core* shares the [Resource Encryption Key] with the recipients as described in [Sharing with users](#sharing-with-users) and [Sharing with user groups](#sharing-with-user-groups)
 
-## Sharing with users
+### Sharing with users
 
 Prerequisite: the *user*'s *device* is authenticated against the *Tanker server*, and some *data* has been encrypted.
 
@@ -207,7 +207,7 @@ Given the [Resource Encryption Key], sharing encrypted *data* with another *user
 1. For each recipient, *Tanker Core* creates a `key_publish` *block* containing the [Shared Encrypted Key] and the recipient's public [User Encryption Key Pair], and pushes it to the *Trustchain*
 1. The *Tanker server* validates the *block*
 
-## Data decryption
+### Data decryption
 
 Prerequisite: the user's has access to the encrypted data
 
@@ -216,9 +216,9 @@ Prerequisite: the user's has access to the encrypted data
 1. *Tanker Core* decrypts the [Shared Encrypted Key] of the `key_publish` block using the private [User Encryption Key Pair], obtaining the [Resource Encryption Key]
 1. *Tanker Core* decrypts the data using the [Resource Encryption Key]
 
-## Group encryption
+### Group encryption
 
-### User group creation
+#### User group creation
 
 Prerequisite: the *user*'s *device* is authenticated against the *Tanker server*.
 
@@ -234,7 +234,7 @@ The steps to create a new *user group* are as follows:
 1. *Tanker Core* creates a `user_group_creation` *block* with all of the above and pushes it to the *Trustchain*
 1. The *Tanker server* validates the *block*
 
-### Add users to a user group
+#### Add users to a user group
 
 This operation adds users to an existing user group. The group ID, [Group Encryption Key Pair] and the [Group Signature Key Pair] remains unchanged at the end of the operation.
 
@@ -250,7 +250,7 @@ Prerequisite: the *user*'s *device* is authenticated against the *Tanker server*
 1. *Tanker Core* creates a `user_group_addition` *block* with all of the above and pushes it to the *Trustchain*
 1. The *Tanker server* validates the *block*
 
-### Update users in a user group
+#### Update users in a user group
 
 This operation is similar to the previous one, the only difference is that it rotates the [Group Encryption Key Pair] and the [Group Signature Key Pair]. The group ID remains unchanged.
 
@@ -266,7 +266,7 @@ Prerequisite: the *user*'s *device* is authenticated against the *Tanker server*
 1. *Tanker Core* creates a `user_group_update` *block* with all of the above and pushes it to the *Trustchain*
 1. The *Tanker server* validates the *block*
 
-### Sharing with user groups
+#### Sharing with user groups
 
 Prerequisite: the *user*'s *device* is authenticated against the *Tanker server*, and some *data* has been encrypted.
 
@@ -282,7 +282,7 @@ The steps are as follows:
 1. *Tanker Core* pushes the *block* to the *Trustchain*
 1. The *Tanker server* validates the *block*
 
-### Decrypting with user groups
+#### Decrypting with user groups
 
 Prerequisite: the *user*'s *device* is authenticated against the *Tanker server*, they have access to the encrypted data and they are member of the current Tanker group.
 
@@ -291,11 +291,11 @@ Prerequisite: the *user*'s *device* is authenticated against the *Tanker server*
 1. *Tanker Core* decrypts the [Shared Encrypted Key] using the private [Group Encryption Key Pair], obtaining the [Resource Encryption Key]
 1. *Tanker Core* decrypts the data using the [Resource Encryption Key]
 
-# Preregistration
+## Preregistration
 
 ![Claiming a provisional identity](./img/preshare.png "Claiming a provisional identity")
 
-## Provisional identity creation
+### Provisional identity creation
 
 *Tanker* supports sharing with users that are not yet registered.
 The only currently supported authentication method for these identities is email.
@@ -303,7 +303,7 @@ The only currently supported authentication method for these identities is email
 The ownership of a provisional identity is split between *Tanker* and the *application server*.
 When the *user* wants to claim the provisional identity, they will authenticate with an email against both the *application server* and against *Tanker* so that they get both halves of the [Secret Provisional Identity].
 
-## Sharing with a provisional identity
+### Sharing with a provisional identity
 
 Prerequisite: the *user*'s *device* is authenticated against the *Tanker server*, some *data* has been encrypted
 
@@ -317,7 +317,7 @@ Prerequisite: the *user*'s *device* is authenticated against the *Tanker server*
 8. *Tanker Core* creates a `key_publish` *block* containing the [Shared Encrypted Key] and both of the recipient's [Public Provisional Identity]s' public signature keys, and pushes it to the *Trustchain*
 9. The *Tanker server* validates and holds the block until it is claimed
 
-## Creating a group with a provisional user
+### Creating a group with a provisional user
 
 Prerequisite: the *user*'s *device* is authenticated against the *Tanker server*.
 
@@ -334,7 +334,7 @@ Prerequisite: the *user*'s *device* is authenticated against the *Tanker server*
 11. *Tanker Core* creates a `user_group_creation` *block* with all of the above and pushes it to the *Trustchain*
 12. The *Tanker server* validates and holds the block until it is claimed
 
-## Claiming a provisional identity
+### Claiming a provisional identity
 
 Prerequisite: the *user*'s *device* is authenticated against the *Tanker server* and some *users* have shared *data* with a provisional identity owned by them or added it to a group.
 
