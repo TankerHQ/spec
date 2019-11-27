@@ -6,7 +6,7 @@ Note that encrypted data emitted is always bigger than the clear data provided. 
 
 - the format metadata (e.g. version)
 - the MAC (Message Authentication Code): adds bytes to guarantee the integrity of the encrypted data
-- the IV (Initialisation Vector): a random vector thats guarantees that no informations can be deduced from the encrypted data about the clear data (semantic security).
+- the IV (Initialisation Vector): a random vector that guarantees that no information can be deduced from the encrypted data about the clear data (semantic security).
 
 ## Simple encryption
 

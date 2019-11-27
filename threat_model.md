@@ -128,7 +128,7 @@ Applications should also implement the best in class security recommendations: p
 
 **User app credentials**:
 
-*Attack*: An attacker gains access to the credentials used to authenticate with the appplication.
+*Attack*: An attacker gains access to the credentials used to authenticate with the application.
 
 *Impact*: Without Tanker, the attacker immediately gains access to all user data. With Tanker, granted that the application's credentials cannot be used to verify the user's identity with Tanker, the attacker gains no access.
 

@@ -130,7 +130,7 @@ Server side:
 
 Server side:
 
-- The recipient field must contain a valid user public key (one that has not been superseeded, this is a best effort)
+- The recipient field must contain a valid user public key (one that has not been supersede, this is a best effort)
 
 ### KeyPublishToUserGroup
 
@@ -144,7 +144,7 @@ Server side:
 
 Verification:
 
-- The author_signature_by_app_key must be the signature of the (device id + app_public_signature_key + tanker_public_singature_key) by the app_public_signature_key
+- The author_signature_by_app_key must be the signature of the (device id + app_public_signature_key + tanker_public_signature_key) by the app_public_signature_key
 - The author_signature_by_tanker_key must be the signature of (device_id + app_public_signature_key + tanker_public_signature_key) by the tanker_public_signature_key
 - The user_id must match the user_id of the author
 

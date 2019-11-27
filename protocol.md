@@ -32,7 +32,7 @@ The protocols have been split in 4 sections for ease of reading:
 - The [session management](#session-management) section describes how *Tanker Core* ensures that a *user*'s cryptographic identity is available on every *device*, and how the optional *identity verification service* prevents a *user* from losing their cryptographic identity
 - The [verification methods](#verification-methods) section describes how different methods are available to the user to retrieve it's cryptographic identity using the *Tanker Identity* service.
 - The [encryption and decryption](#encryption-and-decryption) section describes how *resource*s are encrypted, decrypted, and shared with *user*s
-- The [preregistration](#preregistration) section describes how a registred user can shared a resource to a non yet registered user.
+- The [preregistration](#preregistration) section describes how a registered user can shared a resource to a non yet registered user.
 
 ## Communications
 
@@ -59,7 +59,7 @@ If no [Local Encrypted Storage] is found, *Tanker Core* will create one automati
 Prerequisite: The *user* is registered on the *application*, but not on the *Trustchain*.
 Once the *user* is authenticated, the *application* can fetch the *user*'s [Secret Permanent Identity] from the *application server*.
 
-First, if they are not found, *Tanker Core* creates a [Device Encryption Key Pair], [Device Signature Key Pair], for the *physical device*, and a [User Encryption Key Pair]. It stores them in the the [Local Encrypted Storage].
+First, if they are not found, *Tanker Core* creates a [Device Encryption Key Pair], [Device Signature Key Pair], for the *physical device*, and a [User Encryption Key Pair]. It stores them in the [Local Encrypted Storage].
 
 *Tanker Core* creates another [Device Encryption Key Pair] and [Device Signature Key Pair] for the *virtual device*. But instead of storing them, it serializes them as an opaque token, the [Verification Key].
 
@@ -119,17 +119,17 @@ This allows the *Tanker server* to check that:
 
 If any of these check fail, the connection is closed.
 
-### Device Revokation
+### Device Revocation
 
 Prerequisite: The *user* has a session opened.
 
-A *user* may want to dispose of a device, for various reasons (eg: not used anymore, compromission, etc). A revoked device cannot authenticate itself to the *Tanker server* anymore, it won't new received blocks for newly shared resources, but it could still decrypts the one received before its revokation. Some *Tanker Core* implementation may attempt to destroy the [Local Encrypted Storage] when receiving the `device_revocation` block. The *user* uses one of its authenticated *device* to revoke another. The targeted *device* may or may not be connected at the time of the revocation.
+A *user* may want to dispose of a device, for various reasons (eg: not used anymore, being compromised, etc). A revoked device cannot authenticate itself to the *Tanker server* anymore, it won't new received blocks for newly shared resources, but it could still decrypts the one received before its revocation. Some *Tanker Core* implementation may attempt to destroy the [Local Encrypted Storage] when receiving the `device_revocation` block. The *user* uses one of its authenticated *device* to revoke another. The targeted *device* may or may not be connected at the time of the revocation.
 
-The *user* provides the device ID they want to revoke. *Tanker Core* generates a new [User Encryption Key] and encrypts the privake key for every *user*'s devices with their public [Device Encryption Key Pair]. *Tanker Core* also encrypts the previous private [User Encryption Key Pair] with the new public [User Encryption Key Pair].*Tanker Core* constructs a `device_revocation` block with all of the above and push it to the *Trustchain*.
+The *user* provides the device ID they want to revoke. *Tanker Core* generates a new [User Encryption Key] and encrypts the private key for every *user*'s devices with their public [Device Encryption Key Pair]. *Tanker Core* also encrypts the previous private [User Encryption Key Pair] with the new public [User Encryption Key Pair].*Tanker Core* constructs a `device_revocation` block with all of the above and push it to the *Trustchain*.
 
 ## Verification Methods
 
-*Tanker Core* requires at least one verification method to be registered at all time for the *user*. These methods allow a *user* to register a new *device* on the trustchain by providing a shared proof between him and the *Tanker server*.
+*Tanker Core* requires at least one verification method to be registered at all time for the *user*. These methods allow a *user* to register a new *device* on the Trustchain by providing a shared proof between him and the *Tanker server*.
 
 The only way to add more *device*s, after the first one created during [user registration](#user-registration), is to sign a new `device_creation` block containing the new device's keys with a *user*'s existing device.
 
@@ -141,7 +141,7 @@ For this purpose, during [user registration](#user_registration) *Tanker Core* c
 
 ### Verification Key
 
-*Tanker Core* accepts a [Verification Key]. It will be used 'as is'. See [device registration](#device-registration) for how the [Verfication Key] is used to register a device.
+*Tanker Core* accepts a [Verification Key]. It will be used 'as is'. See [device registration](#device-registration) for how the [Verification Key] is used to register a device.
 
 ### Passphrase
 
@@ -153,12 +153,12 @@ When the *user* needs to [register a new device](#device-registration), they wil
 
 For the *application* to offer Email as a verification method, they need to send `HTTP` requests to the *Tanker server*. To allow that, the *application* administrator needs to register their domain origin of their requests to the *Tanker App*.
 
-Before registering an email address as a [Verfication Method], the *Tanker server* must make sure the *user* has access to this email address.
+Before registering an email address as a [Verification Method], the *Tanker server* must make sure the *user* has access to this email address.
 
 The steps to verify the *user*'s email address and register their email [Verification Method] are as follow:
 
 1. The *user* provides an email address
-1. The *application* makes a request to the *Tanker server* with the provided email adress and some payload for the email message
+1. The *application* makes a request to the *Tanker server* with the provided email address and some payload for the email message
 1. The *Tanker server* generates a [Verification Code]
 1. The *Tanker server* records the hashed email address and the [Verification Code]
 1. The *Tanker server* sends an email to the provided email address with the [Verification Code]
@@ -167,7 +167,7 @@ The steps to verify the *user*'s email address and register their email [Verific
 1. *Tanker Core* hashes the email address and, with the [Verification Code], sends a request to the *Tanker server*
 1. The *Tanker server* will match the provided hashed email address and the [Verification Code]
 
-If the *Tanker server* does not returns an error, it means the process has ended sucessfully and the *user* has now registered their provided email address as a [Verification Method].
+If the *Tanker server* does not returns an error, it means the process has ended successfully and the *user* has now registered their provided email address as a [Verification Method].
 
 The process to [register a new device](#device-registration) with an email [Verification Method] is the same as described above. The only difference is that at the end of the process the *Tanker server* returns the *user*'s [Verification Key].
 
@@ -175,7 +175,7 @@ The process to [register a new device](#device-registration) with an email [Veri
 
 For the *application* to offer OpenID Connect as a verification method, *application* owners need to register their `OIDC`'s `Client ID` to the *Tanker App*.
 
-The *user* authenticates against the OpenID Connect provider, which will allow the *application* to receive the *user* `ID Token`. Then, the *application* can provide this `ID Token` to *Tanker Core* during [user registration](#user-registration) or later on. The *Tanker server* will verify the provided `ID Token` according to [the OpenID recommandation](https://openid.net/specs/openid-connect-core-1_0.html#IDTokenValidation) and hash it before storing it.
+The *user* authenticates against the OpenID Connect provider, which will allow the *application* to receive the *user* `ID Token`. Then, the *application* can provide this `ID Token` to *Tanker Core* during [user registration](#user-registration) or later on. The *Tanker server* will verify the provided `ID Token` according to [the OpenID recommendation](https://openid.net/specs/openid-connect-core-1_0.html#IDTokenValidation) and hash it before storing it.
 
 The process to [register a new device](#device-registration) with an `OIDC` [Verification Method] is the same as described above. The only difference is that at the end of the process the *Tanker server* returns the *user*'s [Verification Key].
 

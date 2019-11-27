@@ -177,7 +177,7 @@ This block can only add members, not remove them. The list of added members is t
 | group_id                                                      | fixed buffer (32 bytes)     | Group ID                                                     |
 | previous_group_block                                          | fixed buffer (32 bytes)     | The hash of this group's last modification block             |
 | encrypted_group_private_encryption_keys_for_users             | list(GroupEncryptedKey2)    | The new group keys encrypted for the new users               |
-| encrypted_group_private_encryption_keys_for_provisional_users | list(GroupEncryptedPreKey2) | The new group keys encrypted for the new provisiola users    |
+| encrypted_group_private_encryption_keys_for_provisional_users | list(GroupEncryptedPreKey2) | The new group keys encrypted for the new provisional users    |
 | self_signature_with_current_key                               | fixed buffer (64 bytes)     | The signature of all non-signature fields, in that order, with the current group signature key |
 
 ### UserGroupUpdate
@@ -302,6 +302,6 @@ An DoubleEncryptedKey is a 128-byte buffer corresponding to a 32-bytes cleartext
 
 | Field name                             | Type                     | Description                                                  |
 | -------------------------------------- | ------------------------ | ------------------------------------------------------------ |
-| pending_app_public_signature_key       | fixed buffer (32 bytes)  | The public preshare key of the recipient of this key         |
-| pending_tanker_public_signature_key    | fixed buffer (32 bytes)  | The public preshare key of the recipient of this key         |
+| pending_app_public_signature_key       | fixed buffer (32 bytes)  | The public provisional key of the recipient of this key         |
+| pending_tanker_public_signature_key    | fixed buffer (32 bytes)  | The public provisional key of the recipient of this key         |
 | encrypted_group_private_encryption_key | fixed buffer (128 bytes) | The private encryption key of the group encrypted for the user key |
