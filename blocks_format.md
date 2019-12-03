@@ -231,8 +231,8 @@ Possible author nature: Device Creations.
 
 | Field name                                            | Type                           | Description                                      |
 | ----------------------------------------------------- | ------------------------------ | ------------------------------------------------ |
-| recipient_app_public_preregistration_signature_key    | fixed buffer (32 bytes)        | The recipient preregistration public key         |
-| recipient_tanker_public_preregistration_signature_key | fixed buffer (32 bytes)        | The recipient preregistration public key         |
+| recipient_app_public_preregistration_signature_key    | fixed buffer (32 bytes)        | The recipient provisional public key         |
+| recipient_tanker_public_preregistration_signature_key | fixed buffer (32 bytes)        | The recipient provisional public key         |
 | resource_id                                           | fixed buffer (16 bytes)        | The resource ID of the data this key can decrypt |
 | encrypted_key                                         | DoubleEncryptedKey (128 bytes) | The encrypted decryption key for the resource    |
 
@@ -243,8 +243,8 @@ Possible author nature: Device Creations.
 | user_id                                 | fixed buffer (32 bytes)  |                                                        |
 | app_public_signature_key                | fixed buffer (32 bytes)  |                                                        |
 | tanker_public_signature_key             | fixed buffer (32 bytes)  |                                                        |
-| author_signature_by_app_key             | fixed buffer (64 bytes)  | The author device id signed by the preregistration key |
-| author_signature_by_tanker_key          | fixed buffer (64 bytes)  | The author device id signed by the preregistration key |
+| author_signature_by_app_key             | fixed buffer (64 bytes)  | The author's device id, app_public_signature_key, and tanker_public_signature_key signed by the provisional key |
+| author_signature_by_tanker_key          | fixed buffer (64 bytes)  | The author's device id,  app_public_signature_key, and tanker_public_signature_key signed by the provisional key |
 | recipient_user_public_key               | fixed buffer (32 bytes)  | The user public key of the user                        |
 | encrypted_private_provisional_user_keys | fixed buffer (112 bytes) | The provisional private keys encrypted with the user key |
 
