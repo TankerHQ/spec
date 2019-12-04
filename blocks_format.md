@@ -231,8 +231,8 @@ Possible author nature: Device Creations.
 
 | Field name                                            | Type                           | Description                                      |
 | ----------------------------------------------------- | ------------------------------ | ------------------------------------------------ |
-| recipient_app_public_preregistration_signature_key    | fixed buffer (32 bytes)        | The recipient provisional public key         |
-| recipient_tanker_public_preregistration_signature_key | fixed buffer (32 bytes)        | The recipient provisional public key         |
+| recipient_app_public_provisional_signature_key        | fixed buffer (32 bytes)        | The recipient provisional public key             |
+| recipient_tanker_public_provisional_signature_key     | fixed buffer (32 bytes)        | The recipient provisional public key             |
 | resource_id                                           | fixed buffer (16 bytes)        | The resource ID of the data this key can decrypt |
 | encrypted_key                                         | DoubleEncryptedKey (128 bytes) | The encrypted decryption key for the resource    |
 
