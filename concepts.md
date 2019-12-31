@@ -5,6 +5,7 @@
 [Device Encryption Key Pair]: concepts.md#device-keys "Used to encrypt the user keys"
 [Device ID]: concepts.md#device-id "Unique identifier of a device belonging to a user"
 [Device Signature Key Pair]: concepts.md#device-keys "Used when the user signs a block"
+[Group ID]: concepts.md#group-id "Unique identifier of a group"
 [Group Encryption Key Pair]: concepts.md#user-group-keys "Used when sharing data securely within a group"
 [Group Signature Key Pair]: concepts.md#user-group-keys "Used when the user modifies a group"
 [Local Encrypted Storage]: concepts.md#device-id "A place where key materials are stored, encrypted at rest while the Tanker session is closed"
@@ -44,6 +45,9 @@ Here's a list of concepts used in the rest of this document:
 
  <dt><a href="#user-id">User ID (UID)</a></dt>
   <dd>Unique identifier of a user</dd>
+
+ <dt><a href="#group-id">Group ID (GID)</a></dt>
+  <dd>Unique identifier of a group</dd>
 
  <dt><a href="#device-id">Device ID (DID)</a></dt>
  <dd>Unique identifier of a device belonging to a user</dd>
@@ -172,7 +176,7 @@ Every *user* registered on the *Trustchain* has one active [User Encryption Key 
 
 ### User group keys
 
-A *user group* has one [Group Encryption Key Pair] and one [Group Signature Key Pair]. *User group* keys are stored in the *device*'s [Local Encrypted Storage]. The private [Group Signature Key Pair] is encrypted with the private [Group Encryption Key Pair], which is encrypted with each *group member*'s [User Encryption Key Pair]. They are pushed to the *Trustchain* in the `user_group_creation` *block* and updated whenever a *group member* is removed from a *user group*.
+A *user group* has one [Group Encryption Key Pair] and one [Group Signature Key Pair]. *User group* keys are stored in the *device*'s [Local Encrypted Storage]. The private [Group Signature Key Pair] is encrypted with the private [Group Encryption Key Pair], which is encrypted with each *group member*'s [User Encryption Key Pair]. They are pushed to the *Trustchain* in the `user_group_creation` *block* and updated whenever a *group member* is removed from a *user group*. The group ID is the first public signature key of the group.
 
 ### Resource keys
 
