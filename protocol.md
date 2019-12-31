@@ -225,7 +225,7 @@ Prerequisite: the *user*'s *device* is authenticated against the *Tanker server*
 The steps to create a new *user group* are as follows:
 
 1. The *application* fetches the [Public Permanent Identity] for each future *group member*
-1. *Tanker Core* fetches all future *group member*s' `device_creation` *block*s from the *Trustchain*
+1. *Tanker Core* fetches all the future *group member*s' `device_creation` and `device_revocation` *block*s from the *Trustchain*
 1. *Tanker Core* verifies them and extracts their public [User Encryption Key Pair]
 1. *Tanker Core* generates the [Group Encryption Key Pair] and the [Group Signature Key Pair]
 1. *Tanker Core* encrypts the private [Group Signature Key Pair] with the public [Group Encryption Key Pair]
@@ -241,12 +241,10 @@ This operation adds users to an existing user group. The group ID, [Group Encryp
 Prerequisite: the *user*'s *device* is authenticated against the *Tanker server*. The *user* is a member of the group they want to add users to.
 
 1. The *application* fetches the [Public Permanent Identity] for each new *group member* to add
-1. *Tanker Core* fetches all future *group member*s `device_creation` *block*s from the *Trustchain*
+1. *Tanker Core* fetches all the future *group member*s' `device_creation` and `device_revocation` *block*s from the *Trustchain*
 1. *Tanker Core* verifies them and extracts their public [User Encryption Key Pair]
-1. *Tanker Core* encrypts the private [Group Signature Key Pair] with the public [Group Encryption Key Pair]
 1. *Tanker Core* encrypts the private [Group Encryption Key Pair] with each added *group member*'s public [User Encryption Key Pair]
-1. Using the new private [Group Signature Key Pair], *Tanker Core* signs all the non-signature fields, in the order defined [here](blocks_format.md#usergroupupdate)
-1. Using the previous private [Group Signature Key Pair], *Tanker Core* signs all the non-signature fields, in the order defined [here](blocks_format.md#usergroupupdate)
+1. Using the private [Group Signature Key Pair], *Tanker Core* signs all the non-signature fields, in the order defined [here](blocks_format.md#usergroupupdate)
 1. *Tanker Core* creates a `user_group_addition` *block* with all of the above and pushes it to the *Trustchain*
 1. The *Tanker server* validates the *block*
 
@@ -258,7 +256,7 @@ Prerequisite: the *user*'s *device* is authenticated against the *Tanker server*
 
 1. The *application* fetches the [Public Permanent Identity] for each *group member* to add
 1. The *application* fetches the [Public Permanent Identity] for each *group member* to remove
-1. *Tanker Core* fetches all future *group member*s' `device_creation` *block*s from the *Trustchain*
+1. *Tanker Core* fetches all the future *group member*s' `device_creation` and `device_revocation` *block*s from the *Trustchain*
 1. *Tanker Core* generates the new [Group Encryption Key Pair] and the [Group Signature Key Pair]
 1. *Tanker Core* encrypts the new private [Group Signature Key Pair] with the new public [Group Encryption Key Pair]
 1. *Tanker Core* encrypts the new private [Group Encryption Key Pair] with each future *group member*'s public [User Encryption Key Pair]
@@ -308,14 +306,13 @@ When the *user* wants to claim the provisional identity, they will authenticate 
 Prerequisite: the *user*'s *device* is authenticated against the *Tanker server*, some *data* has been encrypted
 
 1. The *application* requests a public identity for a user's email which is not registered yet
-2. The *application server* generates a [Public Provisional Identity] and sends it back to the *application*
-3. The *application* calls `tanker.share` with the *application* [Public Provisional Identity]
-4. *Tanker Core* requests a [Public Provisional Identity] for the user from the *Tanker server*
-5. The *Tanker server* generates a [Public Provisional Identity]
-6. *Tanker Core* asymmetrically encrypts the [Resource Encryption Key] with the *application* [Public Provisional Identity]'s encryption key
-7. *Tanker Core* asymmetrically encrypts the previous result with the *Tanker* [Public Provisional Identity]'s encryption key to get the [Shared Encrypted Key]
-8. *Tanker Core* creates a `key_publish` *block* containing the [Shared Encrypted Key] and both of the recipient's [Public Provisional Identity]s' public signature keys, and pushes it to the *Trustchain*
-9. The *Tanker server* validates and holds the block until it is claimed
+1. The *application server* generates a [Public Provisional Identity] and sends it back to the *application*
+1. *Tanker Core* requests a [Public Provisional Identity] for the user from the *Tanker server*
+1. The *Tanker server* generates a [Public Provisional Identity]
+1. *Tanker Core* asymmetrically encrypts the [Resource Encryption Key] with the *application* [Public Provisional Identity]'s encryption key
+1. *Tanker Core* asymmetrically encrypts the previous result with the *Tanker* [Public Provisional Identity]'s encryption key to get the [Shared Encrypted Key]
+1. *Tanker Core* creates a `key_publish` *block* containing the [Shared Encrypted Key] and both of the recipient's [Public Provisional Identity]s' public signature keys, and pushes it to the *Trustchain*
+1. The *Tanker server* validates and holds the block until it is claimed
 
 ### Creating a group with a provisional user
 
