@@ -14,6 +14,7 @@ We want to stress that you don't need to understand this spec in order to use th
 
 * [Overview](overview.md)
 * [Concepts](concepts.md)
+* [Core features](features.md)
 * [Trustchain Design](trustchain_design.md)
 * [Protocol](protocol.md)
 * [Blocks format](blocks_format.md)
