@@ -78,6 +78,35 @@ Access to the email sent by the *Tanker server* is sufficient to retrieve the em
 
 Only the *user* must be able to authenticate to the *application server*, retrieve their identity, and use it to decrypt their *verification key*.
 
+## Passphrase verification method
+
+### Functional perimeter
+
+A *user* can register a passphrase verification method to protect their *verification key*. The passphrase can be a user-chosen password, a randomly-generated token or even the answer to a security question. It *should not* be the same as the *application* password.
+
+When a *user* needs to verify their identity, they will be asked to enter their passphrase.
+
+There is no way to recover a lost passphrase. However, this method can be used in addition to the *email verification method*.
+
+### Access perimeter
+
+The passphrase must not be stored anywhere as it would compromise the user's account security.
+
+## Verification key
+
+### Functional perimeter
+
+A *user* can register their identity by using the *verification key* directly. In this case, the verification key must be provided *as is* for identity registration and verification.
+
+Contrary to other methods, this does not cause the *Tanker server* to store a half secret on behalf of the *user*. Therefore:
+
+* this method cannot be used with any other verification method
+* there is no way to recover a lost verification key
+
+### Access perimeter
+
+The verification key must not be stored anywhere as it would compromise the user's account security.
+
 ## Groups
 
 ### Functional perimeter
