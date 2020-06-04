@@ -1,3 +1,5 @@
+<a href="#readme"><img src="https://tanker.io/images/github-logo.png" alt="Tanker logo" width="180" /></a>
+
 # Tanker: How it works
 
 ## Technical specification of the Tanker SDK and protocol for end-to-end encryption
