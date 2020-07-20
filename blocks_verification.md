@@ -38,6 +38,7 @@ Server-side verifications:
 
 - The user_id must not already exist on the Trustchain (in case of a first device)
 - The device public signature and encryption key must be unique
+- The first device must be a virtual device, additional ones must be physical devices
 
 ### DeviceCreation v2
 
@@ -56,6 +57,7 @@ Verification:
 - The device_id field must contain the hash of a DeviceCreation block
 - The revoked device must belong to the author
 - The revoked device must not already be revoked
+- The revoked device must not be a virtual device
 
 Note: A device can revoke itself, even if it is the last of a user's devices.
 
