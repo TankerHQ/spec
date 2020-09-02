@@ -21,7 +21,7 @@
 [Public Provisional Identity]: concepts.md#public-provisional-identity "Same as Public Permanent Identity, but for a user not registered on the Trustchain yet"
 [TLS]: concepts.md#transport-layer-security "Tanker Core and server uses the TLS protocol to communicate across the Internet, preventing eavesdropping and tampering"
 [Resource ID]: concepts.md#resource-id "The unique ID part of an encrypted data"
-[Verification Method]: concepts.md#Verification-method "A verfication methond allow a user to retrieve its verification key"
+[Verification Method]: concepts.md#Verification-method "A verification method allows a user to retrieve their verification key"
 
 # Protocol
 
@@ -59,39 +59,41 @@ If no [Local Encrypted Storage] is found, *Tanker Core* will create one automati
 Prerequisite: The *user* is registered on the *application*, but not on the *Trustchain*.
 Once the *user* is authenticated, the *application* can fetch the *user*'s [Secret Permanent Identity] from the *application server*.
 
-First, if they are not found, *Tanker Core* creates a [Device Encryption Key Pair], [Device Signature Key Pair], for the *physical device*, and a [User Encryption Key Pair]. It stores them in the [Local Encrypted Storage].
+*Tanker Core* creates a [User Encryption Key Pair].
 
-*Tanker Core* creates another [Device Encryption Key Pair] and [Device Signature Key Pair] for the *virtual device*. But instead of storing them, it serializes them as an opaque token, the [Verification Key].
+*Tanker Core* creates a [Device Encryption Key Pair] and a [Device Signature Key Pair] for the *virtual device*. It serializes them as an opaque token, the [Verification Key].
 
-A first `device_creation` block is constructed with the *virtual device*'s public [Device Encryption Key Pair] and public [Device Signature Key Pair] and the encrypted [User Encryption Key Pair]. This block is signed with the ephemeral private key of the [Delegation Token]found in the [Secret Permanent Identity].
+A first `device_creation` block is constructed with the *virtual device*'s public [Device Encryption Key Pair] and public [Device Signature Key Pair] and the encrypted [User Encryption Key Pair]. This block is signed with the ephemeral private key of the [Delegation Token] found in the [Secret Permanent Identity].
 
-Then, a second `device_creation` block is created with the *physical device*'s [Device Encryption Key Pair] and [Device Signature Key Pair]. *Tanker Core* creates a new ephemeral key pair, signs this block with the ephemeral private key and uses the *virtual device*'s [Device Signature Key Pair] to sign the *delegation* and fill the block's *delegation_signature* field.
+*Tanker Core* creates a [Device Encryption Key Pair] and a [Device Signature Key Pair] for the *physical device*.
+
+A second `device_creation` block is created with the *physical device*'s [Device Encryption Key Pair] and [Device Signature Key Pair]. *Tanker Core* creates a new ephemeral key pair, signs this block with the ephemeral private key and uses the *virtual device*'s [Device Signature Key Pair] to sign the *delegation* and fill the block's *delegation_signature* field.
 
 Finally, both `device_creation` *block*s are pushed to the *Trustchain*, the *virtual device* before the *physical one*, and the [Verification Key] is uploaded to the *Tanker server* according to the [Verification Method] used by the *user*.
 
-Assuming the pushed *block*s are correct, the *Tanker server* acknowledges them, allowing the just created *device* to proceed and [authenticate itself](#device-authentication).
+Assuming the pushed *block*s are correct, the *Tanker server* stores them, and initiates an authenticated session for the *physical device*. The just created *physical device* permanently stores its [Device Encryption Key Pair] and [Device Signature Key Pair] in the [Local Encrypted Storage].
 
 ### Device Registration
 
-Prerequisite: the *user* used one of its registered verification method to let *Tanker Core* retrieve its [Verification key], see [Verification Methods](#verification-methods) for a complete explanation.
+Prerequisite: the *user* registered with a [Verification Method](#verification-methods) on a previous device.
 
-The first time the *user* signs in on a new device, their identity must be *verified* using one of their [Verification Method]s.
+The first time the *user* starts a Tanker session on a new device, their identity must be *verified* using one of their [Verification Method]s.
 
-Given the *user*'s [Verification Key], the steps to register a new *device*:
+Steps to register a new *device*:
 
 1. The *user* uses one the [Verification Method]s available to them to obtain their [Verification Key]
 1. *Tanker Core* extracts the *virtual device*'s [Device Encryption Key Pair] and [Device Signature Key Pair] from the [Verification Key]
-1. *Tanker Core* requests the last *encrypted user key* from the *Tanker server* and the *virtual device*'s *device id*
-1. *Tanker Core* extracts the encrypted [User Encryption Key Pair] and the *device id* from it
-1. *Tanker Core* decrypts the [User Encryption Key Pair] using the *virtual device*'s [Device Encryption Key Pair]
-1. *Tanker Core* generates the new *device*'s [Device Encryption Key Pair] and [Device Signature Key Pair]
-1. *Tanker Core* constructs the new *device*'s `device_creation` *block* with the *device id*, retrieved from the *Tanker server*, as the block author
+1. *Tanker Core* requests the last encrypted [User Encryption Key Pair] and the *virtual device*'s *device id* from the *Tanker server*
+1. *Tanker Core* decrypts the encrypted [User Encryption Key Pair] using the *virtual device*'s [Device Encryption Key Pair]
+1. *Tanker Core* generates the new *physical device*'s [Device Encryption Key Pair] and [Device Signature Key Pair]
+1. *Tanker Core* constructs the new *physical device*'s `device_creation` *block* with the *virtual device*'s *device id*, retrieved from the *Tanker server*, as the block author
 1. *Tanker Core* uses the *virtual device*'s private [Device Signature Key Pair] to sign the delegation and fill the block's *delegation signature* field
 1. *Tanker Core* creates a new ephemeral signature key pair
-1. *Tanker Core* signs the block with private ephemeral key pair
-1. *Tanker Core* pushes the *block* to the *Trustchain*
-1. The *Tanker server* validates the *block*
-1. The new *device* can now [authenticate itself](#device-authentication)
+1. *Tanker Core* signs the `device_creation` *block* with the private ephemeral key pair
+1. *Tanker Core* pushes the `device_creation` *block* to the *Trustchain*
+1. The *Tanker server* validates the *block*, stores it, and initiates an authenticated session for the newly created *physical device*
+
+Note that this procedure can only create *physical devices*, not *virtual ones*.
 
 ### Device authentication
 
@@ -106,10 +108,10 @@ The *device* initiates the authentication by requesting an *authentication chall
 
 The *device* then sends the *authentication message* containing:
 
-- The signature of the challenge with the private [Device Signature Key Pair]
-- The [User ID]
 - The *Tanker App* ID
-- The public [Device Signature Key Pair], acting as a unique identifier for the *device*
+- The [Device ID]
+- The challenge
+- The signature of the challenge with the private [Device Signature Key Pair]
 
 This allows the *Tanker server* to check that:
 
@@ -117,15 +119,17 @@ This allows the *Tanker server* to check that:
 - The *device* is correctly associated with the provided [User ID]
 - The signature matches the challenge
 
-If any of these check fail, the connection is closed.
+If any of these checks fail, the authenticated session is not created.
 
 ### Device Revocation
 
 Prerequisite: The *user* has a session opened.
 
-A *user* may want to dispose of a device, for various reasons (eg: not used anymore, being compromised, etc). A revoked device cannot authenticate itself to the *Tanker server* anymore, it won't new received blocks for newly shared resources, but it could still decrypts the one received before its revocation. Some *Tanker Core* implementation may attempt to destroy the [Local Encrypted Storage] when receiving the `device_revocation` block. The *user* uses one of its authenticated *device* to revoke another. The targeted *device* may or may not be connected at the time of the revocation.
+A *user* may want to dispose of a device, for various reasons (eg: not used anymore, being compromised, etc). A revoked device cannot authenticate itself to the *Tanker server* anymore, it won't new received blocks for newly shared resources, but it could still decrypts the one received before its revocation. Some *Tanker Core* implementation may attempt to destroy the [Local Encrypted Storage] when receiving the `device_revocation` block. The *user* uses one of their authenticated *device* to revoke another. The targeted *device* may or may not be connected at the time of the revocation.
 
 The *user* provides the device ID they want to revoke. *Tanker Core* generates a new [User Encryption Key] and encrypts the private key for every *user*'s devices with their public [Device Encryption Key Pair]. *Tanker Core* also encrypts the previous private [User Encryption Key Pair] with the new public [User Encryption Key Pair].*Tanker Core* constructs a `device_revocation` block with all of the above and push it to the *Trustchain*.
+
+A *virtual device* can not be revoked.
 
 ## Verification Methods
 
