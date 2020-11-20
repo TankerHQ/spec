@@ -55,6 +55,8 @@ The nature of a block indicates the type of action the block represents, and so 
 | **provisional_identity_claim**      | 14               | ProvisionalIdentityClaim    |
 | **user_group_creation_v2**          | 15               | UserGroupCreation v2        |
 | **user_group_addition_v2**          | 16               | UserGroupAddition v2        |
+| **user_group_creation_v3**          | 17               | UserGroupCreation v3        |
+| **user_group_addition_v3**          | 18               | UserGroupAddition v3        |
 
 ## Payloads
 
@@ -157,6 +159,17 @@ Possible author natures: Device Creations.
 | pending_encrypted_group_private_encryption_keys_for_users | list([PendingGroupEncryptedKey2](#pendinggroupencryptedKey2)) | The new group keys encrypted for the provisional users       |
 | self_signature                                            | fixed buffer (64 bytes)      | The signature of all non-signature fields, in that order with the group signature key |
 
+### UserGroupCreation v3
+
+| Field name                                                | Type                         | Description                                                  |
+| --------------------------------------------------------- | ---------------------------- | ------------------------------------------------------------ |
+| public_signature_key                                      | fixed buffer (32 bytes)      | The signature key of the group                               |
+| public_encryption_key                                     | fixed buffer (32 bytes)      | The encryption key of the group                              |
+| encrypted_group_private_signature_key                     | fixed buffer (112 bytes)     | The private signature key of the group encrypted for the group encryption key |
+| encrypted_group_private_encryption_keys_for_users         | list([GroupEncryptedKey2](#groupencryptedkey2))     | The new group keys encrypted for the users                   |
+| pending_encrypted_group_private_encryption_keys_for_users | list([PendingGroupEncryptedKey3](#pendinggroupencryptedKey3)) | The new group keys encrypted for the provisional users       |
+| self_signature                                            | fixed buffer (64 bytes)      | The signature of all non-signature fields, in that order with the group signature key |
+
 ### UserGroupAddition v1
 
 | **Field name**                                    | **Type**                | **Description**                                           |
@@ -178,6 +191,16 @@ This block can only add members, not remove them. The list of added members is t
 | previous_group_block                                          | fixed buffer (32 bytes)     | The hash of this group's last modification block             |
 | encrypted_group_private_encryption_keys_for_users             | list([GroupEncryptedKey2](#groupencryptedkey2))    | The new group keys encrypted for the new users               |
 | encrypted_group_private_encryption_keys_for_provisional_users | list([PendingGroupEncryptedKey2](#pendinggroupencryptedkey2)) | The new group keys encrypted for the new provisional users    |
+| self_signature_with_current_key                               | fixed buffer (64 bytes)     | The signature of all non-signature fields, in that order, with the current group signature key |
+
+### UserGroupAddition v3
+
+| Field name                                                    | Type                        | Description                                                  |
+| ------------------------------------------------------------- | --------------------------- | ------------------------------------------------------------ |
+| group_id                                                      | fixed buffer (32 bytes)     | Group ID                                                     |
+| previous_group_block                                          | fixed buffer (32 bytes)     | The hash of this group's last modification block             |
+| encrypted_group_private_encryption_keys_for_users             | list([GroupEncryptedKey2](#groupencryptedkey2))    | The new group keys encrypted for the new users               |
+| encrypted_group_private_encryption_keys_for_provisional_users | list([PendingGroupEncryptedKey3](#pendinggroupencryptedkey3)) | The new group keys encrypted for the new provisional users    |
 | self_signature_with_current_key                               | fixed buffer (64 bytes)     | The signature of all non-signature fields, in that order, with the current group signature key |
 
 ### UserGroupUpdate
@@ -304,4 +327,14 @@ An DoubleEncryptedKey is a 128-byte buffer corresponding to a 32-bytes cleartext
 | -------------------------------------- | ------------------------ | ------------------------------------------------------------ |
 | pending_app_public_signature_key       | fixed buffer (32 bytes)  | The public provisional key of the recipient of this key         |
 | pending_tanker_public_signature_key    | fixed buffer (32 bytes)  | The public provisional key of the recipient of this key         |
+| encrypted_group_private_encryption_key | fixed buffer (128 bytes) | The private encryption key of the group encrypted for the user key |
+
+### PendingGroupEncryptedKey3
+
+| Field name                             | Type                     | Description                                                  |
+| -------------------------------------- | ------------------------ | ------------------------------------------------------------ |
+| pending_app_public_signature_key       | fixed buffer (32 bytes)  | The public provisional signature key of the recipient of this key         |
+| pending_tanker_public_signature_key    | fixed buffer (32 bytes)  | The public provisional signature key of the recipient of this key         |
+| pending_app_public_encryption_key       | fixed buffer (32 bytes)  | The public provisional encryption key of the recipient of this key         |
+| pending_tanker_public_encryption_key    | fixed buffer (32 bytes)  | The public provisional encryption key of the recipient of this key         |
 | encrypted_group_private_encryption_key | fixed buffer (128 bytes) | The private encryption key of the group encrypted for the user key |
