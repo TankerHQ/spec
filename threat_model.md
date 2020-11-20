@@ -46,15 +46,15 @@ Applications should also implement the best in class security recommendations: p
 
 ## Application risk factors
 
-| Threat                                               | No Tanker                           | Tanker                              |
-| ---------------------------------------------------- | ----------------------------------- | ----------------------------------- |
-| One-time data access                                 | Full access to past data            | No access                           |
-| Repeatable data access                               | Full access to past and future data | No access                           |
-| Identities + repeatable data access                  | Full access to past and future data | No access                           |
-| App secret + repeatable data access                  | Full access to past data            | No access                           |
-| Identities modification + one-time data access       | Full access to past data            | No access                           |
-| Identities modification + repeatable data access     | Full access to past and future data | Full access to future data          |
-| Application Code control                             | Full access to past and future data | Full access to past and future data |
+| Threat                                           | No Tanker                           | Tanker                              |
+|--------------------------------------------------|-------------------------------------|-------------------------------------|
+| One-time data access                             | Full access to past data            | No access                           |
+| Repeatable data access                           | Full access to past and future data | No access                           |
+| Identities + repeatable data access              | Full access to past and future data | No access                           |
+| App secret + repeatable data access              | Full access to past data            | No access                           |
+| Identities modification + one-time data access   | Full access to past data            | No access                           |
+| Identities modification + repeatable data access | Full access to past and future data | Full access to future data          |
+| Application Code control                         | Full access to past and future data | Full access to past and future data |
 
 ### Detailed attacks analysis
 
@@ -104,11 +104,11 @@ Applications should also implement the best in class security recommendations: p
 
 ## User risks factors
 
-| Threat                  | No Tanker                               | Tanker                                  |
-| ----------------------- | --------------------------------------- | --------------------------------------- |
-| Unlocked device         | Targeted access to past and future data | Targeted access to past and future data |
-| Locked device           | Targeted access to past data            | No access                               |
-| User app credentials    | Targeted access to past and future data | No access                               |
+| Threat               | No Tanker                               | Tanker                                  |
+|----------------------|-----------------------------------------|-----------------------------------------|
+| Unlocked device      | Targeted access to past and future data | Targeted access to past and future data |
+| Locked device        | Targeted access to past data            | No access                               |
+| User app credentials | Targeted access to past and future data | No access                               |
 
 ### Detailed attacks analysis
 
@@ -138,13 +138,13 @@ Composite attacks are attacks requiring two parties to be compromised by an atta
 
 Combinations not listed here have the same impact as the combination of their parts.
 
-| Threat 1                                           | Threat 2              | Tanker                               |
-| -------------------------------------------------- | --------------------- | ------------------------------------ |
-| Identities + data access                           | Tanker control        | Full access to past data             |
-| Identities + repeatable data access                | Tanker control        | Full access to past and future data  |
-| App secret + repeatable data access                | Tanker control        | Full access to future data    |
-| Identities access                                  | Locked device         | Targeted access to past data  |
-| User app credentials                               | Locked device         | Targeted access to past data  |
+| Threat 1                            | Threat 2       | Tanker                              |
+|-------------------------------------|----------------|-------------------------------------|
+| Identities + data access            | Tanker control | Full access to past data            |
+| Identities + repeatable data access | Tanker control | Full access to past and future data |
+| App secret + repeatable data access | Tanker control | Full access to future data          |
+| Identities access                   | Locked device  | Targeted access to past data        |
+| User app credentials                | Locked device  | Targeted access to past data        |
 
 
 ### Detailed attacks analysis
@@ -184,10 +184,10 @@ Same as *Identities access + locked device*
 
 Combinations not listed here have the same impact as the combination of their parts.
 
-| Threat 1                            | Threat 2              | Tanker                              |
-| ----------------------------------- | --------------------- | ----------------------------------- |
-| App secret + repeatable data access | Tanker control        | Full access to future data   |
-| Identities access                   | Locked device         | Targeted access to past data |
+| Threat 1                            | Threat 2       | Tanker                       |
+|-------------------------------------|----------------|------------------------------|
+| App secret + repeatable data access | Tanker control | Full access to future data   |
+| Identities access                   | Locked device  | Targeted access to past data |
 
 ### Detailed attacks analysis
 

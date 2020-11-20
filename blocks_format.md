@@ -18,15 +18,15 @@ A block must be smaller than 4MiB (checked server-side only).
 
 Blocks and payloads are serialized in a custom binary format.
 
-| **Field name** | **Type**                | **Description**                                              |
-| -------------- | ----------------------- | ------------------------------------------------------------ |
-| version        | varint                  | The serialization version                                    |
-| index          | varint                  | The index of this block                                      |
-| trustchain_id  | variable buffer         | The ID of the Trustchain this block belongs to               |
-| nature         | varint                  | The nature of the block defining the type of the payload     |
-| payload        | variable buffer         | The contents of the block, see payloads                      |
+| **Field name** | **Type**                | **Description**                                                                                                               |
+|----------------|-------------------------|-------------------------------------------------------------------------------------------------------------------------------|
+| version        | varint                  | The serialization version                                                                                                     |
+| index          | varint                  | The index of this block                                                                                                       |
+| trustchain_id  | variable buffer         | The ID of the Trustchain this block belongs to                                                                                |
+| nature         | varint                  | The nature of the block defining the type of the payload                                                                      |
+| payload        | variable buffer         | The contents of the block, see payloads                                                                                       |
 | author         | fixed buffer (32 bytes) | Hash of the block of the authority who has emitted this block. When the author block is a device, this is also the device id. |
-| signature      | fixed buffer (64 bytes) | The signature of the hash of the block by the author's key (except for device creations)                                   |
+| signature      | fixed buffer (64 bytes) | The signature of the hash of the block by the author's key (except for device creations)                                      |
 
 A block is identified by its hash. A block hash is the hash of the concatenation of:
 
@@ -39,7 +39,7 @@ A block is identified by its hash. A block hash is the hash of the concatenation
 The nature of a block indicates the type of action the block represents, and so the expected serialization format of the payload:
 
 | **Nature**                          | **Nature value** | **Payload**                 |
-| ----------------------------------- | ---------------- | --------------------------- |
+|-------------------------------------|------------------|-----------------------------|
 | **trustchain_creation**             | 1                | TrustchainCreation          |
 | **device_creation_v1**              | 2                | DeviceCreation v1           |
 | **key_publish_to_device**           | 3                | KeyPublishToDevice          |
@@ -63,7 +63,7 @@ The nature of a block indicates the type of action the block represents, and so 
 ### TrustchainCreation
 
 | **Field name**       | **Type**                | **Description**                            |
-| -------------------- | ----------------------- | ------------------------------------------ |
+|----------------------|-------------------------|--------------------------------------------|
 | public_signature_key | fixed buffer (32 bytes) | The public signature key of the Trustchain |
 
 Notes:
@@ -74,13 +74,13 @@ Notes:
 
 ### DeviceCreation v1
 
-| **Field name**                 | **Type**                | **Description**                                              |
-| ------------------------------ | ----------------------- | ------------------------------------------------------------ |
-| ephemeral_public_signature_key | fixed buffer (32 bytes) | The public key that can verify this block's signature        |
-| user_id                        | fixed buffer (32 bytes) | The obfuscated user ID of the owner of this device           |
+| **Field name**                 | **Type**                | **Description**                                                                          |
+|--------------------------------|-------------------------|------------------------------------------------------------------------------------------|
+| ephemeral_public_signature_key | fixed buffer (32 bytes) | The public key that can verify this block's signature                                    |
+| user_id                        | fixed buffer (32 bytes) | The obfuscated user ID of the owner of this device                                       |
 | delegation_signature           | fixed buffer (64 bytes) | The signature of the ephemeral public signature key and the user ID, by the block author |
-| public_signature_key           | fixed buffer (32 bytes) | The public signature key of the added device                 |
-| public_encryption_key          | fixed buffer (32 bytes) | The public encryption key of the added device                |
+| public_signature_key           | fixed buffer (32 bytes) | The public signature key of the added device                                             |
+| public_encryption_key          | fixed buffer (32 bytes) | The public encryption key of the added device                                            |
 
 Possible author natures:
 
@@ -94,90 +94,90 @@ The device creation block's signatures:
 
 ### DeviceCreation v2
 
-| **Field name**                 | **Type**                | **Description**                                              |
-| ------------------------------ | ----------------------- | ------------------------------------------------------------ |
-| last_reset                     | fixed buffer (32 bytes) | The hash of the last reset block of this user                |
-| ephemeral_public_signature_key | fixed buffer (32 bytes) | The public key that can verify this block's signature        |
-| user_id                        | fixed buffer (32 bytes) | The obfuscated user ID of the owner of this device           |
+| **Field name**                 | **Type**                | **Description**                                                                          |
+|--------------------------------|-------------------------|------------------------------------------------------------------------------------------|
+| last_reset                     | fixed buffer (32 bytes) | The hash of the last reset block of this user                                            |
+| ephemeral_public_signature_key | fixed buffer (32 bytes) | The public key that can verify this block's signature                                    |
+| user_id                        | fixed buffer (32 bytes) | The obfuscated user ID of the owner of this device                                       |
 | delegation_signature           | fixed buffer (64 bytes) | The signature of the ephemeral public signature key and the user ID, by the block author |
-| public_signature_key           | fixed buffer (32 bytes) | The public signature key of the added device                 |
-| public_encryption_key          | fixed buffer (32 bytes) | The public encryption key of the added device                |
+| public_signature_key           | fixed buffer (32 bytes) | The public signature key of the added device                                             |
+| public_encryption_key          | fixed buffer (32 bytes) | The public encryption key of the added device                                            |
 
 See DeviceCreation 1 for other details.
 
 ### DeviceCreation v3
 
-| **Field name**                 | **Type**                | **Description**                                              |
-| ------------------------------ | ----------------------- | ------------------------------------------------------------ |
-| ephemeral_public_signature_key | fixed buffer (32 bytes) | The public key that can verify this block's signature        |
-| user_id                        | fixed buffer (32 bytes) | The obfuscated user ID of the owner of this device           |
-| delegation_signature           | fixed buffer (64 bytes) | The signature of the ephemeral public signature key and the user ID, by the block author |
-| device_public_signature_key    | fixed buffer (32 bytes) | The public signature key of the added device                 |
-| device_public_encryption_key   | fixed buffer (32 bytes) | The public encryption key of the added device                |
+| **Field name**                 | **Type**                    | **Description**                                                                               |
+|--------------------------------|-----------------------------|-----------------------------------------------------------------------------------------------|
+| ephemeral_public_signature_key | fixed buffer (32 bytes)     | The public key that can verify this block's signature                                         |
+| user_id                        | fixed buffer (32 bytes)     | The obfuscated user ID of the owner of this device                                            |
+| delegation_signature           | fixed buffer (64 bytes)     | The signature of the ephemeral public signature key and the user ID, by the block author      |
+| device_public_signature_key    | fixed buffer (32 bytes)     | The public signature key of the added device                                                  |
+| device_public_encryption_key   | fixed buffer (32 bytes)     | The public encryption key of the added device                                                 |
 | user_key_pair                  | [UserKeyPair](#userkeypair) | The user public encryption key and the corresponding private key encrypted for the new device |
-| is_virtual_device                | flag (1 byte)        | This device is not a real physical device                             |
+| is_virtual_device              | flag (1 byte)               | This device is not a real physical device                                                     |
 
 See DeviceCreation 1 for other details.
 
 ### DeviceRevocation v1
 
 | **Field name** | **Type**                | **Description**       |
-| -------------- | ----------------------- | --------------------- |
+|----------------|-------------------------|-----------------------|
 | device_id      | fixed buffer (32 bytes) | The revoked device ID |
 
 Possible author natures: TrustchainCreation or Device Creations.
 
 ### DeviceRevocation v2
 
-| **Field name** | **Type**                | **Description**                                              |
-| -------------- | ----------------------- | ------------------------------------------------------------ |
-| device_id      | fixed buffer (32 bytes) | The revoked device ID                                        |
-| new_user_key   | [NewUserKey](#newuserkey) | See below                                                  |
+| **Field name** | **Type**                  | **Description**       |
+|----------------|---------------------------|-----------------------|
+| device_id      | fixed buffer (32 bytes)   | The revoked device ID |
+| new_user_key   | [NewUserKey](#newuserkey) | See below             |
 
 Possible author natures: Device Creations
 
 ### UserGroupCreation v1
 
-| **Field name**                                    | **Type**                 | **Description**                                              |
-| ------------------------------------------------- | ------------------------ | ------------------------------------------------------------ |
-| public_signature_key                              | fixed buffer (32 bytes)  | The signature key of the group                               |
-| public_encryption_key                             | fixed buffer (32 bytes)  | The encryption key of the group                              |
-| encrypted_group_private_signature_key             | fixed buffer (112 bytes) | The private signature key of the group encrypted for the group encryption key |
-| encrypted_group_private_encryption_keys_for_users | list([GroupEncryptedKey](#groupencryptedkey))  | The new group keys encrypted for the users                   |
-| self_signature                                    | fixed buffer (64 bytes)  | The signature of all non-signature fields, in that order with the group signature key |
+| **Field name**                                    | **Type**                                      | **Description**                                                                       |
+|---------------------------------------------------|-----------------------------------------------|---------------------------------------------------------------------------------------|
+| public_signature_key                              | fixed buffer (32 bytes)                       | The signature key of the group                                                        |
+| public_encryption_key                             | fixed buffer (32 bytes)                       | The encryption key of the group                                                       |
+| encrypted_group_private_signature_key             | fixed buffer (112 bytes)                      | The private signature key of the group encrypted for the group encryption key         |
+| encrypted_group_private_encryption_keys_for_users | list([GroupEncryptedKey](#groupencryptedkey)) | The new group keys encrypted for the users                                            |
+| self_signature                                    | fixed buffer (64 bytes)                       | The signature of all non-signature fields, in that order with the group signature key |
 
 Possible author natures: Device Creations.
 
 ### UserGroupCreation v2
 
-| Field name                                                | Type                         | Description                                                  |
-| --------------------------------------------------------- | ---------------------------- | ------------------------------------------------------------ |
-| public_signature_key                                      | fixed buffer (32 bytes)      | The signature key of the group                               |
-| public_encryption_key                                     | fixed buffer (32 bytes)      | The encryption key of the group                              |
-| encrypted_group_private_signature_key                     | fixed buffer (112 bytes)     | The private signature key of the group encrypted for the group encryption key |
-| encrypted_group_private_encryption_keys_for_users         | list([GroupEncryptedKey2](#groupencryptedkey2))     | The new group keys encrypted for the users                   |
-| pending_encrypted_group_private_encryption_keys_for_users | list([PendingGroupEncryptedKey2](#pendinggroupencryptedKey2)) | The new group keys encrypted for the provisional users       |
-| self_signature                                            | fixed buffer (64 bytes)      | The signature of all non-signature fields, in that order with the group signature key |
+| Field name                                                | Type                                                          | Description                                                                           |
+|-----------------------------------------------------------|---------------------------------------------------------------|---------------------------------------------------------------------------------------|
+| public_signature_key                                      | fixed buffer (32 bytes)                                       | The signature key of the group                                                        |
+| public_encryption_key                                     | fixed buffer (32 bytes)                                       | The encryption key of the group                                                       |
+| encrypted_group_private_signature_key                     | fixed buffer (112 bytes)                                      | The private signature key of the group encrypted for the group encryption key         |
+| encrypted_group_private_encryption_keys_for_users         | list([GroupEncryptedKey2](#groupencryptedkey2))               | The new group keys encrypted for the users                                            |
+| pending_encrypted_group_private_encryption_keys_for_users | list([PendingGroupEncryptedKey2](#pendinggroupencryptedKey2)) | The new group keys encrypted for the provisional users                                |
+| self_signature                                            | fixed buffer (64 bytes)                                       | The signature of all non-signature fields, in that order with the group signature key |
 
 ### UserGroupCreation v3
 
-| Field name                                                | Type                         | Description                                                  |
-| --------------------------------------------------------- | ---------------------------- | ------------------------------------------------------------ |
-| public_signature_key                                      | fixed buffer (32 bytes)      | The signature key of the group                               |
-| public_encryption_key                                     | fixed buffer (32 bytes)      | The encryption key of the group                              |
-| encrypted_group_private_signature_key                     | fixed buffer (112 bytes)     | The private signature key of the group encrypted for the group encryption key |
-| encrypted_group_private_encryption_keys_for_users         | list([GroupEncryptedKey2](#groupencryptedkey2))     | The new group keys encrypted for the users                   |
-| pending_encrypted_group_private_encryption_keys_for_users | list([PendingGroupEncryptedKey3](#pendinggroupencryptedKey3)) | The new group keys encrypted for the provisional users       |
-| self_signature                                            | fixed buffer (64 bytes)      | The signature of all non-signature fields, in that order with the group signature key |
+| Field name                                                | Type                                                          | Description                                                                           |
+|-----------------------------------------------------------|---------------------------------------------------------------|---------------------------------------------------------------------------------------|
+| public_signature_key                                      | fixed buffer (32 bytes)                                       | The signature key of the group                                                        |
+| public_encryption_key                                     | fixed buffer (32 bytes)                                       | The encryption key of the group                                                       |
+| encrypted_group_private_signature_key                     | fixed buffer (112 bytes)                                      | The private signature key of the group encrypted for the group encryption key         |
+| encrypted_group_private_encryption_keys_for_users         | list([GroupEncryptedKey2](#groupencryptedkey2))               | The new group keys encrypted for the users                                            |
+| pending_encrypted_group_private_encryption_keys_for_users | list([PendingGroupEncryptedKey3](#pendinggroupencryptedKey3)) | The new group keys encrypted for the provisional users                                |
+| self_signature                                            | fixed buffer (64 bytes)                                       | The signature of all non-signature fields, in that order with the group signature key |
 
 ### UserGroupAddition v1
 
-| **Field name**                                    | **Type**                | **Description**                                           |
-| ------------------------------------------------- | ----------------------- | --------------------------------------------------------- |
-| group_id                                          | fixed buffer (32 bytes) | Group ID                                                  |
-| previous_group_block                              | fixed buffer (32 bytes) | The hash of this group's last modification block          |
+| **Field name**                                    | **Type**                                      | **Description**                                           |
+|---------------------------------------------------|-----------------------------------------------|-----------------------------------------------------------|
+| group_id                                          | fixed buffer (32 bytes)                       | Group ID                                                  |
+| previous_group_block                              | fixed buffer (32 bytes)                       | The hash of this group's last modification block          |
 | encrypted_group_private_encryption_keys_for_users | list([GroupEncryptedKey](#groupencryptedkey)) | The new group keys encrypted for the new users            |
-| self_signature_with_current_key                   | fixed buffer (64 bytes) | The signature of all non-signature fields, in that order, |
+| self_signature_with_current_key                   | fixed buffer (64 bytes)                       | The signature of all non-signature fields, in that order, |
 
 Possible author natures: Device Creations.
 
@@ -185,43 +185,43 @@ This block can only add members, not remove them. The list of added members is t
 
 ### UserGroupAddition v2
 
-| Field name                                                    | Type                        | Description                                                  |
-| ------------------------------------------------------------- | --------------------------- | ------------------------------------------------------------ |
-| group_id                                                      | fixed buffer (32 bytes)     | Group ID                                                     |
-| previous_group_block                                          | fixed buffer (32 bytes)     | The hash of this group's last modification block             |
-| encrypted_group_private_encryption_keys_for_users             | list([GroupEncryptedKey2](#groupencryptedkey2))    | The new group keys encrypted for the new users               |
-| encrypted_group_private_encryption_keys_for_provisional_users | list([PendingGroupEncryptedKey2](#pendinggroupencryptedkey2)) | The new group keys encrypted for the new provisional users    |
-| self_signature_with_current_key                               | fixed buffer (64 bytes)     | The signature of all non-signature fields, in that order, with the current group signature key |
+| Field name                                                    | Type                                                          | Description                                                                                    |
+|---------------------------------------------------------------|---------------------------------------------------------------|------------------------------------------------------------------------------------------------|
+| group_id                                                      | fixed buffer (32 bytes)                                       | Group ID                                                                                       |
+| previous_group_block                                          | fixed buffer (32 bytes)                                       | The hash of this group's last modification block                                               |
+| encrypted_group_private_encryption_keys_for_users             | list([GroupEncryptedKey2](#groupencryptedkey2))               | The new group keys encrypted for the new users                                                 |
+| encrypted_group_private_encryption_keys_for_provisional_users | list([PendingGroupEncryptedKey2](#pendinggroupencryptedkey2)) | The new group keys encrypted for the new provisional users                                     |
+| self_signature_with_current_key                               | fixed buffer (64 bytes)                                       | The signature of all non-signature fields, in that order, with the current group signature key |
 
 ### UserGroupAddition v3
 
-| Field name                                                    | Type                        | Description                                                  |
-| ------------------------------------------------------------- | --------------------------- | ------------------------------------------------------------ |
-| group_id                                                      | fixed buffer (32 bytes)     | Group ID                                                     |
-| previous_group_block                                          | fixed buffer (32 bytes)     | The hash of this group's last modification block             |
-| encrypted_group_private_encryption_keys_for_users             | list([GroupEncryptedKey2](#groupencryptedkey2))    | The new group keys encrypted for the new users               |
-| encrypted_group_private_encryption_keys_for_provisional_users | list([PendingGroupEncryptedKey3](#pendinggroupencryptedkey3)) | The new group keys encrypted for the new provisional users    |
-| self_signature_with_current_key                               | fixed buffer (64 bytes)     | The signature of all non-signature fields, in that order, with the current group signature key |
+| Field name                                                    | Type                                                          | Description                                                                                    |
+|---------------------------------------------------------------|---------------------------------------------------------------|------------------------------------------------------------------------------------------------|
+| group_id                                                      | fixed buffer (32 bytes)                                       | Group ID                                                                                       |
+| previous_group_block                                          | fixed buffer (32 bytes)                                       | The hash of this group's last modification block                                               |
+| encrypted_group_private_encryption_keys_for_users             | list([GroupEncryptedKey2](#groupencryptedkey2))               | The new group keys encrypted for the new users                                                 |
+| encrypted_group_private_encryption_keys_for_provisional_users | list([PendingGroupEncryptedKey3](#pendinggroupencryptedkey3)) | The new group keys encrypted for the new provisional users                                     |
+| self_signature_with_current_key                               | fixed buffer (64 bytes)                                       | The signature of all non-signature fields, in that order, with the current group signature key |
 
 ### UserGroupUpdate
 
-| Field name                                                     | Type                        | Description                                                  |
-| -------------------------------------------------------------- | --------------------------- | ------------------------------------------------------------ |
-| group_id                                                       | fixed buffer (32 bytes)     | Group ID                                                     |
-| previous_group_block                                           | fixed buffer (32 bytes)     | The hash of this group's last modification block             |
-| public_signature_key                                           | fixed buffer (32 bytes)     | The new signature key of the group                           |
-| public_encryption_key                                          | fixed buffer (32 bytes)     | The new encryption key of the group                          |
-| encrypted_group_private_signature_key                          | fixed buffer (112 bytes)    | The current private signature key of the group encrypted for the current group encryption key |
-| encrypted_previous_group_private_encryption_key                | fixed buffer (80 bytes)     | The previous private group encryption key encrypted with the current group encryption key |
-| encrypted_group_private_encryption_keys_for_users              | list([GroupEncryptedKey2](#groupencryptedkey2))    | The new group keys encrypted for the new users               |
-| encrypted_group_private_encryption_keys_for_provisional_users  | list([PendingGroupEncryptedKey2](#pendinggroupencryptedkey2)) | The new group keys encrypted for the new provisional users   |
-| self_signature_with_current_key                                | fixed buffer (64 bytes)     | The signature of all non-signature fields, in that order, with the current group signature key |
-| self_signature_with_previous_key                               | fixed buffer (64 bytes)     | The signature of all non-signature fields, in that order, with the previous group signature key |
+| Field name                                                    | Type                                                          | Description                                                                                     |
+|---------------------------------------------------------------|---------------------------------------------------------------|-------------------------------------------------------------------------------------------------|
+| group_id                                                      | fixed buffer (32 bytes)                                       | Group ID                                                                                        |
+| previous_group_block                                          | fixed buffer (32 bytes)                                       | The hash of this group's last modification block                                                |
+| public_signature_key                                          | fixed buffer (32 bytes)                                       | The new signature key of the group                                                              |
+| public_encryption_key                                         | fixed buffer (32 bytes)                                       | The new encryption key of the group                                                             |
+| encrypted_group_private_signature_key                         | fixed buffer (112 bytes)                                      | The current private signature key of the group encrypted for the current group encryption key   |
+| encrypted_previous_group_private_encryption_key               | fixed buffer (80 bytes)                                       | The previous private group encryption key encrypted with the current group encryption key       |
+| encrypted_group_private_encryption_keys_for_users             | list([GroupEncryptedKey2](#groupencryptedkey2))               | The new group keys encrypted for the new users                                                  |
+| encrypted_group_private_encryption_keys_for_provisional_users | list([PendingGroupEncryptedKey2](#pendinggroupencryptedkey2)) | The new group keys encrypted for the new provisional users                                      |
+| self_signature_with_current_key                               | fixed buffer (64 bytes)                                       | The signature of all non-signature fields, in that order, with the current group signature key  |
+| self_signature_with_previous_key                              | fixed buffer (64 bytes)                                       | The signature of all non-signature fields, in that order, with the previous group signature key |
 
 ### KeyPublishToDevice
 
 | **Field name** | **Type**                   | **Description**                                  |
-| -------------- | -------------------------- | ------------------------------------------------ |
+|----------------|----------------------------|--------------------------------------------------|
 | recipient      | fixed buffer (32 bytes)    | The recipient deviceId                           |
 | resource_id    | fixed buffer (16 bytes)    | The resource ID of the data this key can decrypt |
 | key            | variable buffer (72 bytes) | The encrypted decryption key for the resource    |
@@ -232,68 +232,68 @@ Possible author nature: Device Creations.
 
 ### KeyPublishToUser
 
-| **Field name**       | **Type**                | **Description**                                  |
-| -------------------- | ----------------------- | ------------------------------------------------ |
-| recipient_public_key | fixed buffer (32 bytes) | The recipient user public encryption key                    |
-| resource_id          | fixed buffer (16 bytes) | The resource ID of the data this key can decrypt |
+| **Field name**       | **Type**                                 | **Description**                                  |
+|----------------------|------------------------------------------|--------------------------------------------------|
+| recipient_public_key | fixed buffer (32 bytes)                  | The recipient user public encryption key         |
+| resource_id          | fixed buffer (16 bytes)                  | The resource ID of the data this key can decrypt |
 | encrypted_key        | [EncryptedKey](#encryptedkey) (80 bytes) | The encrypted decryption key for the resource    |
 
 Possible author nature: Device Creations.
 
 ### KeyPublishToUserGroup
 
-| **Field name**             | **Type**                | **Description**                                  |
-| -------------------------- | ----------------------- | ------------------------------------------------ |
-| recipient_group_public_key | fixed buffer (32 bytes) | The recipient group public encryption key                   |
-| resource_id                | fixed buffer (16 bytes) | The resource ID of the data this key can decrypt |
+| **Field name**             | **Type**                                 | **Description**                                  |
+|----------------------------|------------------------------------------|--------------------------------------------------|
+| recipient_group_public_key | fixed buffer (32 bytes)                  | The recipient group public encryption key        |
+| resource_id                | fixed buffer (16 bytes)                  | The resource ID of the data this key can decrypt |
 | encrypted_key              | [EncryptedKey](#encryptedkey) (80 bytes) | The encrypted decryption key for the resource    |
 
 Possible author nature: Device Creations.
 
 ### KeyPublishToProvisionalUser
 
-| Field name                                            | Type                           | Description                                      |
-| ----------------------------------------------------- | ------------------------------ | ------------------------------------------------ |
-| recipient_app_public_provisional_signature_key        | fixed buffer (32 bytes)        | The recipient provisional public key             |
-| recipient_tanker_public_provisional_signature_key     | fixed buffer (32 bytes)        | The recipient provisional public key             |
-| resource_id                                           | fixed buffer (16 bytes)        | The resource ID of the data this key can decrypt |
-| encrypted_key                                         | [DoubleEncryptedKey](#doubleencryptedkey) (128 bytes) | The encrypted decryption key for the resource    |
+| Field name                                        | Type                                                  | Description                                      |
+|---------------------------------------------------|-------------------------------------------------------|--------------------------------------------------|
+| recipient_app_public_provisional_signature_key    | fixed buffer (32 bytes)                               | The recipient provisional public key             |
+| recipient_tanker_public_provisional_signature_key | fixed buffer (32 bytes)                               | The recipient provisional public key             |
+| resource_id                                       | fixed buffer (16 bytes)                               | The resource ID of the data this key can decrypt |
+| encrypted_key                                     | [DoubleEncryptedKey](#doubleencryptedkey) (128 bytes) | The encrypted decryption key for the resource    |
 
 ### ProvisionalIdentityClaim
 
-| Field name                              | Type                     | Description                                            |
-| --------------------------------------- | ------------------------ | ------------------------------------------------------ |
-| user_id                                 | fixed buffer (32 bytes)  |                                                        |
-| app_public_signature_key                | fixed buffer (32 bytes)  |                                                        |
-| tanker_public_signature_key             | fixed buffer (32 bytes)  |                                                        |
-| author_signature_by_app_key             | fixed buffer (64 bytes)  | The author's device id, app_public_signature_key, and tanker_public_signature_key signed by the provisional key |
+| Field name                              | Type                     | Description                                                                                                      |
+|-----------------------------------------|--------------------------|------------------------------------------------------------------------------------------------------------------|
+| user_id                                 | fixed buffer (32 bytes)  |                                                                                                                  |
+| app_public_signature_key                | fixed buffer (32 bytes)  |                                                                                                                  |
+| tanker_public_signature_key             | fixed buffer (32 bytes)  |                                                                                                                  |
+| author_signature_by_app_key             | fixed buffer (64 bytes)  | The author's device id, app_public_signature_key, and tanker_public_signature_key signed by the provisional key  |
 | author_signature_by_tanker_key          | fixed buffer (64 bytes)  | The author's device id,  app_public_signature_key, and tanker_public_signature_key signed by the provisional key |
-| recipient_user_public_key               | fixed buffer (32 bytes)  | The user public key of the user                        |
-| encrypted_private_provisional_user_keys | fixed buffer (112 bytes) | The provisional private keys encrypted with the user key |
+| recipient_user_public_key               | fixed buffer (32 bytes)  | The user public key of the user                                                                                  |
+| encrypted_private_provisional_user_keys | fixed buffer (112 bytes) | The provisional private keys encrypted with the user key                                                         |
 
 ## Substructures
 
 ### UserKeyPair
 
-| **Field name**        | **Type**                | **Description**                                          |
-| --------------------- | ----------------------- | -------------------------------------------------------- |
-| public_encryption_key | fixed buffer (32 bytes) | The current public encryption key of the user            |
+| **Field name**        | **Type**                                 | **Description**                                          |
+|-----------------------|------------------------------------------|----------------------------------------------------------|
+| public_encryption_key | fixed buffer (32 bytes)                  | The current public encryption key of the user            |
 | encrypted_private_key | [EncryptedKey](#encryptedkey) (80 bytes) | The user private encryption key encrypted for the Device |
 
 ### NewUserKey
 
-| **Field name**                                    | **Type**                    | **Description**                                              |
-| ------------------------------------------------- | --------------------------- | ------------------------------------------------------------ |
-| public_encryption_key                             | fixed buffer (32 bytes)     | The current public encryption key of the user                |
-| previous_public_encryption_key                    | fixed buffer (32 bytes)     | The previous public encryption key of the user or 0-array    |
-| previous_private_user_key_encrypted_with_user_key | fixed buffer (80 bytes)     | The previous private user key encrypted with the new user key or 0-array |
-| encrypted_private_user_keys_for_devices           | list([EncryptedKeyForDevice](#encryptedkeyfordevice)) | The new user private key encrypted for other devices         |
+| **Field name**                                    | **Type**                                              | **Description**                                                          |
+|---------------------------------------------------|-------------------------------------------------------|--------------------------------------------------------------------------|
+| public_encryption_key                             | fixed buffer (32 bytes)                               | The current public encryption key of the user                            |
+| previous_public_encryption_key                    | fixed buffer (32 bytes)                               | The previous public encryption key of the user or 0-array                |
+| previous_private_user_key_encrypted_with_user_key | fixed buffer (80 bytes)                               | The previous private user key encrypted with the new user key or 0-array |
+| encrypted_private_user_keys_for_devices           | list([EncryptedKeyForDevice](#encryptedkeyfordevice)) | The new user private key encrypted for other devices                     |
 
 ### EncryptedKeyForDevice
 
-| **Field name**        | **Type**                | **Description**                         |
-| --------------------- | ----------------------- | --------------------------------------- |
-| device_id             | fixed buffer (32 bytes) | The recipient device ID of this key     |
+| **Field name**        | **Type**                                 | **Description**                         |
+|-----------------------|------------------------------------------|-----------------------------------------|
+| device_id             | fixed buffer (32 bytes)                  | The recipient device ID of this key     |
 | encrypted_private_key | [EncryptedKey](#encryptedkey) (80 bytes) | The user key encrypted for the DeviceID |
 
 ### EncryptedKey
@@ -308,33 +308,33 @@ An DoubleEncryptedKey is a 128-byte buffer corresponding to a 32-bytes cleartext
 
 ### GroupEncryptedKey
 
-| **Field name**                         | **Type**                | **Description**                                              |
-| -------------------------------------- | ----------------------- | ------------------------------------------------------------ |
-| public_user_encryption_key             | fixed buffer (32 bytes) | The public user key of the recipient of this key             |
+| **Field name**                         | **Type**                | **Description**                                                    |
+|----------------------------------------|-------------------------|--------------------------------------------------------------------|
+| public_user_encryption_key             | fixed buffer (32 bytes) | The public user key of the recipient of this key                   |
 | encrypted_group_private_encryption_key | fixed buffer (80 bytes) | The private encryption key of the group encrypted for the user key |
 
 ### GroupEncryptedKey2
 
-| Field name                             | Type                    | Description                                                  |
-| -------------------------------------- | ----------------------- | ------------------------------------------------------------ |
-| user_id                                | fixed buffer (32 bytes) | The public user key of the recipient of this key             |
-| public_user_encryption_key             | fixed buffer (32 bytes) | The public user key of the recipient of this key             |
+| Field name                             | Type                    | Description                                                        |
+|----------------------------------------|-------------------------|--------------------------------------------------------------------|
+| user_id                                | fixed buffer (32 bytes) | The public user key of the recipient of this key                   |
+| public_user_encryption_key             | fixed buffer (32 bytes) | The public user key of the recipient of this key                   |
 | encrypted_group_private_encryption_key | fixed buffer (80 bytes) | The private encryption key of the group encrypted for the user key |
 
 ### PendingGroupEncryptedKey2
 
-| Field name                             | Type                     | Description                                                  |
-| -------------------------------------- | ------------------------ | ------------------------------------------------------------ |
-| pending_app_public_signature_key       | fixed buffer (32 bytes)  | The public provisional key of the recipient of this key         |
-| pending_tanker_public_signature_key    | fixed buffer (32 bytes)  | The public provisional key of the recipient of this key         |
+| Field name                             | Type                     | Description                                                        |
+|----------------------------------------|--------------------------|--------------------------------------------------------------------|
+| pending_app_public_signature_key       | fixed buffer (32 bytes)  | The public provisional key of the recipient of this key            |
+| pending_tanker_public_signature_key    | fixed buffer (32 bytes)  | The public provisional key of the recipient of this key            |
 | encrypted_group_private_encryption_key | fixed buffer (128 bytes) | The private encryption key of the group encrypted for the user key |
 
 ### PendingGroupEncryptedKey3
 
-| Field name                             | Type                     | Description                                                  |
-| -------------------------------------- | ------------------------ | ------------------------------------------------------------ |
-| pending_app_public_signature_key       | fixed buffer (32 bytes)  | The public provisional signature key of the recipient of this key         |
-| pending_tanker_public_signature_key    | fixed buffer (32 bytes)  | The public provisional signature key of the recipient of this key         |
-| pending_app_public_encryption_key       | fixed buffer (32 bytes)  | The public provisional encryption key of the recipient of this key         |
-| pending_tanker_public_encryption_key    | fixed buffer (32 bytes)  | The public provisional encryption key of the recipient of this key         |
+| Field name                             | Type                     | Description                                                        |
+|----------------------------------------|--------------------------|--------------------------------------------------------------------|
+| pending_app_public_signature_key       | fixed buffer (32 bytes)  | The public provisional signature key of the recipient of this key  |
+| pending_tanker_public_signature_key    | fixed buffer (32 bytes)  | The public provisional signature key of the recipient of this key  |
+| pending_app_public_encryption_key      | fixed buffer (32 bytes)  | The public provisional encryption key of the recipient of this key |
+| pending_tanker_public_encryption_key   | fixed buffer (32 bytes)  | The public provisional encryption key of the recipient of this key |
 | encrypted_group_private_encryption_key | fixed buffer (128 bytes) | The private encryption key of the group encrypted for the user key |
