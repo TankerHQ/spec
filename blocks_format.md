@@ -214,7 +214,7 @@ This block can only add members, not remove them. The list of added members is t
 | encrypted_group_private_signature_key                         | fixed buffer (112 bytes)                                      | The current private signature key of the group encrypted for the current group encryption key   |
 | encrypted_previous_group_private_encryption_key               | fixed buffer (80 bytes)                                       | The previous private group encryption key encrypted with the current group encryption key       |
 | encrypted_group_private_encryption_keys_for_users             | list([GroupEncryptedKey2](#groupencryptedkey2))               | The new group keys encrypted for the new users                                                  |
-| encrypted_group_private_encryption_keys_for_provisional_users | list([PendingGroupEncryptedKey2](#pendinggroupencryptedkey2)) | The new group keys encrypted for the new provisional users                                      |
+| encrypted_group_private_encryption_keys_for_provisional_users | list([PendingGroupEncryptedKey3](#pendinggroupencryptedkey3)) | The new group keys encrypted for the new provisional users                                      |
 | self_signature_with_current_key                               | fixed buffer (64 bytes)                                       | The signature of all non-signature fields, in that order, with the current group signature key  |
 | self_signature_with_previous_key                              | fixed buffer (64 bytes)                                       | The signature of all non-signature fields, in that order, with the previous group signature key |
 
