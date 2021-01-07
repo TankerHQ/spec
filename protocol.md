@@ -21,7 +21,7 @@
 [Public Provisional Identity]: concepts.md#public-provisional-identity "Same as Public Permanent Identity, but for a user not registered on the Trustchain yet"
 [TLS]: concepts.md#transport-layer-security "Tanker Core and server uses the TLS protocol to communicate across the Internet, preventing eavesdropping and tampering"
 [Resource ID]: concepts.md#resource-id "The unique ID part of an encrypted data"
-[Verification Method]: concepts.md#Verification-method "A verification method allows a user to retrieve their verification key"
+[Verification Method]: concepts.md#Verification-method "A verification method allows a user to retrieve their encrypted verification key"
 
 # Protocol
 
@@ -69,7 +69,7 @@ A first `device_creation` block is constructed with the *virtual device*'s publi
 
 A second `device_creation` block is created with the *physical device*'s [Device Encryption Key Pair] and [Device Signature Key Pair]. *Tanker Core* creates a new ephemeral key pair, signs this block with the ephemeral private key and uses the *virtual device*'s [Device Signature Key Pair] to sign the *delegation* and fill the block's *delegation_signature* field.
 
-Finally, both `device_creation` *block*s are pushed to the *Trustchain*, the *virtual device* before the *physical one*, and the [Verification Key] is uploaded to the *Tanker server* according to the [Verification Method] used by the *user*.
+Finally, both `device_creation` *block*s are pushed to the *Trustchain*, the *virtual device* before the *physical one*, and the [Verification Key] is encrypted with the [User Secret] and uploaded to the *Tanker server* according to the [Verification Method] used by the *user*.
 
 Assuming the pushed *block*s are correct, the *Tanker server* stores them, and initiates an authenticated session for the *physical device*. The just created *physical device* permanently stores its [Device Encryption Key Pair] and [Device Signature Key Pair] in the [Local Encrypted Storage].
 
@@ -81,7 +81,8 @@ The first time the *user* starts a Tanker session on a new device, their identit
 
 Steps to register a new *device*:
 
-1. The *user* uses one the [Verification Method]s available to them to obtain their [Verification Key]
+1. The *user* uses one the [Verification Method]s available to them to obtain their encrypted [Verification Key]
+1. *Tanker Core* decrypts the encrypted [Verification Key] using the [User Secret]
 1. *Tanker Core* extracts the *virtual device*'s [Device Encryption Key Pair] and [Device Signature Key Pair] from the [Verification Key]
 1. *Tanker Core* requests the last encrypted [User Encryption Key Pair] and the *virtual device*'s *device id* from the *Tanker server*
 1. *Tanker Core* decrypts the encrypted [User Encryption Key Pair] using the *virtual device*'s [Device Encryption Key Pair]
@@ -139,7 +140,7 @@ The only way to add more *device*s, after the first one created during [user reg
 
 For this purpose, during [user registration](#user_registration) *Tanker Core* creates a *virtual device* and pushes its `device_creation` block. This *device* is not a "physical" one, it has no [Local Encrypted Storage]. Instead, the [Device Signature Key Pair] and the [Device Encryption Key Pair] are serialized as an opaque token, we call it the [Verification Key]. The [Verification Key] is encrypted with the [User Secret] and stored on the *Tanker server*.
 
-*User*s can use their [Verification Key] 'as is' when registering a new device. But *Tanker Core* proposes an easier way to handle the [Verification Key].
+*User*s can use their [Verification Key] 'as is' when registering a new device. But *Tanker Core* proposes several [Verification Method]s as an easier way to handle the [Verification Key].
 
 [Verification Method] registration happens at least once during [User Registration] and can be done anytime by the *user* through an authenticated device.
 
@@ -149,7 +150,7 @@ For this purpose, during [user registration](#user_registration) *Tanker Core* c
 
 ### Passphrase
 
-The *user* provides a passphrase when registering a new [Verification Method]. The passphrase will be hashed by *Tanker Core* before sending it to the *Tanker server*. The *Tanker server* will rehash with a salt the received hashed passphrase before storing it alongside the user's [Verification Key].
+The *user* provides a passphrase when registering a new [Verification Method]. The passphrase will be hashed by *Tanker Core* before sending it to the *Tanker server*. The *Tanker server* will rehash with a salt the received hashed passphrase before storing it alongside the user's encrypted [Verification Key].
 
 When the *user* needs to [register a new device](#device-registration), they will provide their passphrase. *Tanker Core* will hash the passphrase before sending it to the *Tanker server*. Then, the *Tanker server* will rehash with the seed the received hashed passphrase and match this result with the stored passphrase. If they match, the *Tanker server* will return the encrypted [Verification Key].
 

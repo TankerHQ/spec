@@ -20,7 +20,7 @@
 [Public Permanent Identity]: concepts.md#public-permanent-identity "Generated from a Secret Permanent Identity - essentialy equivalent to a user ID"
 [Secret Provisional Identity]: concepts.md#secret-provisional-identity "Same as Secret Permanent Identity, but for a user not registered on the Trustchain yet"
 [Public Provisional Identity]: concepts.md#public-provisional-identity "Same as Public Permanent Identity, but for a user not registered on the Trustchain yet"
-[Verification Method]: concepts.md#verification-method "A verification method allows a user to retrieve their verification key"
+[Verification Method]: concepts.md#verification-method "A verification method allows a user to retrieve their encrypted verification key"
 
 *Tanker Core*'s security is based on the separation of knowledge, between the *Tanker server*, the *user*, and the *application server*.
 To establish trust between these actors and to enable sharing of encrypted *data* between *user*s, *Tanker Core* produces and uses cryptographic keys, IDs, and tokens.
