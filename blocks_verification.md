@@ -102,11 +102,11 @@ Server side:
 Verification:
 
 - The author must be a DeviceCreation
-- The previous group block must be the hash of the last group modification of the group referenced by group_id
 - The block must be extra-signed with public_signature_key
 
 Server side:
 
+- The previous group block must be the hash of the last group modification of the group referenced by group_id
 - The keys in encrypted_group_private_encryption_keys_for_users.public_user_encryption_key should be non-obsolete keys
 
 ## Key publishes
