@@ -205,8 +205,8 @@ Prerequisite: the *user*'s *device* is authenticated against the *Tanker server*
 Given the [Resource Encryption Key], sharing encrypted *data* with another *user* is done as follows:
 
 1. The *application* fetches the recipients' [Public Permanent Identity] from the *application server*
-1. *Tanker Core* fetches the recipients' `device_creation` *block*s from the *Trustchain*
-1. *Tanker Core* verifies the received `device_creation` *block*s
+1. *Tanker Core* fetches the recipients' first `device_creation` *block* (or all the `device_creation` and `device_revocation` *block*s if the user has at least one revocation) from the *Trustchain*
+1. *Tanker Core* verifies the received *block*s
 1. *Tanker Core* extracts the recipient's public [User Encryption Key Pair]
 1. For each recipient, *Tanker Core* asymmetrically encrypts the [Resource Encryption Key] with the public recipient's [User Encryption Key Pair] creating a [Shared Encrypted Key] for each one of them
 1. For each recipient, *Tanker Core* creates a `key_publish` *block* containing the [Shared Encrypted Key] and the recipient's public [User Encryption Key Pair], and pushes it to the *Trustchain*
@@ -230,7 +230,7 @@ Prerequisite: the *user*'s *device* is authenticated against the *Tanker server*
 The steps to create a new *user group* are as follows:
 
 1. The *application* fetches the [Public Permanent Identity] for each future *group member*
-1. *Tanker Core* fetches all the future *group member*s' `device_creation` and `device_revocation` *block*s from the *Trustchain*
+1. *Tanker Core* fetches the future *group member*s' first `device_creation` *block* (or all the `device_creation` and `device_revocation` *block*s if the user has at least one revocation) from the *Trustchain*
 1. *Tanker Core* verifies them and extracts their public [User Encryption Key Pair]
 1. *Tanker Core* generates the [Group Encryption Key Pair] and the [Group Signature Key Pair]
 1. *Tanker Core* encrypts the private [Group Signature Key Pair] with the public [Group Encryption Key Pair]
@@ -246,7 +246,7 @@ This operation adds users to an existing user group. The group ID, [Group Encryp
 Prerequisite: the *user*'s *device* is authenticated against the *Tanker server*. The *user* is a member of the group they want to add users to.
 
 1. The *application* fetches the [Public Permanent Identity] for each new *group member* to add
-1. *Tanker Core* fetches all the future *group member*s' `device_creation` and `device_revocation` *block*s from the *Trustchain*
+1. *Tanker Core* fetches the future *group member*s' first `device_creation` *block* (or all the `device_creation` and `device_revocation` *block*s if the user has at least one revocation) from the *Trustchain*
 1. *Tanker Core* verifies them and extracts their public [User Encryption Key Pair]
 1. *Tanker Core* encrypts the private [Group Encryption Key Pair] with each added *group member*'s public [User Encryption Key Pair]
 1. Using the private [Group Signature Key Pair], *Tanker Core* signs all the non-signature fields, in the order defined [here](blocks_format.md#usergroupupdate)
@@ -261,7 +261,7 @@ Prerequisite: the *user*'s *device* is authenticated against the *Tanker server*
 
 1. The *application* fetches the [Public Permanent Identity] for each *group member* to add
 1. The *application* fetches the [Public Permanent Identity] for each *group member* to remove
-1. *Tanker Core* fetches all the future *group member*s' `device_creation` and `device_revocation` *block*s from the *Trustchain*
+1. *Tanker Core* fetches the future *group member*s' first `device_creation` *block* (or all the `device_creation` and `device_revocation` *block*s if the user has at least one revocation) from the *Trustchain*
 1. *Tanker Core* generates the new [Group Encryption Key Pair] and the [Group Signature Key Pair]
 1. *Tanker Core* encrypts the new private [Group Signature Key Pair] with the new public [Group Encryption Key Pair]
 1. *Tanker Core* encrypts the new private [Group Encryption Key Pair] with each future *group member*'s public [User Encryption Key Pair]
