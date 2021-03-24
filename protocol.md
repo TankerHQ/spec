@@ -96,6 +96,23 @@ Steps to register a new *device*:
 
 Note that this procedure can only create *physical devices*, not *virtual ones*.
 
+### Session Tokens
+
+Prerequisite: The user is registered on the application.
+
+A *session token* can be obtained when a user creates their first device, or at any time later when proving ownership of a  [Verification Method](#verification-methods).
+
+Steps to obtain and check a *session token*:
+1. The *user* uses one the [Verification Method]s available to them, and requests a *session token* through the API
+1. *Tanker Core* generates a nonce and sends it to the *Tanker server* along with the verification
+1. *Tanker Core* generates a *session certificate* containing the time and [Verification Method] used, and signs it with the *physical device*'s [Device Signature Key Pair]
+1. *Tanker Core* sends the *session certificate* to the *Tanker server* along with the previously generated random nonce
+1. The *Tanker server* checks that the received *session certificate* matches the [Verification Method] used with this random nonce
+1. The *Tanker server* stores the *session certificate* and sends a *session token* to the *user* in exchange
+1. The *user* sends the received *session token* to the *application* servers
+1. The *application* makes a request to the *Tanker server* with the provided *session token* and the expected [Verification Method]
+1. The *Tanker server* checks that the expected [Verification Method] matches with the *session certificate*, and returns the status to the *application*
+
 ### Device authentication
 
 Prerequisite: the *device* is already registered on the *Trustchain*, the [Secret Permanent Identity] has been retrieved from the *application server* after the *user* has been authenticated against the *application server*.

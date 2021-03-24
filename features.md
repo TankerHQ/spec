@@ -62,6 +62,20 @@ This allows the *device* to decrypt any encrypted *data* shared with the *user* 
 
 This operation can for example be done with a *verification ke*y, which is usually stored on the *Tanker server*, protected by the *verification method* set up at the identity registration.
 
+## Session tokens
+
+### Functional perimeter
+
+When a *user*  performs an *identity verification* they can also request a *session token*.
+A *session token* can be used by the *application server* to verify that an *identity verification* took place, and also check what *verification method* was used.
+
+This allows the *application server* to implement policies like multi-factor authentication.
+
+### Access perimeter
+
+This operation requires that the device generate a signed *session certificate* when performing *identity verification*. 
+This signed *session certificate* is stored on the *Tanker server* and corresponds to the *session token*.
+
 ## Email verification method
 
 ### Functional perimeter
