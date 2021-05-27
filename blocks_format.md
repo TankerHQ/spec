@@ -57,6 +57,7 @@ The nature of a block indicates the type of action the block represents, and so 
 | **user_group_addition_v2**          | 16               | UserGroupAddition v2        |
 | **user_group_creation_v3**          | 17               | UserGroupCreation v3        |
 | **user_group_addition_v3**          | 18               | UserGroupAddition v3        |
+| **user_group_update**               | 20               | UserGroupUpdate             |
 
 ## Payloads
 
@@ -209,6 +210,7 @@ This block can only add members, not remove them. The list of added members is t
 |---------------------------------------------------------------|---------------------------------------------------------------|-------------------------------------------------------------------------------------------------|
 | group_id                                                      | fixed buffer (32 bytes)                                       | Group ID                                                                                        |
 | previous_group_block                                          | fixed buffer (32 bytes)                                       | The hash of this group's last modification block                                                |
+| previous_key_rotation_block                                   | fixed buffer (32 bytes)                                       | The hash of this group's last block which rotated the keys                                      |
 | public_signature_key                                          | fixed buffer (32 bytes)                                       | The new signature key of the group                                                              |
 | public_encryption_key                                         | fixed buffer (32 bytes)                                       | The new encryption key of the group                                                             |
 | encrypted_group_private_signature_key                         | fixed buffer (112 bytes)                                      | The current private signature key of the group encrypted for the current group encryption key   |
