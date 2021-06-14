@@ -197,7 +197,7 @@ A provisional identity is attached to some authentication methods. For the momen
 
 ### Public Provisional Identity
 
-A [Public Provisional Identity] can be generated from a [Secret Provisional Identity] and consists of the [Secret Provisional Identity] without its secrets parts.
+A [Public Provisional Identity] can be generated from a [Secret Provisional Identity] and generally consists of the [Secret Provisional Identity] without its secrets parts. For the case of a Secret Provisional Identity that contains personally identifiable information (PII), such as an email address, the [Public Provisional Identity] contains a hashed value of this data.
 
 ### TLS
 
