@@ -209,7 +209,7 @@ The steps to verify the *user*'s phone number and register their phone number [V
 1. The *user* receives the SMS with the [Verification Code] inside
 1. The *user* provides the [Verification Code] to the *application*
 1. The *application* forwards the phone number of the *user* and the [Verification Code] to *Tanker Core*
-1. *Tanker Core* generates a private [Salt] from some user secret data and sends a request to the *Tanker server*. The request contains the [Verification Code], phone number in clear text and the [Salt].
+1. *Tanker Core* generates a private [Salt] from the [user secret] and sends a request to the *Tanker server*. The request contains the [Verification Code], phone number in clear text and the [Salt].
 1. The *Tanker server* will hash the provided phone number and match this hash and the [Verification Code]. It will record a second hash generated from the phone number and [Salt]
 
 If the *Tanker server* does not return an error, it means the process has ended successfully and the *user* has now registered their provided phone number as a [Verification Method].
