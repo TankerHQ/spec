@@ -212,7 +212,7 @@ The steps to verify the *user*'s phone number and register their phone number [V
 1. *Tanker Core* generates a private [Salt] from some user secret data and sends a request to the *Tanker server*. The request contains the [Verification Code], phone number in clear text and the [Salt].
 1. The *Tanker server* will hash the provided phone number and match this hash and the [Verification Code]. It will record a second hash generated from the phone number and [Salt]
 
-If the *Tanker server* does not returns an error, it means the process has ended successfully and the *user* has now registered their provided phone number as a [Verification Method].
+If the *Tanker server* does not return an error, it means the process has ended successfully and the *user* has now registered their provided phone number as a [Verification Method].
 
 The process to [register a new device](#device-registration) with a phone number [Verification Method] is the same as described above. The only difference is that at the end of the process the *Tanker server* returns the *user*'s [Verification Key].
 
