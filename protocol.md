@@ -193,6 +193,29 @@ If the *Tanker server* does not returns an error, it means the process has ended
 
 The process to [register a new device](#device-registration) with an email [Verification Method] is the same as described above. The only difference is that at the end of the process the *Tanker server* returns the *user*'s [Verification Key].
 
+### Phone number
+
+For the *application* to offer Phone number as a verification method, they need to send `HTTP` requests to the *Tanker server*. To allow that, the *application* administrator needs to register their domain origin of their requests to the *Tanker App*.
+
+Before registering a phone number as a [Verification Method], the *Tanker server* must make sure the *user* has access to this phone number.
+
+The steps to verify the *user*'s phone number and register their phone number [Verification Method] are as follow:
+
+1. The *user* provides a phone number
+1. The *application* makes a request to the *Tanker server* with the provided phone number and some payload for the SMS message
+1. The *Tanker server* generates a [Verification Code]
+1. The *Tanker server* records the hashed phone number and the [Verification Code]
+1. The *Tanker server* sends an SMS to the provided phone number with the [Verification Code]
+1. The *user* receives the SMS with the [Verification Code] inside
+1. The *user* provides the [Verification Code] to the *application*
+1. The *application* forwards the phone number of the *user* and the [Verification Code] to *Tanker Core*
+1. *Tanker Core* generates a private [Salt] from the [user secret] and sends a request to the *Tanker server*. The request contains the [Verification Code], phone number in clear text and the [Salt].
+1. The *Tanker server* will hash the provided phone number and match this hash and the [Verification Code]. It will record a second hash generated from the phone number and [Salt]
+
+If the *Tanker server* does not return an error, it means the process has ended successfully and the *user* has now registered their provided phone number as a [Verification Method].
+
+The process to [register a new device](#device-registration) with a phone number [Verification Method] is the same as described above. The only difference is that at the end of the process the *Tanker server* returns the *user*'s [Verification Key].
+
 ### OpenID Connect
 
 For the *application* to offer OpenID Connect as a verification method, *application* owners need to register their `OIDC`'s `Client ID` to the *Tanker App*.
