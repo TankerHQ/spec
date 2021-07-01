@@ -92,6 +92,22 @@ Access to the email sent by the *Tanker server* is sufficient to retrieve the em
 
 Only the *user* must be able to authenticate to the *application server*, retrieve their identity, and use it to decrypt their *verification key*.
 
+## Phone number verification method
+
+### Functional perimeter
+
+A *user* can register a phone number verification method to protect their *verification key*. This *verification method* can then be used to register other *devices* (as explained in the “Identity verification” section).
+
+When a *user* needs to verify their identity, the *application server* will ask the *Tanker server* to send them a SMS containing a token which they must give back to Tanker to prove that they own the phone number.
+
+### Access perimeter
+
+When using the *phone number verification method*, the *verification key* is stored encrypted on the Tanker server. *Users* need access to their identity to decrypt it.
+
+Access to the SMS sent by the *Tanker server* is sufficient to retrieve the SMS token that grants access to the encrypted *verification key*. In other words, entities such as, but not limited to, the person who owns the phone number, the SMS provider may have access to this token.
+
+Only the *user* must be able to authenticate to the *application server*, retrieve their identity, and use it to decrypt their *verification key*.
+
 ## Groups
 
 ### Functional perimeter
