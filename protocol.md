@@ -205,7 +205,8 @@ The steps to verify the *user*'s phone number and register their phone number [V
 1. The *application* makes a request to the *Tanker server* with the provided phone number and some payload for the SMS message
 1. The *Tanker server* generates a [Verification Code]
 1. The *Tanker server* records the hashed phone number and the [Verification Code]
-1. The *Tanker server* sends a SMS to the provided phone number with the [Verification Code]
+1. The *Tanker server* sends an SMS to the provided phone number with the [Verification Code]
+1. The *user* receives the SMS with the [Verification Code] inside
 1. The *user* provides the [Verification Code] to the *application*
 1. The *application* forwards the phone number of the *user* and the [Verification Code] to *Tanker Core*
 1. *Tanker Core* hashes the phone number and, with the [Verification Code], sends a request to the *Tanker server*
