@@ -98,7 +98,7 @@ Only the *user* must be able to authenticate to the *application server*, retrie
 
 A *user* can register a phone number verification method to protect their *verification key*. This *verification method* can then be used to register other *devices* (as explained in the “Identity verification” section).
 
-When a *user* needs to verify their identity, the *application server* will ask the *Tanker server* to send them a SMS containing a token which they must give back to Tanker to prove that they own the phone number.
+When a *user* needs to verify their identity, the *application server* will ask the *Tanker server* to send them an SMS containing a token which they must give back to Tanker to prove that they own the phone number.
 
 ### Access perimeter
 
@@ -159,17 +159,17 @@ On the other hand, any of the following actors cannot single-handedly decrypt a 
 
 ### Functional perimeter
 
-A *user* can share data with another *user* who is not registered on the *application server* or on the *Trustchain* yet. Such a recipient is identified by their email address.
+A *user* can share data with another *user* who is not registered on the *application server* or on the *Trustchain* yet. Such a recipient is identified by the target value of their provisional identity.
 
 The *application server* must store a provisional identity for each provisional *user* to be shared with.
 
 ### Access perimeter
 
-The *application server* must ensure (e.g. with a similar challenge to the *email verification method*) that the *user* is the legitimate owner of the specified email address before giving them access to the provisional identity.
+The *application server* must ensure (e.g. with a similar challenge to the *email verification method*) that the *user* is the legitimate owner of the specified email address or phone number before giving them access to the provisional identity.
 
 The *Tanker server* will uphold the same security guarantees.
 
-Note however that entities with access to the *user*’s email may also complete the challenge, similarly to the email verification process.
+Note however that entities with access to the *user*’s email or phone data may also complete the challenge, with the same access perimeter as the underlying verification method.
 
 In particular these entities may have access to any resource keys shared with the provisional identity or any *group* it is part of.
 
