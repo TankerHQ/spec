@@ -289,25 +289,21 @@ Prerequisite: the *user*'s *device* is authenticated against the *Tanker server*
 1. *Tanker Core* fetches the future *group member*s' first `device_creation` *block* (or all the `device_creation` and `device_revocation` *block*s if the user has at least one revocation) from the *Trustchain*
 1. *Tanker Core* verifies them and extracts their public [User Encryption Key Pair]
 1. *Tanker Core* encrypts the private [Group Encryption Key Pair] with each added *group member*'s public [User Encryption Key Pair]
-1. Using the private [Group Signature Key Pair], *Tanker Core* signs all the non-signature fields, in the order defined [here](blocks_format.md#usergroupupdate)
+1. Using the private [Group Signature Key Pair], *Tanker Core* signs all the non-signature fields, in the order defined [here](blocks_format.md#usergroupaddition)
 1. *Tanker Core* creates a `user_group_addition` *block* with all of the above and pushes it to the *Trustchain*
+1. The *Tanker server* checks that the author is a member of the group
 1. The *Tanker server* validates the *block*
 
-#### Update users in a user group
+#### Remove users from a user group
 
-This operation is similar to the previous one, the only difference is that it rotates the [Group Encryption Key Pair] and the [Group Signature Key Pair]. The group ID remains unchanged.
+This operation allows members to remove other members from a group.
+This is not done by changing the group keys but only by access control from the *Tanker server*.
 
-Prerequisite: the *user*'s *device* is authenticated against the *Tanker server*. The *user* is a member of the group they want to update users to.
-
-1. The *application* fetches the [Public Permanent Identity] for each *group member* to add
-1. The *application* fetches the [Public Permanent Identity] for each *group member* to remove
-1. *Tanker Core* fetches the future *group member*s' first `device_creation` *block* (or all the `device_creation` and `device_revocation` *block*s if the user has at least one revocation) from the *Trustchain*
-1. *Tanker Core* generates the new [Group Encryption Key Pair] and the [Group Signature Key Pair]
-1. *Tanker Core* encrypts the new private [Group Signature Key Pair] with the new public [Group Encryption Key Pair]
-1. *Tanker Core* encrypts the new private [Group Encryption Key Pair] with each future *group member*'s public [User Encryption Key Pair]
-1. Using the new private [Group Signature Key Pair], *Tanker Core* signs the new public and the new encrypted private [Group Encryption Key Pair] and [Group Signature Key Pair]
-1. *Tanker Core* creates a `user_group_update` *block* with all of the above and pushes it to the *Trustchain*
-1. The *Tanker server* validates the *block*
+1. *Tanker Core* prepares the list of all (permanent and provisional) members to remove from the group
+1. Using the private [Group Signature Key Pair], *Tanker Core* signs all the non-signature fields with the prefix string `UserGroupRemoval Signature`, in the order defined [here](blocks_format.md#usergroupremoval)
+1. *Tanker Core* creates a `user_group_removal` *block* with all of the above and pushes it to the *Trustchain*
+1. The *Tanker server* checks that the author is a member of the group
+1. The *Tanker server* validates the *block* but does not store it. Instead, it records the removed members from the group and stops distributing resource keys to these users
 
 #### Sharing with user groups
 

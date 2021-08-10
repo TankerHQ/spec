@@ -106,8 +106,21 @@ Verification:
 
 Server side:
 
+- The author must be a member of the group
 - The previous group block must be the hash of the last group modification of the group referenced by group_id
 - The keys in encrypted_group_private_encryption_keys_for_users.public_user_encryption_key should be non-obsolete keys
+
+### UserGroupRemoval
+
+This block is only verified server-side.
+
+Verification:
+
+- The author must be a DeviceCreation
+- The block must be extra-signed with public_signature_key
+- The author must be a member of the group
+- The removed members must be present in the group
+- The removed provisional members must not be claimed
 
 ## Key publishes
 

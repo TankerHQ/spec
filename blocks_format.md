@@ -181,7 +181,7 @@ Possible author natures: Device Creations.
 
 Possible author natures: Device Creations.
 
-This block can only add members, not remove them. The list of added members is the list of users in encrypted_group_keys_for_users. It does not rotate the group keys. Because it's so different from the UserGroupUpdate (which can add and remove users, not implemented yet), we decided to make a different block.
+This block can only add members, not remove them. The list of added members is the list of users in encrypted_group_keys_for_users. It does not rotate the group keys.
 
 ### UserGroupAddition v2
 
@@ -203,20 +203,16 @@ This block can only add members, not remove them. The list of added members is t
 | encrypted_group_private_encryption_keys_for_provisional_users | list([PendingGroupEncryptedKey3](#pendinggroupencryptedkey3)) | The new group keys encrypted for the new provisional users                                     |
 | self_signature_with_current_key                               | fixed buffer (64 bytes)                                       | The signature of all non-signature fields, in that order, with the current group signature key |
 
-### UserGroupUpdate
+### UserGroupRemoval
+
+This block is not stored in the Trustchain.
 
 | Field name                                                    | Type                                                          | Description                                                                                     |
 |---------------------------------------------------------------|---------------------------------------------------------------|-------------------------------------------------------------------------------------------------|
 | group_id                                                      | fixed buffer (32 bytes)                                       | Group ID                                                                                        |
-| previous_group_block                                          | fixed buffer (32 bytes)                                       | The hash of this group's last modification block                                                |
-| public_signature_key                                          | fixed buffer (32 bytes)                                       | The new signature key of the group                                                              |
-| public_encryption_key                                         | fixed buffer (32 bytes)                                       | The new encryption key of the group                                                             |
-| encrypted_group_private_signature_key                         | fixed buffer (112 bytes)                                      | The current private signature key of the group encrypted for the current group encryption key   |
-| encrypted_previous_group_private_encryption_key               | fixed buffer (80 bytes)                                       | The previous private group encryption key encrypted with the current group encryption key       |
-| encrypted_group_private_encryption_keys_for_users             | list([GroupEncryptedKey2](#groupencryptedkey2))               | The new group keys encrypted for the new users                                                  |
-| encrypted_group_private_encryption_keys_for_provisional_users | list([PendingGroupEncryptedKey3](#pendinggroupencryptedkey3)) | The new group keys encrypted for the new provisional users                                      |
+| members_to_remove                                             | list(fixed buffer (32 bytes))                                 | The user IDs of the members to remove                                                           |
+| provisional_members_to_remove                                 | list(fixed buffer (64 bytes))                                 | The app and tanker signature public keys of the provisional users to remove                     |
 | self_signature_with_current_key                               | fixed buffer (64 bytes)                                       | The signature of all non-signature fields, in that order, with the current group signature key  |
-| self_signature_with_previous_key                              | fixed buffer (64 bytes)                                       | The signature of all non-signature fields, in that order, with the previous group signature key |
 
 ### KeyPublishToDevice
 
