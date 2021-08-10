@@ -341,16 +341,16 @@ Prerequisite: the *user*'s *device* is authenticated against the *Tanker server*
 ### Provisional identity creation
 
 *Tanker* supports sharing with users that are not yet registered.
-The only currently supported authentication method for these identities is email.
+The currently supported verification methods for these identities are emails and phone numbers.
 
 The ownership of a provisional identity is split between *Tanker* and the *application server*.
-When the *user* wants to claim the provisional identity, they will authenticate with an email against both the *application server* and against *Tanker* so that they get both halves of the [Secret Provisional Identity].
+When the *user* wants to claim the provisional identity, they will authenticate, by email or SMS, against both the *application server* and against *Tanker* so that they get both halves of the [Secret Provisional Identity].
 
 ### Sharing with a provisional identity
 
 Prerequisite: the *user*'s *device* is authenticated against the *Tanker server*, some *data* has been encrypted
 
-1. The *application* requests a public identity for a user's email which is not registered yet
+1. The *application* requests a public identity for a user's email or phone number which is not registered yet
 1. The *application server* generates a [Public Provisional Identity] and sends it back to the *application*
 1. *Tanker Core* requests a [Public Provisional Identity] for the user from the *Tanker server*
 1. The *Tanker server* generates a [Public Provisional Identity]
@@ -363,7 +363,7 @@ Prerequisite: the *user*'s *device* is authenticated against the *Tanker server*
 
 Prerequisite: the *user*'s *device* is authenticated against the *Tanker server*.
 
-1. The *application* requests a public identity for a user's email which is not registered yet
+1. The *application* requests a public identity for a user's email or phone number which is not registered yet
 2. The *application server* generates the [Public Provisional Identity] for the future *group member*
 3. The *application* calls `tanker.createGroup` with the obtained [Public Provisional Identity]
 4. *Tanker Core* requests a [Public Provisional Identity] for the user from the *Tanker server*
@@ -373,16 +373,16 @@ Prerequisite: the *user*'s *device* is authenticated against the *Tanker server*
 8. *Tanker Core* encrypts the private [Group Encryption Key Pair] with the *application* [Public Provisional Identity]'s encryption key
 9. *Tanker Core* encrypts the result of the previous step with the *Tanker* [Public Provisional Identity]'s encryption key
 10. Using the private [Group Signature Key Pair], *Tanker Core* signs the public and encrypted private [Group Encryption Key Pair] and [Group Signature Key Pair]
-11. *Tanker Core* creates a `user_group_creation` *block* with all of the above and pushes it to the *Trustchain*
+11. *Tanker Core* creates a `user_group_creation` *block* with all the above and pushes it to the *Trustchain*
 12. The *Tanker server* validates and holds the block until it is claimed
 
 ### Claiming a provisional identity
 
 Prerequisite: the *user*'s *device* is authenticated against the *Tanker server* and some *users* have shared *data* with a provisional identity owned by them or added it to a group.
 
-1. The *application server* sends an email to the *user* with a verification code
+1. The *application server* sends a verification code to the *user* (via email or SMS, depending on the verification method associated with the provisional identity)
 2. The *device* gets the *application* [Secret Provisional Identity] using the verification code
-3. The *Tanker server* sends an email to the *user* with a verification code
+3. The *Tanker server* sends a verification code to the *user*, via email or SMS
 4. *Tanker Core* gets the *Tanker* [Secret Provisional Identity] using the verification code
 5. *Tanker Core* encrypts both [Secret Provisional Identity]s' private encryption keys with the [User Encryption Key Pair]
 6. *Tanker Core* signs its [Device ID] with the *application* [Secret Provisional Identity]'s private signature key

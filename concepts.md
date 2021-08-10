@@ -193,7 +193,7 @@ A [Verification Method] is used to protect the encrypted [Verification Key] on t
 ### Secret Provisional Identity
 
 A [Secret Provisional Identity] represents the identity of a user that is not yet registered on Tanker. It is split into two halves that are stored on the *application server* and on *Tanker server*s.
-A provisional identity is attached to some authentication methods. For the moment, email and OpenID connect `IDToken`s are supported. Each half contains the name of the authentication method, a value (in case of email, the value is the email address), an encryption key pair, and a signature key pair.
+A provisional identity is attached to some authentication methods. For the moment, email and OpenID connect `IDToken`s are supported as well as phone numbers. Each half contains the name of the authentication method, a value (in case of email, the value is the email address), an encryption key pair, and a signature key pair.
 
 ### Public Provisional Identity
 
