@@ -116,11 +116,13 @@ Only the *user* must be able to authenticate to the *application server*, retrie
 
 It is possible to create and add more members to a *group* later on.
 
+It is also possible to remove members from groups, though this is only done by access control and has no cryptographic guarantees.
+
 ### Access perimeter
 
 Any *user* can create a *group*.
 
-Only members of the *group* can add other *group* members.
+Only members of the *group* can add or remove other *group* members.
 
 ## Data encryption
 

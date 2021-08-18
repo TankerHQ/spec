@@ -53,7 +53,7 @@ Server-side verifications:
 
 Verification:
 
-- The author must be a DeviceCreation
+- The author must be a DeviceCreation block
 - The device_id field must contain the hash of a DeviceCreation block
 - The revoked device must belong to the author
 - The revoked device must not already be revoked
@@ -88,7 +88,7 @@ is the block that is used to upgrade a user without user key to a user with one.
 
 Verification:
 
-- The author must be a DeviceCreation
+- The author must be a DeviceCreation block
 - The group id must not already exist
 - The block must be extra-signed with the public_signature_key contained in it
 
@@ -101,13 +101,26 @@ Server side:
 
 Verification:
 
-- The author must be a DeviceCreation
+- The author must be a DeviceCreation block
 - The block must be extra-signed with public_signature_key
 
 Server side:
 
+- The author must be a member of the group
 - The previous group block must be the hash of the last group modification of the group referenced by group_id
 - The keys in encrypted_group_private_encryption_keys_for_users.public_user_encryption_key should be non-obsolete keys
+
+### UserGroupRemoval
+
+This block is only verified server-side.
+
+Verification:
+
+- The author must be a DeviceCreation block
+- The block must be extra-signed with public_signature_key
+- The author must be a member of the group
+- The removed members must be present in the group
+- The removed provisional members must not be claimed
 
 ## Key publishes
 
