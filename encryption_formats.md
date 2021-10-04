@@ -90,7 +90,7 @@ None (but don’t use the same key more than once).
 
 #### Usage
 
-This is the default format used for simple resource encryption.
+This format is used if the customer disabled the padding option. Otherwise, the v6 format is used.
 
 ### Encryption format v5
 
@@ -117,6 +117,39 @@ None.
 #### Usage
 
 Used when encrypting file metadata before upload. We reuse the resource ID generated for the file content so that a single resource ID can be reused for multiple encryptions.
+
+### Encryption format v6
+
+#### Spec
+
+| **Element**        | **Buffer type** | **Byte length**                   |
+|--------------------|-----------------|-----------------------------------|
+| Version number (6) | Varint          | 1 byte                            |
+| Encrypted data     | Variable length | = clear data size + padding bytes |
+| MAC                | Fixed length    | 16 bytes                          |
+
+This format is the same as *Encryption format v3* except some padding bytes are added to the clear data before encryption.
+This addition is intented to prevent the leak of information about the data size once encrypted.
+
+The number of padding bytes to add is computed using [the PADME algorithm](https://lbarman.ch/blog/padme/).
+
+The implementation of padding follows the [ISO/IEC 7816-4](https://en.wikipedia.org/wiki/Padding_(cryptography)#ISO/IEC_7816-4) standard.
+Let *N* be the size of the clear data and *P* the size of the clear data plus its padding. This standard consists of adding a `0x80` byte and the `0x00` bytes until *P* is reached. For example, to pad `true` to *P* = 8 bytes we do `7472 7565 8000 0000`. In addition, PADME results being unsatisfying for *N* < 10 bytes, this format has a minimal padding size of 10 (so `true` actually gets padded to `7472 7565 8000 0000 0000`).
+
+
+#### Properties
+
+Overhead: O = *padme_overhead(N + 1)* + 17b with  
+*padme_overhead(N)* = 10 bytes if *N* < 10b  
+*padme_overhead(N)* < *N* + *N* * 12/100 if 10b < *N* < 1Mb  
+*padme_overhead(N)* < *N* + *N* * 6/100 if 1Mb < *N* < 1Gb  
+*padme_overhead(N)* < *N* + *N* * 3/100 if *N* > 1Gb
+
+
+#### Usage
+
+This is the default format used for simple resource encryption.
+
 
 ## Chunk encryption
 
