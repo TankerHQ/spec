@@ -20,3 +20,7 @@ We want to stress that you don't need to understand this spec in order to use th
 * [Blocks verification rules](blocks_verification.md)
 * [Encryption formats](encryption_formats.md)
 * [Threat model](threat_model.md)
+
+## Copyright
+
+The document as a whole and each of the elements that composes it (texts, articles, photographs, illustrations, diagrams, tables, logos, trademarks, architecture, software code) are protected by intellectual property law and are the exclusive property of or are licensed to Tanker. Tanker grants a non-exclusive right to use (in particular, by downloading, reproduction, representation) such document and its elements strictly for internal use for the purpose of assessing the opportunity to adopt Tanker’s technology. Any other use, and particularly any use for commercial purpose is not allowed.
