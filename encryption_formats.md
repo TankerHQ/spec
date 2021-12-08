@@ -129,7 +129,7 @@ Used when encrypting file metadata before upload. We reuse the resource ID gener
 | MAC                | Fixed length    | 16 bytes                          |
 
 This format is the same as *Encryption format v3* except some padding bytes are added to the clear data before encryption.
-This addition is intented to prevent the leak of information about the data size once encrypted.
+This addition is intended to prevent the leak of information about the data size once encrypted.
 
 The number of padding bytes to add is computed using [the PADME algorithm](https://lbarman.ch/blog/padme/).
 
