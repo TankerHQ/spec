@@ -116,7 +116,7 @@ None.
 
 #### Usage
 
-Used when encrypting file metadata before upload. We reuse the resource ID generated for the file content so that a single resource ID can be reused for multiple encryptions.
+Used instead of format v7 when padding is disabled.
 
 ### Encryption format v6
 
@@ -150,6 +150,33 @@ Overhead: O = *padme_overhead(N + 1)* + 17b with
 
 This is the default format used for simple resource encryption.
 
+### Encryption format v7
+
+#### Spec
+
+| **Element**        | **Buffer type** | **Byte length**             |
+|--------------------|-----------------|-----------------------------|
+| Version number (5) | Varint          | 1 byte                      |
+| Resource ID        | Fixed length    | 16 bytes                    |
+| IV                 | Fixed length    | 24 bytes                    |
+| Encrypted data     | Variable length | = clear data size + padding |
+| MAC                | Fixed length    | 16 bytes                    |
+
+This format is the same as v5 but with the addition of padding. The padding algorithm and overhead is the same as v6.
+
+#### Properties
+
+Constant overhead: O = *padme_overhead(N + 1)* + 57 bytes
+
+*padme_overhead(N)* is detailed in the v6 section.
+
+#### Issues
+
+None.
+
+#### Usage
+
+Default format for encryption sessions. Used when encrypting file metadata before upload. We reuse the resource ID generated for the file content so that a single resource ID can be reused for multiple encryptions.
 
 ## Chunk encryption
 
