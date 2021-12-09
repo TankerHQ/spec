@@ -116,26 +116,29 @@ None.
 
 #### Usage
 
-Used when encrypting file metadata before upload. We reuse the resource ID generated for the file content so that a single resource ID can be reused for multiple encryptions.
+Used instead of format v7 when padding is disabled.
 
 ### Encryption format v6
 
 #### Spec
 
-| **Element**        | **Buffer type** | **Byte length**                   |
-|--------------------|-----------------|-----------------------------------|
-| Version number (6) | Varint          | 1 byte                            |
-| Encrypted data     | Variable length | = clear data size + padding bytes |
-| MAC                | Fixed length    | 16 bytes                          |
+| **Element**        | **Buffer type** | **Byte length**             |
+|--------------------|-----------------|-----------------------------|
+| Version number (6) | Varint          | 1 byte                      |
+| Encrypted data     | Variable length | = clear data size + padding |
+| MAC                | Fixed length    | 16 bytes                    |
 
 This format is the same as *Encryption format v3* except some padding bytes are added to the clear data before encryption.
-This addition is intented to prevent the leak of information about the data size once encrypted.
+This addition is intended to prevent the leak of information about the data size once encrypted.
 
 The number of padding bytes to add is computed using [the PADME algorithm](https://lbarman.ch/blog/padme/).
 
 The implementation of padding follows the [ISO/IEC 7816-4](https://en.wikipedia.org/wiki/Padding_(cryptography)#ISO/IEC_7816-4) standard.
 Let *N* be the size of the clear data and *P* the size of the clear data plus its padding. This standard consists of adding a `0x80` byte and the `0x00` bytes until *P* is reached. For example, to pad `true` to *P* = 8 bytes we do `7472 7565 8000 0000`. In addition, PADME results being unsatisfying for *N* < 10 bytes, this format has a minimal padding size of 10 (so `true` actually gets padded to `7472 7565 8000 0000 0000`).
 
+#### Issues
+
+None.
 
 #### Properties
 
@@ -145,11 +148,38 @@ Overhead: O = *padme_overhead(N + 1)* + 17b with
 *padme_overhead(N)* < *N* + *N* * 6/100 if 1Mb < *N* < 1Gb  
 *padme_overhead(N)* < *N* + *N* * 3/100 if *N* > 1Gb
 
-
 #### Usage
 
 This is the default format used for simple resource encryption.
+It is safe for use in “one-time encryption” situation.
 
+### Encryption format v7
+
+#### Spec
+
+| **Element**        | **Buffer type** | **Byte length**             |
+|--------------------|-----------------|-----------------------------|
+| Version number (5) | Varint          | 1 byte                      |
+| Resource ID        | Fixed length    | 16 bytes                    |
+| IV                 | Fixed length    | 24 bytes                    |
+| Encrypted data     | Variable length | = clear data size + padding |
+| MAC                | Fixed length    | 16 bytes                    |
+
+This format is the same as v5 but with the addition of padding. The padding algorithm and overhead is the same as v6.
+
+#### Properties
+
+Constant overhead: O = *padme_overhead(N + 1)* + 57 bytes
+
+*padme_overhead(N)* is detailed in the v6 section.
+
+#### Issues
+
+None.
+
+#### Usage
+
+Default format for encryption sessions. Used when encrypting file metadata before upload. We reuse the resource ID generated for the file content so that a single resource ID can be reused for multiple encryptions.
 
 ## Chunk encryption
 
