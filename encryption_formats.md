@@ -159,7 +159,7 @@ It is safe for use in “one-time encryption” situation.
 
 | **Element**        | **Buffer type** | **Byte length**             |
 |--------------------|-----------------|-----------------------------|
-| Version number (5) | Varint          | 1 byte                      |
+| Version number (7) | Varint          | 1 byte                      |
 | Resource ID        | Fixed length    | 16 bytes                    |
 | IV                 | Fixed length    | 24 bytes                    |
 | Encrypted data     | Variable length | = clear data size + padding |
