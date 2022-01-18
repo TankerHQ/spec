@@ -374,7 +374,7 @@ Prerequisite: the *user*'s *device* is authenticated against the *Tanker server*
 
 ### Claiming a provisional identity
 
-Prerequisite: the *user*'s *device* is authenticated against the *Tanker server* and some *users* have shared *data* with a provisional identity owned by them or added it to a group.
+Prerequisite: the *user*'s *device* is authenticated against the *Tanker server*.
 
 1. The *application server* sends a verification code to the *user* (via email or SMS, depending on the verification method associated with the provisional identity)
 2. The *device* gets the *application* [Secret Provisional Identity] using the verification code
