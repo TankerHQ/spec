@@ -73,6 +73,28 @@ Finally, both `device_creation` *block*s are pushed to the *Trustchain*, the *vi
 
 Assuming the pushed *block*s are correct, the *Tanker server* stores them, and initiates an authenticated session for the *physical device*. The just created *physical device* permanently stores its [Device Encryption Key Pair] and [Device Signature Key Pair] in the [Local Encrypted Storage].
 
+### User Enrollment
+
+Prerequisite: The *user* is registered on the *application*, but not on the *Trustchain*.
+The *application* trusts or verified one of the *user*'s [Verification Method](#verification-methods).
+
+[User enrollment](#user-enrollment) is done from the *application server*.
+It must be used when converting an existing *user* base to migrate an *application* to Tanker.
+The feature must be disabled in production mode.
+
+Using the *user*'s [Secret Permanent Identity], *Tanker Core* creates a [User Encryption Key Pair].
+
+*Tanker Core* creates a [Device Encryption Key Pair] and a [Device Signature Key Pair] for the *virtual device*. It serializes them as an opaque token, the [Verification Key].
+This *device* is not a "physical" one, it has no [Local Encrypted Storage].
+
+A `device_creation` block is constructed with the *virtual device*'s public [Device Encryption Key Pair] and public [Device Signature Key Pair] and the encrypted [User Encryption Key Pair]. This block is signed with the ephemeral private key of the [Delegation Token] found in the [Secret Permanent Identity].
+
+Finally, the `device_creation` *block* is pushed to the *Trustchain*, the [Verification Key] is encrypted with the [User Secret] and uploaded to the *Tanker server* alongside the *user*'s [Verification Method]s trusted or verified by the *application server*.
+
+As opposed to a [user registration](#user-registration), only a single `device_creation` block is pushed, for the *virtual device*.
+
+Assuming the pushed *block* is correct, the *Tanker server* stores it.
+
 ### Device Registration
 
 Prerequisite: the *user* registered with a [Verification Method](#verification-methods) on a previous device.
