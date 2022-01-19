@@ -39,7 +39,7 @@ Due to the issue described above, this format is not used to encrypt resources a
 
 | **Element**        | **Buffer type** | **Byte length**   |
 | ------------------ | --------------- | ----------------- |
-| Version number (2) | Varint          | 1 byte            |
+| Version number (2) | Fixed length    | 1 byte            |
 | IV                 | Fixed length    | 24 bytes          |
 | Encrypted data     | Variable length | = clear data size |
 | MAC                | Fixed length    | 16 bytes          |
@@ -68,7 +68,7 @@ It is still used in the JS SDK when the same key is used to encrypt multiple tim
 
 | **Element**        | **Buffer type** | **Byte length**   |
 | ------------------ | --------------- | ----------------- |
-| Version number (3) | Varint          | 1 byte            |
+| Version number (3) | Fixed length    | 1 byte            |
 | Encrypted data     | Variable length | = clear data size |
 | MAC                | Fixed length    | 16 bytes          |
 
@@ -98,7 +98,7 @@ This format is used if the customer disabled the padding option. Otherwise, the 
 
 | **Element**        | **Buffer type** | **Byte length**   |
 | ------------------ | --------------- | ----------------- |
-| Version number (5) | Varint          | 1 byte            |
+| Version number (5) | Fixed length    | 1 byte            |
 | Resource ID        | Fixed length    | 16 bytes          |
 | IV                 | Fixed length    | 24 bytes          |
 | Encrypted data     | Variable length | = clear data size |
@@ -124,7 +124,7 @@ Used instead of format v7 when padding is disabled.
 
 | **Element**        | **Buffer type** | **Byte length**             |
 |--------------------|-----------------|-----------------------------|
-| Version number (6) | Varint          | 1 byte                      |
+| Version number (6) | Fixed length    | 1 byte                      |
 | Encrypted data     | Variable length | = clear data size + padding |
 | MAC                | Fixed length    | 16 bytes                    |
 
@@ -159,7 +159,7 @@ It is safe for use in “one-time encryption” situation.
 
 | **Element**        | **Buffer type** | **Byte length**             |
 |--------------------|-----------------|-----------------------------|
-| Version number (7) | Varint          | 1 byte                      |
+| Version number (7) | Fixed length    | 1 byte                      |
 | Resource ID        | Fixed length    | 16 bytes                    |
 | IV                 | Fixed length    | 24 bytes                    |
 | Encrypted data     | Variable length | = clear data size + padding |
@@ -193,7 +193,7 @@ Here is the format of an encrypted chunk:
 
 | **Element**                  | **Buffer type**      | **Byte length**    |
 | ---------------------------- | -------------------- | ------------------ |
-| Version number (4)           | Varint               | 1 byte             |
+| Version number (4)           | Fixed length         | 1 byte             |
 | Maximum encrypted chunk size | Uint32 little endian | 4 bytes            |
 | Resource ID                  | Fixed length         | 16 bytes           |
 | IV seed                      | Fixed length         | 24 bytes           |
