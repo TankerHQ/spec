@@ -242,7 +242,24 @@ The process to [register a new device](#device-registration) with a phone number
 
 For the *application* to offer OpenID Connect as a verification method, *application* owners need to register their `OIDC`'s `Client ID` to the *Tanker App*.
 
-The *user* authenticates against the OpenID Connect provider, which will allow the *application* to receive the *user* `ID Token`. Then, the *application* can provide this `ID Token` to *Tanker Core* during [user registration](#user-registration) or later on. The *Tanker server* will verify the provided `ID Token` according to [the OpenID recommendation](https://openid.net/specs/openid-connect-core-1_0.html#IDTokenValidation) and hash it before storing it.
+The steps to verify the *user* using OpenID Connect are as follows:
+1. The *user* requests a random `nonce` from *Tanker Core*
+1. *Tanker Core* generates an asymetric key pair and records the key pair on the *user*'s device
+1. *Tanker Core* encodes the public key and returns the encoded result to use as `nonce`
+1. The *user* authenticates against the OpenID Connect provider using the generated `nonce`
+1. The *user* receives an `authorization code` from the OpenID Connect provider
+1. The *application* exchanges the `authorization code` to receive the *user* `ID Token` from the OpenID Connect provider
+1. The *application* provides this `ID Token` to *Tanker Core* during [user registration](#user-registration) or [new device registration](#device-registration)
+1. *Tanker Core* extracts the `nonce` from the `ID Token` and requests a `challenge` from the *Tanker server*
+1. The *Tanker server* generates a `challenge`
+1. The *Tanker server* records the `nonce` and the `challenge`
+1. The *Tanker server* sends the `challenge`
+1. *Tanker Core* signs the `challenge` with the secret key matching the `nonce`
+1. *Tanker Core* sends a request to the *Tanker server*. The request contains the `ID Token`, the `challenge` and the `challenge`'s signature
+1. The *Tanker server* verifies the provided `ID Token` according to [the OpenID recommendation](https://openid.net/specs/openid-connect-core-1_0.html#IDTokenValidation)
+1. The *Tanker server* extracts the `nonce` from the `ID Token`, matches the `nonce`, the `challenge` and the recorded `challenge`
+1. The *Tanker server* decodes the `nonce` into a public key and verifies the `challenge`'s signature with the key
+1. The *Tanker server* extracts the *user*'s `subject` from the `ID Token` and hashes the `subject` before storing it.
 
 The process to [register a new device](#device-registration) with an `OIDC` [Verification Method] is the same as described above. The only difference is that at the end of the process the *Tanker server* returns the *user*'s [Verification Key].
 
