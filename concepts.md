@@ -21,6 +21,9 @@
 [Secret Provisional Identity]: concepts.md#secret-provisional-identity "Same as Secret Permanent Identity, but for a user not registered on the Trustchain yet"
 [Public Provisional Identity]: concepts.md#public-provisional-identity "Same as Public Permanent Identity, but for a user not registered on the Trustchain yet"
 [Verification Method]: concepts.md#verification-method "A verification method allows a user to retrieve their encrypted verification key"
+[Verification Code]: concepts.md#verification-code "A 8 digits random code used to confirm a user's identity"
+[OIDC Challenge]: concepts.md#oidc-challenge "A 24 bytes random code used to perform an additional challenge during OIDC verification"
+[Salt]: concepts.md#salt "A salt is random data used as an additional input to a hash function"
 
 *Tanker Core*'s security is based on the separation of knowledge, between the *Tanker server*, the *user*, and the *application server*.
 To establish trust between these actors and to enable sharing of encrypted *data* between *user*s, *Tanker Core* produces and uses cryptographic keys, IDs, and tokens.
@@ -189,6 +192,18 @@ The [Verification Key] is used to register new devices in a secure manner. See t
 ### Verification Method
 
 A [Verification Method] is used to protect the encrypted [Verification Key] on the *Tanker server*. The user must provide a proof of their identity to access it. The *user* must establish this proof with the *application* and the *Tanker server* before being available to the user.
+
+### Verification Code
+
+A [Verification Code] is a random 8 digits code communicated to a *user* without the *application* having access to the code. The [Verification Code] is used by a *user* to prove its identity to the *Tanker server*.
+
+### OIDC Challenge
+
+An [OIDC Challenge] is random and 24 bytes long. The [OIDC Challenge] is bound to a public key and only a signature from the key's secret counterpart can pass the challenge.
+
+### Salt
+
+A [Salt] is used as an additional input to a hashing function. A different [Salt] is used for each input of the hashing function. The [Salt] protects relatively short data such as passphrase or phone numbers against attacks that use precomputed tables to guess the clear value of a hashed data.
 
 ### Secret Provisional Identity
 
