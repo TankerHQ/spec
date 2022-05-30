@@ -72,7 +72,8 @@ A first `device_creation` block is constructed with the *virtual device*'s publi
 
 A second `device_creation` block is created with the *physical device*'s [Device Encryption Key Pair] and [Device Signature Key Pair]. *Tanker Core* creates a new ephemeral key pair, signs this block with the ephemeral private key and uses the *virtual device*'s [Device Signature Key Pair] to sign the *delegation* and fill the block's *delegation_signature* field.
 
-Finally, both `device_creation` *block*s are pushed to the *Trustchain*, the *virtual device* before the *physical one*, and the [Verification Key] is encrypted with the [User Secret] and uploaded to the *Tanker server* according to the [Verification Method] used by the *user*.
+Finally, both `device_creation` *block*s are pushed to the *Trustchain*, the *virtual device* before the *physical one*, and the [Verification Key] is encrypted and uploaded to the *Tanker server* according to the [Verification Method] used by the *user*.
+If the [Verification Method] is an end to end method (e.g. the end to end passphrase method), the [Verification Key] to be uploaded is encrypted once with the [User Encryption Key Pair] and once with the end to end method's secret value (e.g. the end to end passphrase). Otherwise, for non-end to end methods, it is encrypted only with the [User Secret].
 
 Assuming the pushed *block*s are correct, the *Tanker server* stores them, and initiates an authenticated session for the *physical device*. The just created *physical device* permanently stores its [Device Encryption Key Pair] and [Device Signature Key Pair] in the [Local Encrypted Storage].
 
@@ -107,7 +108,7 @@ The first time the *user* starts a Tanker session on a new device, their identit
 Steps to register a new *device*:
 
 1. The *user* uses one the [Verification Method]s available to them to obtain their encrypted [Verification Key]
-1. *Tanker Core* decrypts the encrypted [Verification Key] using the [User Secret]
+1. *Tanker Core* decrypts the encrypted [Verification Key] using either the [User Secret] for a non-end to end method, or the end to end method's secret.
 1. *Tanker Core* extracts the *virtual device*'s [Device Encryption Key Pair] and [Device Signature Key Pair] from the [Verification Key]
 1. *Tanker Core* requests the last encrypted [User Encryption Key Pair] and the *virtual device*'s *device id* from the *Tanker server*
 1. *Tanker Core* decrypts the encrypted [User Encryption Key Pair] using the *virtual device*'s [Device Encryption Key Pair]
@@ -180,7 +181,11 @@ A *virtual device* can not be revoked.
 
 The only way to add more *device*s, after the first one created during [user registration](#user-registration), is to sign a new `device_creation` block containing the new device's keys with a *user*'s existing device.
 
-For this purpose, during [user registration](#user_registration) *Tanker Core* creates a *virtual device* and pushes its `device_creation` block. This *device* is not a "physical" one, it has no [Local Encrypted Storage]. Instead, the [Device Signature Key Pair] and the [Device Encryption Key Pair] are serialized as an opaque token, we call it the [Verification Key]. The [Verification Key] is encrypted with the [User Secret] and stored on the *Tanker server*.
+For this purpose, during [user registration](#user_registration) *Tanker Core* creates a *virtual device* and pushes its `device_creation` block. This *device* is not a "physical" one, it has no [Local Encrypted Storage]. Instead, the [Device Signature Key Pair] and the [Device Encryption Key Pair] are serialized as an opaque token, we call it the [Verification Key].
+
+There are two types of verification methods: end-to-end (E2E) methods, and non-E2E methods.
+The difference is that for non-E2E methods, the [Verification Key] is encrypted with the [User Secret] and stored on the *Tanker server*, while for E2E methods it is encrypted with the [User Encryption Key Pair] and the E2E method's secret value (e.g. an E2E passphrase) before being stored on the *Tanker server*.
+The reason for this difference is that the [User Secret] can be accessed by parties others than the end-users themselves, namely the *application*, so it is not strictly end-to-end. End-to-end verification methods offer stricter guarantees but do not allow for any possibility of recovery if the verification method's secret value (e.g. passphrase) is lost.
 
 *User*s can use their [Verification Key] 'as is' when registering a new device. But *Tanker Core* proposes several [Verification Method]s as an easier way to handle the [Verification Key].
 
@@ -195,6 +200,16 @@ For this purpose, during [user registration](#user_registration) *Tanker Core* c
 The *user* provides a passphrase when registering a new [Verification Method]. The passphrase will be hashed by *Tanker Core* before sending it to the *Tanker server*. The *Tanker server* will rehash with a salt the received hashed passphrase before storing it alongside the user's encrypted [Verification Key].
 
 When the *user* needs to [register a new device](#device-registration), they will provide their passphrase. *Tanker Core* will hash the passphrase before sending it to the *Tanker server*. Then, the *Tanker server* will rehash with the seed the received hashed passphrase and match this result with the stored passphrase. If they match, the *Tanker server* will return the encrypted [Verification Key].
+
+### E2E Passphrase
+
+This method is an end-to-end (E2E) verification method.
+
+The *user* provides a passphrase when registering a new [Verification Method]. The passphrase will be hashed by *Tanker Core*, with a unique constant value appended, before sending it to the *Tanker server*.
+The passphrase will be hashed a second time by *Tanker Core*, with a different unique constant, and the resulting hash will be used to encrypt the [Verification Key]. The [verification Key] will also be encrypted with the [User Encryption Key Pair]. Then both ciphertexts are sent to the *Tanker server*.
+The *Tanker server* will store the hashed passphrase alongside the user's encrypted [Verification Key].
+
+When the *user* needs to [register a new device](#device-registration), they will provide their passphrase. *Tanker Core* will hash the passphrase, again with the first unique constant value appended, before sending it to the *Tanker server*. Then, the *Tanker server* will match this result with the stored passphrase. If they match, the *Tanker server* will return the encrypted [Verification Key].
 
 ### Email
 
