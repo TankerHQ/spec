@@ -214,7 +214,7 @@ Maximum encrypted chunk size: MECS = variable (default value: 1 MB)
 
 Maximum clear chunk size: MCCS = MECS - CO (default value: 1 MB - 61 bytes)
 
-Number of chunks: NC = ceil[ (TCDS + 1) / MECS ]
+Number of chunks: NC = ceil[ (TCDS + 1) / MCCS ]
 
 Total variable overhead: O = CO * NC
 
@@ -244,11 +244,69 @@ The Key is not derived and stays the same for all the chunks.
 | Encrypted chunk sizes        | 1 MB \| 1 MB \| 0.5 MB + 183 B      | 2 MB \| 2 MB \| 61 B              |
 | Total overhead               | 3 * 61 = 183 B                      | 3 * 61 = 183 B                    |
 
-In example #2, we do have: TCDS % (MECS - CO) = 0, hence the third chunk of 61 bytes.
+In example #2, we do have: TCDS % (MCCS) = 0, hence the third chunk of 61 bytes.
 
 #### Issues
 
 None.
+
+#### Usage
+
+Used instead of format v8 when padding is disabled.
+
+### Encryption format v8
+
+#### Spec
+
+This format aims at providing a stream encryption by splitting the data into chunks. The maximum encrypted chunk size is encoded in the header and is not supposed to always be the same (our current default: 1MB).
+
+Here is the format of an encrypted chunk:
+
+| **Element**                  | **Buffer type**      | **Byte length**              |
+| ---------------------------- | -------------------- | ---------------------------- |
+| Version number (8)           | Fixed length         | 1 byte                       |
+| Maximum encrypted chunk size | Uint32 little endian | 4 bytes                      |
+| Resource ID                  | Fixed length         | 16 bytes                     |
+| IV seed                      | Fixed length         | 24 bytes                     |
+| Encrypted data               | Variable length      | = clear chunk size + padding |
+| MAC                          | Fixed length         | 16 bytes                     |
+
+
+
+All encrypted chunks have the same size (= maximum encrypted chunk size), except the last one which has always a shorter size.
+
+#### Properties
+
+Total clear data size: TCDS (variable)
+
+Constant overhead per chunk: CO = 62 bytes
+
+Padding overhead: PO = *padme_overhead(TCDS + 1)*
+
+*padme_overhead(N)* is detailed in the v6 section.
+
+Maximum encrypted chunk size: MECS = variable (default value: 1 MB)
+
+Maximum clear chunk size: MCCS = MECS - CO (default value: 1 MB - 62 bytes)
+
+Number of chunks: NC = ceil[ (TCDS + PO + 1) / MCCS ]
+
+Total variable overhead: O = PO + CO * NC
+
+
+
+When the total **clear** data size + padding overhead is a multiple of the maximum **clear** chunk size, an additional “empty” chunk is added at the end. This ensures that the encrypted data is not truncated by a malicious storage service. Corresponding formula:
+(TCDS + PO) % (MCCS) = 0  =>  +1 “empty” chunk of length CO = 62 bytes
+
+The Resource ID is randomly generated once, and is the same in every chunk.
+
+The IV seed is randomly generated for each chunk.
+
+The IV used in encryption is derived from the IV seed and the index of the block with the following formula: IV = H(IV seed, index). The index is concatenated as an uint64 little endian and starts from 0.
+
+This designs avoids using the same Key+IV combination multiple times if we need to support chunk rewriting, while also protecting against a malicious storage service that tries to reorder the chunks.
+
+The Key is not derived and stays the same for all the chunks.
 
 #### Usage
 
