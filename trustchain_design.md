@@ -57,7 +57,7 @@ Blocks also contain a serialized payload, which contains different information d
 
 The payload of a key publish block &mdash; the block that shares a [Resource Encryption Key] between different *devices* &mdash; contains the recipient *device*'s ID and the [Resource Encryption Key] encrypted with its public [Device Encryption Key Pair].
 
-The payload of a *device* creation block contains the public [Device Encryption Key Pair] and [Device Signature Key Pair] of the newly created *device*, plus an ephemeral key pair and an [extra signature](#Device creation and signature delegation).
+The payload of a *device* creation block contains the public [Device Encryption Key Pair] and [Device Signature Key Pair] of the newly created *device*, plus an ephemeral key pair and an [extra signature](#device-creation-and-signature-delegation).
 
 Blocks also have an index, which corresponds to the order in which they are added to the *Trustchain*.
 
