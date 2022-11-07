@@ -90,7 +90,8 @@ None (but don’t use the same key more than once).
 
 #### Usage
 
-This format was instead of v6 when the padding option was disabled. It is no longer used.
+This format was used instead of v6 when the padding option was disabled.
+It has been superseded by the v9 format.
 
 ### Encryption format v5
 
@@ -150,8 +151,8 @@ Overhead: O = *padme_overhead(N + 1)* + 17b with
 
 #### Usage
 
-This was the simple resource encryption format. It is no longer used.
-It was safe for use in “one-time encryption” situation.
+This used to be the simple resource encryption format, which was safe for use in “one-time encryption” situation.
+It has been superseded by the v10 format.
 
 ### Encryption format v7
 
@@ -180,6 +181,63 @@ None.
 #### Usage
 
 Default format for manually created encryption sessions. Used when encrypting file metadata before upload. We reuse the resource ID generated for the file content so that a single resource ID can be reused for multiple encryptions.
+
+### Encryption format v9
+
+#### Spec
+
+| **Element**        | **Buffer type** | **Byte length**   |
+|--------------------| --------------- | ----------------- |
+| Version number (9) | Fixed length    | 1 byte            |
+| Session ID         | Fixed length    | 16 bytes          |
+| Resource ID / Seed | Fixed length    | 16 bytes          |
+| Encrypted data     | Variable length | = clear data size |
+| MAC                | Fixed length    | 16 bytes          |
+
+This format has been designed for simple resource encryption within an encryption session.
+
+#### Properties
+
+Constant overhead: O = 49 bytes
+
+#### Issues
+
+None.
+
+#### Usage
+
+Used instead of format v10 when padding is disabled.
+
+### Encryption format v10
+
+#### Spec
+
+| **Element**         | **Buffer type** | **Byte length**             |
+|---------------------| --------------- |-----------------------------|
+| Version number (10) | Fixed length    | 1 byte                      |
+| Session ID          | Fixed length    | 16 bytes                    |
+| Resource ID / Seed  | Fixed length    | 16 bytes                    |
+| Encrypted data      | Variable length | = clear data size + padding |
+| MAC                 | Fixed length    | 16 bytes                    |
+
+This format has been designed for simple resource encryption within an encryption session.
+It is the same as v9 but with the addition of padding. The padding algorithm and overhead is the same as v6.
+
+#### Properties
+
+Constant overhead: O = 49 bytes
+
+Padding overhead: O = padme_overhead(N + 1) bytes
+*padme_overhead(N)* is detailed in the v6 section.
+
+#### Issues
+
+None.
+
+#### Usage
+
+It is used by default for simple resource encryption, when not using a manually created session and when padding is not disabled.
+The session used when encrypting with this format is created automatically (transparent session).
 
 ## Chunk encryption
 
@@ -229,7 +287,7 @@ The IV seed is randomly generated for each chunk.
 
 The IV used in encryption is derived from the IV seed and the index of the block with the following formula: IV = H(IV seed, index). The index is concatenated as an uint64 little endian and starts from 0.
 
-This designs avoids using the same Key+IV combination multiple times if we need to support chunk rewriting, while also protecting against a malicious storage service that tries to reorder the chunks.
+This design avoids using the same Key+IV combination multiple times if we need to support chunk rewriting, while also protecting against a malicious storage service that tries to reorder the chunks.
 
 The Key is not derived and stays the same for all the chunks.
 
@@ -304,10 +362,68 @@ The IV seed is randomly generated for each chunk.
 
 The IV used in encryption is derived from the IV seed and the index of the block with the following formula: IV = H(IV seed, index). The index is concatenated as an uint64 little endian and starts from 0.
 
-This designs avoids using the same Key+IV combination multiple times if we need to support chunk rewriting, while also protecting against a malicious storage service that tries to reorder the chunks.
+This design avoids using the same Key+IV combination multiple times if we need to support chunk rewriting, while also protecting against a malicious storage service that tries to reorder the chunks.
 
 The Key is not derived and stays the same for all the chunks.
 
 #### Usage
 
 Currently used to encrypt clear data with byte length >= 1 MB (e.g. big files) when using manual encryption sessions.
+
+### Encryption format v11
+
+#### Spec
+
+This format aims at providing a stream encryption by splitting the data into chunks. The maximum encrypted chunk size is encoded in the header and is not supposed to always be the same (our current default: 1MB).
+
+Here is the format of an encrypted chunk:
+
+
+| **Element**          | **Buffer type**      | **Byte length**              |
+|----------------------|----------------------|------------------------------|
+| Version number (11)  | Fixed length         | 1 byte                       |
+| Session ID           | Fixed length         | 16 bytes                     |
+| Resource ID / Seed   | Fixed length         | 16 bytes                     |
+| Encrypted chunk size | Uint32 little endian | 4 bytes                      |
+| Chunk padding size   | Uint32 little endian | 4 bytes                      |
+| Encrypted chunk data | Variable length      | = clear chunk size + padding |
+| Encrypted chunk MAC  | Fixed length         | 16 bytes                     |
+
+All encrypted chunks have the same size (= encrypted chunk size), except the last one which is always shorter.
+
+#### Properties
+
+Total clear data size: TCDS (variable)
+
+Header overhead: HO = 37 bytes
+
+Overhead per chunk: CO = 20 bytes
+
+Padding overhead: PO = *padme_overhead(TCDS)*
+
+*padme_overhead(N)* is detailed in the v6 section.
+
+Encrypted chunk size: ECS = variable (default value: 1 MB)
+
+Clear chunk size: CCS = ECS - CO (default value: 1 MB - 20 bytes)
+
+Number of chunks: NC = ceil[ (TCDS + PO) / CCS ]
+
+Total variable overhead: O = H0 + PO + CO * NC
+
+
+When the total **clear** data size + padding overhead is a multiple of the maximum **clear** chunk size, an additional “empty” chunk is added at the end. This ensures that the encrypted data is not truncated by a malicious storage service. Corresponding formula:
+(TCDS + PO) % (CCS) = 0  =>  +1 “empty” chunk of length CO = 20 bytes
+
+The Resource ID is randomly generated once, and is also the seed used to derive the individual encryption key of this resource.
+
+The IV used in encryption is derived from the session ID and the index of the chunk with the following formula: IV = H(session ID, index). The index is concatenated as an uint64 little endian and starts from 0.
+
+This design avoids using the same Key+IV combination multiple times, while also protecting against a malicious storage service that tries to reorder the chunks.
+
+The Key is derived from the Resource ID and the key of the encryption session, and is the same for all chunks.
+
+#### Usage
+
+Currently used to encrypt clear data with byte length >= 1 MB (e.g. big files) when *not* using manual encryption sessions.
+This format is used even when padding is off, as the overhead of the format remains small either way.
