@@ -90,7 +90,7 @@ None (but don’t use the same key more than once).
 
 #### Usage
 
-This format is used if the customer disabled the padding option. Otherwise, the v6 format is used.
+This format was instead of v6 when the padding option was disabled. It is no longer used.
 
 ### Encryption format v5
 
@@ -150,8 +150,8 @@ Overhead: O = *padme_overhead(N + 1)* + 17b with
 
 #### Usage
 
-This is the default format used for simple resource encryption.
-It is safe for use in “one-time encryption” situation.
+This was the simple resource encryption format. It is no longer used.
+It was safe for use in “one-time encryption” situation.
 
 ### Encryption format v7
 
@@ -179,7 +179,7 @@ None.
 
 #### Usage
 
-Default format for encryption sessions. Used when encrypting file metadata before upload. We reuse the resource ID generated for the file content so that a single resource ID can be reused for multiple encryptions.
+Default format for manually created encryption sessions. Used when encrypting file metadata before upload. We reuse the resource ID generated for the file content so that a single resource ID can be reused for multiple encryptions.
 
 ## Chunk encryption
 
@@ -310,4 +310,4 @@ The Key is not derived and stays the same for all the chunks.
 
 #### Usage
 
-Currently used to encrypt clear data with byte length >= 1 MB (e.g. big files).
+Currently used to encrypt clear data with byte length >= 1 MB (e.g. big files) when using manual encryption sessions.
