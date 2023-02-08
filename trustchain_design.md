@@ -1,5 +1,5 @@
 <!-- note: duplicated from concepts.md for now -->
-[Tanker App]: concepts.md#tanker-app "An application created in the Tanker dashboard"
+[Tanker App]: concepts.md#tanker-app "An application created using Tanker's App management API"
 [Trustchain]: concepts.md#trustchain "A Trustchain is a collection of signed blocks, attached to a given app"
 [Device Encryption Key Pair]: concepts.md#device-keys "Used to encrypt the user keys"
 [Device ID]: concepts.md#device-id "Unique identifier of a device belonging to a user"
@@ -79,7 +79,7 @@ A new block is then created, containing the ephemeral public signature key, the 
 
 ## The root block
 
-The root block represents the creation of the *Trustchain*. It is not created by *Tanker*, but by the *customer*, in their dashboard. When creating a new *Trustchain*, a new signature key pair is generated on their *device*. This key pair will be the [Trustchain Signature Key Pair]. The public [Trustchain Signature Key Pair] is then written in the root block, which is sent to the *Trustchain* server.
+The root block represents the creation of the *Trustchain*. It is not created by *Tanker*, but by the *customer*, on a computer they control. When creating a new *Trustchain*, a new signature key pair is generated on their *device*. This key pair will be the [Trustchain Signature Key Pair]. The public [Trustchain Signature Key Pair] is then written in the root block, which is sent to the *Trustchain* server.
 
 The private [Trustchain Signature Key Pair] is held only by the *Trustchain*'s creator. It represents the *customer* in the *Trustchain* structure and is the authority that signs the first *device* creation block of each *user*.
 

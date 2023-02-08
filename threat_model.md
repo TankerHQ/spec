@@ -1,5 +1,5 @@
 <!-- note: duplicated from concepts.md for now -->
-[Tanker App]: concepts.md#tanker-app "An application created in the Tanker dashboard"
+[Tanker App]: concepts.md#tanker-app "An application created using Tanker's App management API"
 [Trustchain]: concepts.md#trustchain "A Trustchain is a collection of signed blocks, attached to a given app"
 [Device Encryption Key Pair]: concepts.md#device-keys "Used to encrypt the user keys"
 [Device ID]: concepts.md#device-id "Unique identifier of a device belonging to a user"
@@ -25,7 +25,7 @@ Like all security solutions, *Tanker* protects against some but not all attacks,
 
 ## Preface
 
-Security is not only a matter of encrypting data properly, it must also be reflected in the user experience of the *application* itself. Proper notifications, like new device registration emails and/or in-app notifications must be implemented. Email verification should be enforced for account creation and password recovery. 
+Security is not only a matter of encrypting data properly, it must also be reflected in the user experience of the *application* itself. Proper notifications, like new device registration emails and/or in-app notifications must be implemented. Email verification should be enforced for account creation and password recovery.
 
 Adding Tanker to an *application* will add a few additional security steps in the user experience, like additional identity verification.
 
@@ -62,35 +62,35 @@ Applications should also implement the best in class security recommendations: p
 
 *Attack*: An attacker gains access to all user data stored by the *application*. This attack is not repeatable.   
 
-*Impact:* Without *Tanker*, the attacker immediately gains access to all user data existing at this point in time. With *Tanker*, they have no access to Tanker-encrypted data. 
+*Impact:* Without *Tanker*, the attacker immediately gains access to all user data existing at this point in time. With *Tanker*, they have no access to Tanker-encrypted data.
 
 **Repeatable data access**:
 
-*Attack*: An attacker gains access to all user data stored by the *application*. This attack is repeatable. 
+*Attack*: An attacker gains access to all user data stored by the *application*. This attack is repeatable.
 
-*Impact:* Without *Tanker*, the attacker immediately gains access to all user data existing at this point in time. By repeating the same attack, they also have access to all future user data. With *Tanker*, they have no access to Tanker-encrypted data. 
+*Impact:* Without *Tanker*, the attacker immediately gains access to all user data existing at this point in time. By repeating the same attack, they also have access to all future user data. With *Tanker*, they have no access to Tanker-encrypted data.
 
 **Identities + repeatable data access**:
 
-*Attack*: An attacker gains access to all user data stored by the *application*. They also gain access to all stored *Tanker Identities*. This attack is repeatable. 
+*Attack*: An attacker gains access to all user data stored by the *application*. They also gain access to all stored *Tanker Identities*. This attack is repeatable.
 
-*Impact:* Without *Tanker*, the attacker immediately gains access to all user data existing at this point in time. By repeating the same attack, they also have access to all future user data. With *Tanker*, they have no access to Tanker-encrypted data. 
+*Impact:* Without *Tanker*, the attacker immediately gains access to all user data existing at this point in time. By repeating the same attack, they also have access to all future user data. With *Tanker*, they have no access to Tanker-encrypted data.
 
 **App secret + repeatable data access**:
 
-*Attack*: An attacker gains access to all user data stored by the *application*. They also gain access to the private [Trustchain Signature Key Pair] contained in the app secret. This attack is repeatable. 
+*Attack*: An attacker gains access to all user data stored by the *application*. They also gain access to the private [Trustchain Signature Key Pair] contained in the app secret. This attack is repeatable.
 
-*Impact:* Without *Tanker*, the attacker immediately gains access to all user data existing at this point in time. By repeating the same attack, they also have access to all future user data. With *Tanker*, they have no access to Tanker-encrypted data. 
+*Impact:* Without *Tanker*, the attacker immediately gains access to all user data existing at this point in time. By repeating the same attack, they also have access to all future user data. With *Tanker*, they have no access to Tanker-encrypted data.
 
 **Identity modification + one-time data access** :
 
-*Attack*: An attacker gains access to all user data stored by the *application*. They also gain access to all stored *Tanker Identities* and are able to change them. They replace all *user* *Identities* by their own. This attack is not repeatable. 
+*Attack*: An attacker gains access to all user data stored by the *application*. They also gain access to all stored *Tanker Identities* and are able to change them. They replace all *user* *Identities* by their own. This attack is not repeatable.
 
 *Impact:* Without *Tanker*, the attacker immediately gains access to all user data existing at this point in time. With *Tanker*, they have no access to Tanker-encrypted data. All future user data will however be encrypted for the attacker's *Tanker* account.
 
 **Identity modification + repeatable data access** :
 
-*Attack*: An attacker gains access to all user data stored by the *application*. They also gain access to all stored *Tanker Identities* and are able to change them. This attack is repeatable. 
+*Attack*: An attacker gains access to all user data stored by the *application*. They also gain access to all stored *Tanker Identities* and are able to change them. This attack is repeatable.
 
 *Impact:* Without *Tanker*, the attacker immediately gains access to all user data existing at this point in time. With *Tanker*, all future user data will be encrypted for the attacker's *Tanker* account. If the attacker accesses the data again in the future, they will gain access to all data since the initial attack.
 
@@ -98,7 +98,7 @@ Applications should also implement the best in class security recommendations: p
 
 *Attack*: An attacker is able to deploy arbitrary code instead of the *application*. They deploy a version of the *application* which sends all user data in clear-text to a server they control.
 
-*Impact:* Whatever the level of protection, the attacker has access to all past and future data. 
+*Impact:* Whatever the level of protection, the attacker has access to all past and future data.
 
 *Fix:* *Application* verification and signature could help mitigate that risk. This technology however is difficult to implement in browsers.
 
@@ -116,7 +116,7 @@ Applications should also implement the best in class security recommendations: p
 
 *Attack*: An attacker gains access to a *user*'s devi*ce. The *user* is logged in the *application*.
 
-*Impact:* The attacker has access to all the *user*'s existing data. If the attacker maintains an open session, they will also have access to future data. 
+*Impact:* The attacker has access to all the *user*'s existing data. If the attacker maintains an open session, they will also have access to future data.
 
 *Note:* If the *user* revokes the stolen/lost device, the attacker won't have access to future data.
 
@@ -180,7 +180,7 @@ Combinations not listed here have the same impact as the combination of their pa
 Same as *Identities access + locked device*
 
 
-## Composite attacks without identity verification 
+## Composite attacks without identity verification
 
 Combinations not listed here have the same impact as the combination of their parts.
 
@@ -192,6 +192,3 @@ Combinations not listed here have the same impact as the combination of their pa
 ### Detailed attacks analysis
 
 See the corresponding sections in *Composite attacks identity verification* for detailed attack and impacts analysis
-
-
-

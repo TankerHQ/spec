@@ -2,7 +2,7 @@
 
 *Tanker* is a solution for implementing client-side encryption in *application*s. It makes use of end-to-end encryption, and, in case of *device* loss, it provides an optional way for developers to ensure their *user*s can recover their cryptographic identities. This mechanism is referred to as *identity verification service* and depends on both the *application server* and a third-party verification server to protect and redistribute *user*s' cryptographic identities.
 
-For this to work, a **Tanker app** needs to be created on the [Tanker Dashboard](https://dashboard.tanker.io), and then *Tanker Core* must be used to implement the Tanker solution into the app.
+For this to work, a **Tanker app** needs to be created using the [App management API](https://docs.tanker.io/latest/api/app-management/app-management/), and then *Tanker Core* must be used to implement the Tanker solution into the app.
 
 ![Tanker big picture](./img/servers.png)
 
@@ -74,5 +74,3 @@ All communications between actors are done through HTTPS.
 We use the [LibreSSL](http://www.libressl.org/) implementation on mobile and defer to the user-agent for web browsers and Node.js.
 Server certificates are verified on all platforms even if, in some cases, we cannot use the ones provided by the platform.
 In such occurrences, *Tanker Core* comes with the certificates embedded in its binary code.
-
-
