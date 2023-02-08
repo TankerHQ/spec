@@ -1,5 +1,5 @@
 <!-- note: duplicated from concepts.md for now -->
-[Tanker App]: concepts.md#tanker-app "An application created in the Tanker dashboard"
+[Tanker App]: concepts.md#tanker-app "An application created using Tanker's App management API"
 [Trustchain]: concepts.md#trustchain "A Trustchain is a collection of signed blocks, attached to a given app"
 [Device Encryption Key Pair]: concepts.md#device-keys "Used to encrypt the user keys"
 [Device ID]: concepts.md#device-id "Unique identifier of a device belonging to a user"

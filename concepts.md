@@ -1,6 +1,6 @@
 # Concepts
 
-[Tanker App]: concepts.md#tanker-app "An application created in the Tanker dashboard"
+[Tanker App]: concepts.md#tanker-app "An application created using Tanker's App management API"
 [Trustchain]: concepts.md#trustchain "A Trustchain is a collection of signed blocks, attached to a given app"
 [Device Encryption Key Pair]: concepts.md#device-keys "Used to encrypt the user keys"
 [Device ID]: concepts.md#device-id "Unique identifier of a device belonging to a user"
@@ -41,7 +41,7 @@ Here's a list of concepts used in the rest of this document:
 
 <dl>
  <dt><a href="#tanker-app">Tanker App</a></dt>
-  <dd>An application created in the Tanker dashboard</dd>
+  <dd>An application created using Tanker's App management API</dd>
 
  <dt><a href="#trustchain">Trustchain</a></dt>
   <dd>A Trustchain is a collection of signed blocks, attached to a given app<dd>
@@ -111,7 +111,7 @@ They are explained in more detail below.
 
 ### Tanker app
 
-An app is created in the <a href="https://dashboard.tanker.io">Tanker dashboard</a> and managed by its creator.
+An app is created using the [App management API](https://docs.tanker.io/latest/api/app-management/app-management/) and managed by its creator.
 Creating an app gives a *app secret* and an *app ID*.
 
 ### Trustchain
@@ -124,12 +124,12 @@ It is operated by a Trustchain server and responsible for storing and distributi
 A *Trustchain* is identified by a unique ID, a name, and a [Trustchain Signature Key Pair].
 The name is informative only.
 
-The [Trustchain Signature Key Pair] is generated client-side by the *customer* during the *Trustchain* creation. The Private Signature Key is called *app secret* in the dashboard.
+The [Trustchain Signature Key Pair] is generated client-side by the *customer* during the *Trustchain* creation. The Private Signature Key is called *app secret* in the App management API.
 
 As such, it is only known by the *customer* and cannot be recovered by *Tanker* in any way - except if the "test mode" is enabled.
 
 The public part of the [Trustchain Signature Key Pair] is included in the *Trustchain*'s root *block*.
-The *Trustchain* ID is actually the hash of the *Trustchain* root *block* and is named *app ID* in the dashboard.
+The *Trustchain* ID is actually the hash of the *Trustchain* root *block* and is named *app ID* in the App management API.
 
 ### User ID
 
@@ -278,4 +278,3 @@ This ID is used by *Tanker core* to associate encrypted data with their encrypti
   <dt>resource</dt>
   <dd>same as <em>data</em></dd>
 </dl>
-
