@@ -256,7 +256,7 @@ If the *Tanker server* does not return an error, it means the process has ended 
 
 The process to [register a new device](#device-registration) with a phone number [Verification Method] is the same as described above. The only difference is that at the end of the process the *Tanker server* returns the *user*'s [Verification Key].
 
-### OpenID Connect
+### OpenID Connect (deprecated)
 
 For the *application* to offer OpenID Connect as a verification method, *application* owners need to register their `OIDC`'s `Client ID` to the *Tanker App*.
 
@@ -278,6 +278,24 @@ The steps to verify the *user* using OpenID Connect are as follows:
 1. The *Tanker server* extracts the `nonce` from the `ID Token`, matches the `nonce`, the request's [OIDC Challenge] and the recorded [OIDC Challenge]
 1. The *Tanker server* decodes the `nonce` into a public key and verifies the [OIDC Challenge]'s signature with the key
 1. The *Tanker server* extracts the *user*'s `subject` from the `ID Token` and hashes the `subject` before storing it.
+
+The process to [register a new device](#device-registration) with an `OIDC` [Verification Method] is the same as described above. The only difference is that at the end of the process the *Tanker server* returns the *user*'s [Verification Key].
+
+### OpenID Connect with authorization code flow
+
+The *Tanker Server* is integrated with a list of trusted OpenID connect providers. The *Tanker Server* uses its own `client ID` and `client secret` to act as a `service provider`. It follows the [OpenID protocol](https://openid.net/specs/openid-connect-core-1_0.html#CodeFlowAuth).
+
+For the *application* to offer OpenID Connect as a [Verification Method], *application* owners need to register the trusted OpenID Connect provider with the *Tanker App*.
+
+The steps to verify the *user* using OpenID Connect are as follows:
+1. The *user* queries the `OIDC` sign-in endpoint of the *Tanker server*
+1. The *Tanker server* prepares an authentication request and redirects the user to the OpenID Connect provider
+1. The OpenID Connect provider authenticates the *user* and obtains their consent/authorization
+1. The OpenID Connect provider responds with an `authorization code`
+1. *Tanker Core* sends a request to the *Tanker server*. The request contains the `authorization code`
+1. The *Tanker server* requests, from the OpenID Connect provider, an `ID Token` in exchange for the `authorization code` and the *Tanker server*'s `client ID` and `client secret`
+1. The *Tanker server* verifies the provided `ID Token` according to [the OpenID recommendation](https://openid.net/specs/openid-connect-core-1_0.html#IDTokenValidation)
+1. The *Tanker server* extracts the *user*'s `subject` from the `ID Token` and hashes the `subject` before storing it
 
 The process to [register a new device](#device-registration) with an `OIDC` [Verification Method] is the same as described above. The only difference is that at the end of the process the *Tanker server* returns the *user*'s [Verification Key].
 
